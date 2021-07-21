@@ -1,0 +1,49 @@
+.link-decoration{
+    color: #0366d6; 
+    cursor: pointer;
+}
+.link-decoration:hover{
+    color: #0366d6; 
+    text-decoration: underline; 
+}
+.table-wrapper{ 
+    overflow-y: auto; 
+    margin-top: 10px;
+    height: 500px; 
+}
+.table-wrapper thead th { 
+    position: sticky; 
+    top: 0; 
+}
+
+/* Just common table stuff. Really. */
+table  { border-collapse: collapse; width: 100%;}
+th, td { padding: 8px 16px; }
+th     { background:#eee; }
+
+/* width */
+div::-webkit-scrollbar {
+    width: 10px;
+}
+  
+/* Track */
+div::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+div::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+div::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.button-container{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}

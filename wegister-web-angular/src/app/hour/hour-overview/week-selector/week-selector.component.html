@@ -1,0 +1,13 @@
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      {{buttonWorkweekText}}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <span *ngFor="let weekDetail of weekDetails" 
+            class="dropdown-item" 
+            style="cursor: pointer;" 
+            (click)="selectWeek(weekDetail)">
+                {{weekDetail.weekdetail}}
+      </span>
+    </div>
+</div>

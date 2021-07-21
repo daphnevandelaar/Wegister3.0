@@ -1,0 +1,56 @@
+<h1>Uren registreren 2.0</h1>
+<p>Vul de gewerkte uren in met pauze(in minuten) van start- tot eindtijd.</p>
+<form [formGroup]="hourRegistrationForm" (ngSubmit)="registerHours()">
+    <div *ngIf="">
+        custom validator
+    </div>
+    <div *ngIf="hourRegistrationForm.controls['startTime'].invalid && (hourRegistrationForm.controls['startTime'].dirty || hourRegistrationForm.controls['startTime'].touched)" class="alert alert-danger">
+        <div *ngIf="hourRegistrationForm.controls['startTime'].errors.required">
+          Starttijd is verplicht.
+        </div>
+    </div>
+    <div *ngIf="hourRegistrationForm.controls['endTime'].invalid && (hourRegistrationForm.controls['endTime'].dirty || hourRegistrationForm.controls['endTime'].touched)" class="alert alert-danger">
+        <div *ngIf="hourRegistrationForm.controls['endTime'].errors.required">
+          Eindtijd is verplicht.
+        </div>
+    </div>
+
+    <div class="form-row">
+        <app-employer-dropdown [hourRegistrationForm]="hourRegistrationForm"></app-employer-dropdown>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="startTime">Starttijd</label>
+            <input type="datetime-local" class="form-control" id="startTime" (keyup)="onStartDateChange()" (click)="onStartDateChange()" (change)="onStartDateChange()" formControlName="startTime" ComparisonDateValidator>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="endTime">Eindtijd</label>
+            <input type="datetime-local" class="form-control" id="endTime" (click)="onStartDateChange()" formControlName="endTime" ComparisonDateValidator>
+        </div>
+    </div>
+
+    <label for="break">Pauze</label>
+    <span class="badge badge-pill badge-secondary" style="margin-left: 10px;" placement="right"
+        ngbTooltip="Tijd in minuten, wordt van het totaal afgehouden">i</span>
+
+    <div class="container">
+        <div class="row">
+            <div>
+                <div class="input-group mb-2">
+                    <input type="input" class="form-control" id="recreation" formControlName="recreation">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Minuten</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Omschrijving</label>
+        <textarea class="form-control" id="description" formControlName="description"></textarea>
+    </div>
+    <br>
+    <button class="btn btn-secondary" type="submit">Registeer</button>
+
+</form>

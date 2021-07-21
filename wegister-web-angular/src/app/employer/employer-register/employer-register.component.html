@@ -1,0 +1,66 @@
+<h1>Werkgever toevoegen</h1>
+<p>Vul de naam van de werkgever en klik op registreren om deze aan het systeem toe te voegen.</p>
+<form [formGroup]="employerRegistrationForm" (ngSubmit)="registerEmployer()">
+    <div class="form-row">
+        <div class="form-group col-md">
+            <label for="employerName">Naam</label>
+            <input type="text" class="form-control" id="employerName" formControlName="employerName">
+        </div>
+        <div class="form-group col-md">
+          <label for="employerEmail">Email</label>
+          <input type="text" class="form-control" id="employerEmail" formControlName="employerEmail">
+      </div>
+    </div>
+
+    <button class="btn btn-secondary" type="submit">Registreren</button>
+</form>
+
+<div class="table-wrapper">
+    <table class="table table-sm table-responsive-sm">
+        <thead>
+          <tr>
+            <th scope="col">Nr.</th>
+            <th scope="col">Naam</th>
+            <th scope="col">Email</th>
+            <th scope="col" style="text-align: right;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employer of employers">
+            <td>{{employer.id}}</td>
+            <td>{{employer.name}}</td>
+            <td>{{employer?.email}}</td>
+            <td style="text-align: right;"><a class="link-decoration" data-toggle="modal" data-target="#exampleModal" (click)="onClickChange(employer)">wijzigen</a></td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+      <div class="modal-header"> 
+          <h5 class="modal-title" id="exampleModalLabel">Werkgever {{employerToChange?.name}} aanpassen</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 10px; margin-right: 10px;">
+        <div>
+          <button class="btn btn-danger" (click)="onClickDelete()">Verwijderen</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <label for="employerEmail">Naam</label>
+        <input type="text" class="form-control" value="{{employerToChange?.name}}" (change)="onChangeName($event.target.value)">
+
+        <label for="employerEmail">Email</label>
+        <input type="text" class="form-control" value="{{employerToChange?.email}}" (change)="onChangeEmail($event.target.value)">
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluiten</button>
+          <button type="button" class="btn btn-primary" (click)="changeEmployer(employerToChange)">Wijzigen</button>
+      </div>
+      </div>
+  </div>
+</div>

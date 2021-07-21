@@ -1,0 +1,13 @@
+<div class="dropdown">
+    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      {{buttonEmployerText}}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
+      <span *ngFor="let employer of employers" 
+            class="dropdown-item" 
+            style="cursor: pointer;" 
+            (click)="selectEmployer(employer)">
+                {{employer.name}}
+      </span>
+    </div>
+</div>

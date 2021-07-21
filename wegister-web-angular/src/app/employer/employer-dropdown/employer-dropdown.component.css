@@ -1,0 +1,12 @@
+.dropdown{
+    margin-bottom: 10px;
+}
+
+.btn{
+    margin-right: 10px;
+}
+
+.dropdown-menu{
+    max-height: 250px;
+    overflow: auto;
+}

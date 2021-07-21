@@ -1,0 +1,112 @@
+<h1>Uren overzicht</h1> 
+<div class="button-container">
+  <div>
+    <app-employer-selector (selectedEmployer)="getRegisteredHoursOfEmployer($event)"></app-employer-selector>
+  </div>
+  <div>
+    <app-mail></app-mail>
+  </div>
+</div>
+<div>
+  <app-date-slider (selectedEntry)="getRegisteredHoursOfEntry($event)"></app-date-slider>
+</div>
+<div class="table-wrapper" id="style-1">
+      <table class="table table-sm table-responsive-sm table-hover">
+        <thead>
+          <tr>
+            <th scope="col" style="min-width: 115px;">Datum</th>
+            <th scope="col">Werkgever</th>
+            <th scope="col">Dagtotaal</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Totaal</th>
+            <th scope="col">{{totalHoursInSeconds | totalHours}} uur</th>
+            <th scope="col"></th>
+          </tr>
+        </tfoot>
+        <tbody>
+          <ng-container *ngFor="let workedhour of workedhours">
+              <tr (click)="onClickUnfold(workedhour)" class="hover">
+                <td>{{workedhour.startTime | date:'dd-MM-yyyy'}}</td>
+                <td>{{workedhour.employer.name}}</td>
+                <td>{{workedhour?.totalWorkedHoursDayInSeconds | totalHours}}</td>
+                <td><a data-toggle="modal" data-target="#hourRegistrationModal" class="link-decoration" (click)="onClickChangeHour(workedhour)">Wijzigen</a></td>
+              </tr>
+              <tr *ngIf="workedhour.details" class="no-hover">
+                <td colspan="4">
+                  <div>
+                    <p>
+                      <b>Datum:</b> {{workedhour.startTime | date:'dd'}} t/m {{workedhour.endTime | date:'dd-MM-yyyy'}} <br>
+                      <b>Tijdstip:</b> {{workedhour.startTime | date:'HH:mm:ss'}} - {{workedhour.endTime | date:'HH:mm:ss'}} <br>
+                      <b>Pauze:</b> {{workedhour.recreation}} <br>
+                      <b>Totaal:</b> {{workedhour.totalWorkedHoursDayInSeconds | totalHours}} <br>    
+                    </p>
+                    <b>Omschrijving:</b> <br>
+                    {{workedhour.description}}
+                  </div>
+                </td>
+              </tr>
+          </ng-container>
+        </tbody>
+      </table>
+</div>
+
+<div>
+  <!-- Modal -->
+  <div class="modal fade" id="hourRegistrationModal" tabindex="-1" role="dialog" aria-labelledby="hourRegistrationModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+          <div class="modal-header"> 
+              <h5 class="modal-title" id="hourRegistrationModalLabel">Werkdag wijzigen</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+            <div style="display: flex; justify-content: flex-end;">
+              <button class="btn btn-danger" (click)="onClickRemove()">Verwijderen</button>
+            </div>
+
+            <div style="margin-bottom: 10px;">
+              <app-employer-selector *ngIf="hourRegistrationToChange" (selectedEmployer)="getSelectedEmployer($event)" [employeeNumber]="hourRegistrationToChange?.employerId"></app-employer-selector>
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+              <label for="startTime">Starttijd</label>
+              <input type="datetime-local" class="form-control" id="startTime" value="{{hourRegistrationToChange?.startTime}}" (keyup)="getChangedStartTime($event.target.value)" (change)="getChangedStartTime($event.target.value)">
+            </div>
+            <div>
+              <label for="endTime">Eindtijd</label>
+              <input type="datetime-local" class="form-control" id="endTime" value="{{hourRegistrationToChange?.endTime}}" (keyup)="getChangedEndTime($event.target.value)" (change)="getChangedEndTime($event.target.value)">
+            </div>
+
+            <div>
+              <label for="break">Pauze</label>
+              <span class="badge badge-pill badge-secondary" style="margin-left: 10px;" placement="right"
+                  ngbTooltip="Tijd in minuten, wordt van het totaal afgehouden">i</span>
+              <div class="input-group mb-2">
+                  <input type="input" class="form-control" id="recreation" value="{{hourRegistrationToChange?.recreation}}" (change)="getChangedRecreation($event.target.value)">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroup-sizing-default">Minuten</span>
+                  </div>
+              </div>
+            </div>
+
+            <div>
+              <label for="description">Omschrijving</label>
+              <textarea class="form-control" id="description" (change)="getChangedDescription($event.target.value)">{{hourRegistrationToChange?.description}}</textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluiten</button>
+              <button type="button" class="btn btn-primary" (click)="onClickChangeHourRegistration()">Wijzigen</button>
+          </div>
+          </div>
+      </div>
+  </div>
+
+</div>

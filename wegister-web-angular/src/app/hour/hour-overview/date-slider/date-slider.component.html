@@ -1,0 +1,25 @@
+<div style="display: flex;">
+    <div class="dropdown">
+        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{buttonDate}}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <span *ngFor="let year of years" 
+                class="dropdown-item" 
+                style="cursor: pointer;" 
+                (click)="onSelectYear(year)"
+                >
+                    {{year}}
+          </span>
+        </div>
+    </div>
+    <button class="btn btn-info" style="margin-left:10px;" (click)="onClickMonth()"><img src="../../../assets/img/calendar-month.png" width="20px"> Maand</button>
+    <button class="btn btn-info" style="margin-left:10px;" (click)="onClickWeek()"><img src="../../../assets/img/calendar-week.png" width="20px"> Week</button>
+</div>
+<div class="container-date-slider" id="style-1">
+    <div class="date-slider" *ngFor="let element of dateNumbers" (click)="onSelectDateNumber(element.number)">
+        <div class="date-select">
+            {{element.detail}}
+        </div>
+    </div>
+</div>

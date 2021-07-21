@@ -1,0 +1,88 @@
+<h1>Automatische uren registratie</h1>
+<p>Klik op start om de uren te registreren. Stop zal de registratie beëindigen en de uren in dat tijdspan opslaan.</p>
+
+<div *ngIf="!activeRegistration">
+    <div>
+        <p>
+            Er is nog <b>geen</b> registratie actief
+        </p>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="onClickStartRegistration()">Registratie starten</button>
+    </div>
+</div>
+
+<div *ngIf="activeRegistration">
+    <div>
+        <p>
+            Er is een registratie actief gestart op:
+        </p> 
+        <p>
+            Werkdag gestart om: {{activeRegistration.startTime | date: 'dd-MM-yyyy HH:mm:ss'}}
+        </p>
+    </div>
+    <div>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" (click)="onCalculate()">
+            Registratie stoppen
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header"> 
+                        <h5 class="modal-title" id="exampleModalLabel">Werkdag stoppen</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form [formGroup]="hourRegistrationForm" (ngSubmit)="onRegisterHours()">
+                            <p>
+                                Start werkdag: {{activeRegistration.startTime | date: 'dd-MM-yyyy HH:mm:ss'}}<br>
+                                Einde werkdag: {{today | date: 'dd-MM-yyyy HH:mm:ss' : '+0000'}}
+                            </p>
+                            
+                            <app-employer-dropdown [hourRegistrationForm]="hourRegistrationForm"></app-employer-dropdown>
+                            <br>
+        
+                            <label for="break">Pauze</label>
+                            <span class="badge badge-pill badge-secondary" style="margin-left: 10px;" placement="right"
+                                ngbTooltip="Tijd in minuten, wordt van het totaal afgehouden">i</span>
+                    
+                            <div class="container">
+                                <div class="row">
+                                    <div>
+                                        <div class="input-group mb-2">
+                                            <input type="input" class="form-control" id="recreation" formControlName="recreation" (keyup)="onRecreationAdd($event.target.value)">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-default">Minuten</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <p> 
+                                <b>
+                                    Totaal gewerkte uren: {{total}}
+                                </b>
+                            </p>
+        
+                            <div>
+                                <label for="description">Omschrijving</label>
+                                <textarea class="form-control" id="description" formControlName="description"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluiten</button>
+                        <button type="submit" class="btn btn-primary"  (click)="onRegisterHours()">Afronden</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
