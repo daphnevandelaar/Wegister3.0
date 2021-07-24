@@ -26,7 +26,7 @@ namespace Application.UnitTests.Items.Queries
         private readonly GetItemsListQueryHandler _sut;
 
         private readonly DbContextOptions<WegisterDbContext> options = new DbContextOptionsBuilder<WegisterDbContext>()
-                .UseSqlite("Data Source = WegisterCustomerQueryDb.db")
+                .UseSqlite("Data Source = WegisterItemQueryDb.db")
                 .Options;
 
         public GetItemListQueryHandlerTests(QueryTestFixture fixture)
@@ -35,7 +35,7 @@ namespace Application.UnitTests.Items.Queries
             _currentUserService = fixture.UserService;
             _otherUserService = new TestOtherUserService();
             _dateTime = fixture.MachineDateTime;
-            _context = WegisterTestContextFactory.CreateCustomerDb(options, fixture.UserService, fixture.MachineDateTime);
+            _context = WegisterTestContextFactory.CreateItemDb(options, fixture.UserService, fixture.MachineDateTime);
 
             _otherUserService.CompanyId.ShouldNotBe(_currentUserService.CompanyId);
 
@@ -49,12 +49,12 @@ namespace Application.UnitTests.Items.Queries
             var dbContext = new WegisterDbContext(options, _otherUserService, _dateTime);
             var itemToAdd = new Domain.Entities.Item
             {
-                Name = "Martin Fowler",
+                Name = "Harddisk 500GB",
+                Price = 100m,
+                Unit = "Price per piece"
             };
             dbContext.Items.Add(itemToAdd);
             await dbContext.SaveChangesAsync(CancellationToken.None);
-
-            itemToAdd.CompanyId.ShouldBe(_otherUserService.CompanyId);
 
             //Act
             var result = await _sut.Handle(new GetItemsListQuery(), CancellationToken.None);
@@ -62,9 +62,7 @@ namespace Application.UnitTests.Items.Queries
             //Assert
             result.ShouldBeOfType<ItemListVm>();
             result.Items.Count.ShouldBe(3);
-            //result.Items.All(i => i.CompanyId == _currentUserService.CompanyId).ShouldBe(true);
-            //result.Items.Any(c => c.CompanyId == _otherUserService.CompanyId).ShouldBe(false);
+            result.Items.Any(i => i.Name == itemToAdd.Name && i.Price == itemToAdd.Price).ShouldNotBe(true);
         }
     }
-    
 }

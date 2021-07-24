@@ -4,37 +4,34 @@ using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
 using Application.UnitTests.Common.Implementations;
 using Common;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
+using MediatR;
+using Moq;
 
 namespace Application.UnitTests.Common
 {
     public class CommandTestBase : IDisposable
     {
-        public WegisterDbContext Context { get; private set; }
-        public ICurrentUserService UserService { get; set; }
-        public IDateTime MachineDateTime { get; set; }
-        public IWorkHourFactory WorkHourFactory { get; private set; }
-        public ICustomerFactory CustomerFactory { get; private set; }
-        public IItemFactory ItemFactory { get; private set; }
+        public ICurrentUserService UserService { get; }
+        public IDateTime MachineDateTime { get; }
+        public IWorkHourFactory WorkHourFactory { get; }
+        public ICustomerFactory CustomerFactory { get; }
+        public IItemFactory ItemFactory { get; }
+        public Mock<IMediator> Mediator { get; }
 
         public CommandTestBase()
         {
-            var options = new DbContextOptionsBuilder<WegisterDbContext>()
-                .UseSqlite("Data Source = WegisterCommandDb.db")
-                .Options;
-
             UserService = new TestUserService();
             MachineDateTime = new TestMachineDate();
             WorkHourFactory = new WorkHourFactory();
             CustomerFactory = new CustomerFactory();
             ItemFactory = new ItemFactory();
-            Context = WegisterTestContextFactory.Create(options, UserService, MachineDateTime);
+            Mediator = new Mock<IMediator>();
         }
+
+
 
         public void Dispose()
         {
-            WegisterTestContextFactory.Destroy(Context);
             GC.SuppressFinalize(this);
         }
     }

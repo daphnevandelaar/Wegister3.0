@@ -27,8 +27,7 @@ namespace Application.Common.Factories
             {
                 Id = customer.Id,
                 Name = customer.Name,
-                Email = customer.Email,
-                CompanyId = customer.CompanyId
+                Email = customer.Email
             };
         }
 

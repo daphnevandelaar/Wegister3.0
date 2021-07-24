@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Factories.Interfaces;
@@ -49,22 +50,19 @@ namespace Application.UnitTests.Customers.Queries
             var dbContext = new WegisterDbContext(options, _otherUserService, _dateTime);
             var customerToAdd = new Domain.Entities.Customer
             {
-                Name = "Martin Fowler",
-                Email = "info@fowler.com",
+                Name = "Martin Fowler" + Guid.NewGuid().ToString(),
+                Email = "info@fowler.com" + Guid.NewGuid().ToString()
             };
             dbContext.Customers.Add(customerToAdd);
             await dbContext.SaveChangesAsync(CancellationToken.None);
             
-            customerToAdd.CompanyId.ShouldBe(_otherUserService.CompanyId);
-
             //Act
             var result = await _sut.Handle(new GetCustomersListQuery(), CancellationToken.None);
 
             //Assert
             result.ShouldBeOfType<CustomerListVm>();
             result.Customers.Count.ShouldBe(3);
-            result.Customers.All(c => c.CompanyId == _currentUserService.CompanyId).ShouldBe(true);
-            result.Customers.Any(c => c.CompanyId == _otherUserService.CompanyId).ShouldBe(false);
+            result.Customers.Any(c => c.Name == customerToAdd.Name && c.Email == customerToAdd.Email).ShouldNotBe(true);
         }
     }
 }

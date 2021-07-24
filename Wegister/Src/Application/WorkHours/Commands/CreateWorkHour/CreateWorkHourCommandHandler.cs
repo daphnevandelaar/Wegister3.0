@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
@@ -24,8 +25,13 @@ namespace Application.WorkHours.Commands.CreateWorkHour
             var workHour = _factory.Create(request);
 
             _context.WorkHours.Add(workHour);
-
-            await _context.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+            catch(Exception ex)
+            {
+            }
 
             await _mediator.Publish(_factory.Create(workHour), cancellationToken);
 
