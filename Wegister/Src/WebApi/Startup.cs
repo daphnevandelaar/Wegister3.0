@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Persistence;
 using WebApi.Services;
 
@@ -31,8 +32,6 @@ namespace Wegister.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            
-
             services.AddPersistence(Configuration);
             services.AddInfrastructure();
             services.AddApplication();
@@ -50,6 +49,7 @@ namespace Wegister.WebApi
                                                   .AllowAnyMethod();
                                       });
                 });
+                services.AddSwaggerGen();
             }
             else
             {
@@ -74,7 +74,6 @@ namespace Wegister.WebApi
                     .Build();
             });
 
-            services.AddSwaggerGen();
 
             services.AddHealthChecks()
                 .AddDbContextCheck<WegisterDbContext>();
@@ -98,6 +97,7 @@ namespace Wegister.WebApi
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Wegister API V1");
                 });
+
                 app.UseCors(developmentOrigins);
             }
             else
@@ -106,6 +106,7 @@ namespace Wegister.WebApi
             }
 
             app.UseHttpsRedirection();
+            app.UseHsts();
 
             app.UseRouting();
 

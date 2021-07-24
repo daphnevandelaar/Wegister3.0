@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Common;
@@ -61,10 +62,6 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //TODO: Simplify this...
-            modelBuilder.Entity<Item>().HasQueryFilter(b => b.CompanyId == _currentUserService.CompanyId);
-            modelBuilder.Entity<Customer>().HasQueryFilter(b => b.CompanyId == _currentUserService.CompanyId);
-
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(WegisterDbContext).Assembly);
         }
     }
