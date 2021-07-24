@@ -18,7 +18,7 @@ namespace Application.UnitTests.Items.Queries
 
         public GetItemListQueryHandlerTests(QueryTestFixture fixture)
         {
-            _context = fixture.Context;
+            _context = null;
             _factory = fixture.ItemFactory;
         }
 

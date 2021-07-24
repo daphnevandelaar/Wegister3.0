@@ -13,7 +13,7 @@ namespace Wegister.WebApi
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
 
@@ -25,7 +25,6 @@ namespace Wegister.WebApi
                 {
                     var wegisterContext = services.GetRequiredService<WegisterDbContext>();
                     wegisterContext.Database.Migrate();
-
                 }
                 catch (Exception ex)
                 {

@@ -6,19 +6,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Persistence.Configurations
 {
-    public class ItemConfiguration : IEntityTypeConfiguration<Item>
+    public class WorkHourConfiguration : IEntityTypeConfiguration<WorkHour>
     {
         private readonly ICurrentUserService _currentUserService;
-        private readonly IDateTime _dateTime;
 
-        public ItemConfiguration(
+        public WorkHourConfiguration(
             ICurrentUserService currentUserService
             )
         {
             _currentUserService = currentUserService;
         }
 
-        public void Configure(EntityTypeBuilder<Item> builder)
+        public void Configure(EntityTypeBuilder<WorkHour> builder)
         {
             builder.HasQueryFilter(i => i.CompanyId == _currentUserService.CompanyId);
         }

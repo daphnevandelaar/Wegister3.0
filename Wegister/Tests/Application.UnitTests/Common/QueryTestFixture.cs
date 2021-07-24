@@ -2,37 +2,29 @@
 using Application.Common.Factories;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
+using Application.UnitTests.Common.Implementations;
 using Common;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 using Xunit;
 
 namespace Application.UnitTests.Common
 {
     public class QueryTestFixture : IDisposable
     {
-        public WegisterDbContext Context { get; private set; }
-        public ICurrentUserService UserService { get; set; }
-        public IDateTime MachineDateTime { get; set; }
-        public ICustomerFactory CustomerFactory { get; private set; }
-        public IItemFactory ItemFactory { get; private set; }
+        public ICurrentUserService UserService { get; }
+        public IDateTime MachineDateTime { get; }
+        public ICustomerFactory CustomerFactory { get; }
+        public IItemFactory ItemFactory { get; }
 
         public QueryTestFixture()
         {
-            var options = new DbContextOptionsBuilder<WegisterDbContext>()
-                .UseSqlite("Data Source = WegisterQueryDb.db")
-                .Options;
-
-            UserService = new CurrentUserServiceFactory();
-            MachineDateTime = new MachineDateTimeFactory();
+            UserService = new TestUserService();
+            MachineDateTime = new TestMachineDate();
             CustomerFactory = new CustomerFactory();
             ItemFactory = new ItemFactory();
-            Context = WegisterContextFactory.Create(options, UserService, MachineDateTime);
         }
 
         public void Dispose()
         {
-            WegisterContextFactory.Destroy(Context);
             GC.SuppressFinalize(this);
         }
     }

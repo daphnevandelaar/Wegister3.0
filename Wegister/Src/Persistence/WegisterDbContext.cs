@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Common;
 using Domain.Entities;
 using Domain.Entities.Abstracts;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Configurations;
 
 namespace Persistence
 {
@@ -62,7 +62,11 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(WegisterDbContext).Assembly);
+            //TODO: check if all configurations are injected (else throw exception)
+            modelBuilder.ApplyConfiguration(new CustomerConfiguration(_currentUserService));
+            modelBuilder.ApplyConfiguration(new EmployerConfiguration(_currentUserService));
+            modelBuilder.ApplyConfiguration(new ItemConfiguration(_currentUserService));
+            modelBuilder.ApplyConfiguration(new WorkHourConfiguration(_currentUserService));
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Application.Common.Interfaces;
 
-namespace Application.UnitTests.Common
+namespace Application.UnitTests.Common.Implementations
 {
-    class CurrentUserServiceFactory : ICurrentUserService
+    public class TestUserService : ICurrentUserService
     {
         public string UserId => "10000000-0000-0000-0000-000000000002";
 

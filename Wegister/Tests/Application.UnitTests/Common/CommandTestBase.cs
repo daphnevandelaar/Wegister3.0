@@ -2,6 +2,7 @@
 using Application.Common.Factories;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
+using Application.UnitTests.Common.Implementations;
 using Common;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -23,17 +24,17 @@ namespace Application.UnitTests.Common
                 .UseSqlite("Data Source = WegisterCommandDb.db")
                 .Options;
 
-            UserService = new CurrentUserServiceFactory();
-            MachineDateTime = new MachineDateTimeFactory();
+            UserService = new TestUserService();
+            MachineDateTime = new TestMachineDate();
             WorkHourFactory = new WorkHourFactory();
             CustomerFactory = new CustomerFactory();
             ItemFactory = new ItemFactory();
-            Context = WegisterContextFactory.Create(options, UserService, MachineDateTime);
+            Context = WegisterTestContextFactory.Create(options, UserService, MachineDateTime);
         }
 
         public void Dispose()
         {
-            WegisterContextFactory.Destroy(Context);
+            WegisterTestContextFactory.Destroy(Context);
             GC.SuppressFinalize(this);
         }
     }

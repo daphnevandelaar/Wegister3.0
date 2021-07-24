@@ -12,7 +12,6 @@ namespace Application
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
-            //TODO: Load dynamically 
             services.AddTransient<ICustomerFactory, CustomerFactory>();
             services.AddTransient<IItemFactory, ItemFactory>();
             services.AddTransient<IWorkHourFactory, WorkHourFactory>();

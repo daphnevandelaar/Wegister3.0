@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Employers\**" />
+    <EmbeddedResource Remove="Employers\**" />
+    <None Remove="Employers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.6">
       <PrivateAssets>all</PrivateAssets>
@@ -28,11 +34,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Src\Persistence\Persistence.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Employers\Commands\" />
-    <Folder Include="Employers\Queries\" />
   </ItemGroup>
 
 </Project>
