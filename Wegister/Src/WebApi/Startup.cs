@@ -104,7 +104,7 @@ namespace Wegister.WebApi
             {
                 app.UseCors(origins);
             }
-
+            WegisterInformationPage(app);
             app.UseHttpsRedirection();
             app.UseHsts();
 
@@ -117,6 +117,23 @@ namespace Wegister.WebApi
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
             });
+        }
+
+        private void WegisterInformationPage (IApplicationBuilder app)
+        {
+            app.Map("/wegister", builder => builder.Run(async context =>
+            {
+                var sb = new StringBuilder();
+                sb.Append("<h1>Wegister</h1>");
+                sb.Append("<table><thead>");
+                sb.Append("<tr><th>Name</th><th>Details</th></tr>");
+                sb.Append("</thead><tbody>");
+                sb.Append("<tr>");
+                sb.Append($"<td>Buildnumber: </td>");
+                sb.Append($"<td>{Configuration["Wegister:BuildNumber"]}</td>");
+                sb.Append("</tr>");
+                await context.Response.WriteAsync(sb.ToString());
+            }));
         }
 
         private void RegisteredServicesPage(IApplicationBuilder app)

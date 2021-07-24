@@ -30,34 +30,20 @@ namespace Application.UnitTests.Common
             return context;
         }
 
-        //public static WegisterDbContext SeedDatabaseWithItems(WegisterDbContext context)
-        //{
-        //    context.Items.AddRange(new[] {
-        //        new Item()
-        //        {
-        //            Name = "Cheeseburger",
-        //            Price = 2.50m,
-        //            Unit = "Stuks",
-        //            CompanyId = _companyId
-        //        },
-        //        new Item()
-        //        {
-        //            Name = "Pokebowl",
-        //            Price = 6.50m,
-        //            Unit = "Stuks",
-        //            CompanyId = _companyId
-        //        },
-        //        new Item()
-        //        {
-        //            Name = "Transport",
-        //            Price = 35.50m,
-        //            Unit = "Kilometers",
-        //            CompanyId = "Invisible Item"
-        //        }
-        //    });
+        public static WegisterDbContext CreateItemDb(DbContextOptions<WegisterDbContext> options, ICurrentUserService currentUserService, IDateTime dateTime)
+        {
+            var context = new WegisterDbContext(options, currentUserService, dateTime);
 
-        //    return context;
-        //}
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            var items = new ItemDbSeeder(currentUserService).Seed();
+            context.Items.AddRange(items);
+
+            context.SaveChangesAsync();
+
+            return context;
+        }
 
         public static void Destroy(WegisterDbContext context)
         {
