@@ -6,12 +6,14 @@ using Application.UnitTests.Common.Implementations;
 using Common;
 using MediatR;
 using Moq;
+using Shouldly;
 
 namespace Application.UnitTests.Common
 {
     public class CommandTestBase : IDisposable
     {
         public ICurrentUserService UserService { get; }
+        public ICurrentUserService OtherUserService { get; }
         public IDateTime MachineDateTime { get; }
         public IWorkHourFactory WorkHourFactory { get; }
         public ICustomerFactory CustomerFactory { get; }
@@ -21,11 +23,14 @@ namespace Application.UnitTests.Common
         public CommandTestBase()
         {
             UserService = new TestUserService();
+            OtherUserService = new TestOtherUserService();
             MachineDateTime = new TestMachineDate();
             WorkHourFactory = new WorkHourFactory();
             CustomerFactory = new CustomerFactory();
             ItemFactory = new ItemFactory();
             Mediator = new Mock<IMediator>();
+
+            OtherUserService.CompanyId.ShouldNotBe(UserService.CompanyId);
         }
 
 

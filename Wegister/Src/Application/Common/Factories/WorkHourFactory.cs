@@ -19,19 +19,19 @@ namespace Application.Common.Factories
 
         public WorkHourLookupDto CreateLookUpDto(WorkHour workHour)
         {
-            return new WorkHourLookupDto()
+            return new()
             {
                 Id = workHour.Id,
                 StartTime = workHour.StartTime,
                 EndTime = workHour.EndTime,
                 TotalWorkHoursInMinutes = workHour.TotalWorkHoursInMinutes,
                 RecreationInMinutes = workHour.RecreationInMinutes,
-                Employer = new EmployerMiniDto()
+                Employer = new EmployerMiniDto
                 {
                     Id = workHour.Employer?.Id ?? 0,
                     Name = workHour.Employer?.Name ?? ""
                 },
-                User = new UserDto()
+                User = new UserDto
                 {
                     Id = workHour.User?.Id.ToString() ?? "",
                     DisplayName = workHour.Employer?.Name ?? ""
@@ -41,11 +41,12 @@ namespace Application.Common.Factories
 
         public WorkHour Create(CreateWorkHourCommand entity)
         {
-            return new WorkHour()
+            return new()
             {
                 StartTime = entity.StartTime,
                 EndTime = entity.EndTime,
-                Employer = new Employer()
+                RecreationInMinutes = entity.RecreationInMinutes,
+                Employer = new Employer
                 {
                     Id = entity.EmployerId
                 }
