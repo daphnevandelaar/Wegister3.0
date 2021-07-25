@@ -9,6 +9,7 @@ namespace Application.Common.Factories.Interfaces
     public interface ICustomerFactory : 
         IFactory<CreateCustomerCommand, Customer>, 
         IFactory<Customer, CustomerCreated>, 
+        IFactory<CustomerVm, CreateCustomerCommand>, 
         IFactory<List<CustomerLookupDto>, CustomerListVm>
     {
         public CustomerLookupDto CreateLookUpDto(Customer customer);

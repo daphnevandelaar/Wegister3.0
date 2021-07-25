@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Application.Common.Factories.Interfaces;
+using Application.Common.Viewmodels;
 using Application.Customers.Commands.CreateCustomer;
 using Application.Customers.Queries.GetCustomersList;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +12,12 @@ namespace WebApi.Controllers
     public class CustomersController : BaseController
     {
         private readonly ILogger<CustomersController> _logger;
+        private readonly ICustomerFactory _customerFactory;
 
-        public CustomersController(ILogger<CustomersController> logger)
+        public CustomersController(ILogger<CustomersController> logger, ICustomerFactory customerFactory)
         {
             _logger = logger;
+            _customerFactory = customerFactory;
         }
 
         [HttpGet]
@@ -27,9 +31,11 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerCommand command)
+        public async Task<IActionResult> CreateCustomer([FromBody] CustomerVm customer)
         {
             _logger.LogInformation("Create customer");
+
+            var command = _customerFactory.Create(customer);
 
             var response = await Mediator.Send(command);
 

@@ -61,5 +61,10 @@ namespace Application.Common.Factories
 
             return null;
         }
+
+        public CreateCustomerCommand Create(CustomerVm entity)
+        {
+            return new CreateCustomerCommand(entity.Name, entity.Email, entity.EmailToSendHoursTo, entity.Street, entity.HouseNumber, entity.Place, entity.ZipCode);
+        }
     }
 }
