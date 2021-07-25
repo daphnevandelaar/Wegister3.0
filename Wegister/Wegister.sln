@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.IntegrationTest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.UnitTests", "Tests\Application.UnitTests\Application.UnitTests.csproj", "{49B66B1E-5649-4989-B3F7-87760426ED7F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation.IntegrationTests", "Presentation.IntegrationTests\Presentation.IntegrationTests.csproj", "{02E99178-BE30-4070-9F98-6781E59E47A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{49B66B1E-5649-4989-B3F7-87760426ED7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49B66B1E-5649-4989-B3F7-87760426ED7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49B66B1E-5649-4989-B3F7-87760426ED7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02E99178-BE30-4070-9F98-6781E59E47A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02E99178-BE30-4070-9F98-6781E59E47A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02E99178-BE30-4070-9F98-6781E59E47A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02E99178-BE30-4070-9F98-6781E59E47A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{C3B14F50-1275-44D4-9D13-3B3430009038} = {EBAE8123-38FA-4754-806C-A723A14F2D5E}
 		{74BA1235-6FF3-45E8-8DBA-4FF5987FF54B} = {DBA7B79B-AD22-4138-9BDC-2FFF959779ED}
 		{49B66B1E-5649-4989-B3F7-87760426ED7F} = {DBA7B79B-AD22-4138-9BDC-2FFF959779ED}
+		{02E99178-BE30-4070-9F98-6781E59E47A6} = {DBA7B79B-AD22-4138-9BDC-2FFF959779ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD0CA943-4612-4FF4-968C-A8F0DF14C60C}

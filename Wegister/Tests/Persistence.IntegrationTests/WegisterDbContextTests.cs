@@ -72,7 +72,6 @@ namespace Persistence.IntegrationTests
                 StartTime = _dateTime,
                 EndTime = _dateTime.AddMinutes(20),
                 RecreationInMinutes = 10,
-                TotalWorkHoursInMinutes = 10,
                 Employer = _sut.Employers.FirstOrDefault(),
                 User = new User()
                 {
@@ -163,7 +162,6 @@ namespace Persistence.IntegrationTests
                 StartTime = _dateTime,
                 EndTime = _dateTime.AddMinutes(20),
                 RecreationInMinutes = 10,
-                TotalWorkHoursInMinutes = 10,
                 Employer = _sut.Employers.FirstOrDefault(),
                 User = new User()
                 {

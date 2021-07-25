@@ -9,6 +9,11 @@ namespace Application.Common.Factories
 {
     internal class CustomerFactory : ICustomerFactory
     {
+        public CustomerVm CreateInternal(CustomerLookupDto entity)
+        {
+            return new CustomerVm();
+        }
+
         public CustomerListVm Create(List<CustomerLookupDto> entity)
         {
             var returnValue = new CustomerListVm();

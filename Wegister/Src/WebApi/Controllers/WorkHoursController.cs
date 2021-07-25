@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Application.Common.Factories.Interfaces;
+using Application.Common.Viewmodels;
 using Application.WorkHours.Commands.CreateWorkHour;
 using Application.WorkHours.Queries.GetHoursList;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +13,12 @@ namespace WebApi.Controllers
     public class WorkHoursController : BaseController
     {
         private readonly ILogger<WorkHoursController> _logger;
+        private readonly IWorkHourFactory _workHourFactory;
 
-        public WorkHoursController(ILogger<WorkHoursController> logger)
+        public WorkHoursController(ILogger<WorkHoursController> logger, IWorkHourFactory workHourFactory)
         {
             _logger = logger;
+            _workHourFactory = workHourFactory;
         }
 
         [HttpGet]
@@ -28,9 +32,11 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateWorkHour([FromBody] CreateWorkHourCommand command)
+        public async Task<IActionResult> CreateWorkHour([FromBody] WorkHourVm workHour)
         {
             _logger.LogInformation("Create workhour");
+
+            var command = _workHourFactory.Create(workHour);
 
             var response = await Mediator.Send(command);
 

@@ -9,7 +9,6 @@ namespace Persistence.Configurations
     public class ItemConfiguration : IEntityTypeConfiguration<Item>
     {
         private readonly ICurrentUserService _currentUserService;
-        private readonly IDateTime _dateTime;
 
         public ItemConfiguration(
             ICurrentUserService currentUserService

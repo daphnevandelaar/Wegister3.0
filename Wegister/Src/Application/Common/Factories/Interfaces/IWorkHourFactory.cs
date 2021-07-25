@@ -9,6 +9,7 @@ namespace Application.Common.Factories.Interfaces
     public interface IWorkHourFactory :
         IFactory<CreateWorkHourCommand, WorkHour>,
         IFactory<WorkHour, WorkHourCreated>,
+        IFactory<WorkHourVm, CreateWorkHourCommand>,
         IFactory<List<WorkHourLookupDto>, WorkHourListVm>
     {
         public WorkHourLookupDto CreateLookUpDto(WorkHour workHour);

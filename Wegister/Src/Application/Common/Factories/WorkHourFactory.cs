@@ -9,10 +9,30 @@ namespace Application.Common.Factories
 {
     public class WorkHourFactory : IWorkHourFactory
     {
-        public WorkHourListVm Create(List<WorkHourLookupDto> entity)
+        public WorkHourVm CreateInternal(WorkHourLookupDto entity)
         {
-            if (entity != null)
-                return new WorkHourListVm(entity);
+            return new WorkHourVm {
+                StartTime = entity.StartTime,
+                EndTime = entity.EndTime,
+                RecreationInMinutes = entity.RecreationInMinutes,
+                EmployerId = entity.Employer.Id,
+                TotalWorkHoursInMinutes = entity.TotalWorkHoursInMinutes
+            };
+        }
+
+        public WorkHourListVm Create(List<WorkHourLookupDto> entities)
+        {
+            if (entities != null || entities.Count != 0)
+            {
+                var workHoursVm = new List<WorkHourVm>();
+
+                entities.ForEach(w =>
+                {
+                    workHoursVm.Add(CreateInternal(w));
+                });
+
+                return new WorkHourListVm(workHoursVm);
+            }
 
             return null;
         }
@@ -24,8 +44,8 @@ namespace Application.Common.Factories
                 Id = workHour.Id,
                 StartTime = workHour.StartTime,
                 EndTime = workHour.EndTime,
-                TotalWorkHoursInMinutes = workHour.TotalWorkHoursInMinutes,
                 RecreationInMinutes = workHour.RecreationInMinutes,
+                TotalWorkHoursInMinutes = workHour.TotalWorkHoursInMinutes,
                 Employer = new EmployerMiniDto
                 {
                     Id = workHour.Employer?.Id ?? 0,
@@ -37,6 +57,11 @@ namespace Application.Common.Factories
                     DisplayName = workHour.Employer?.Name ?? ""
                 }
             };
+        }
+
+        public CreateWorkHourCommand Create(WorkHourVm entity)
+        {
+            return new CreateWorkHourCommand(entity.StartTime, entity.EndTime, entity.RecreationInMinutes, entity.EmployerId);
         }
 
         public WorkHour Create(CreateWorkHourCommand entity)

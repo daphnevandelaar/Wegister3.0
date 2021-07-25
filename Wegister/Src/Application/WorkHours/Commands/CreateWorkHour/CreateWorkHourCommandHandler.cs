@@ -23,17 +23,16 @@ namespace Application.WorkHours.Commands.CreateWorkHour
         public async Task<Unit> Handle(CreateWorkHourCommand request, CancellationToken cancellationToken)
         {
             var workHour = _factory.Create(request);
-
             _context.WorkHours.Add(workHour);
+
             try
             {
                 await _context.SaveChangesAsync(cancellationToken);
+                await _mediator.Publish(_factory.Create(workHour), cancellationToken);
             }
             catch(Exception ex)
             {
             }
-
-            await _mediator.Publish(_factory.Create(workHour), cancellationToken);
 
             return Unit.Value;
         }
