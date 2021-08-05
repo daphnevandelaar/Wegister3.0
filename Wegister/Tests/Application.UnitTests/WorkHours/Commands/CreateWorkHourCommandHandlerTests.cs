@@ -36,6 +36,17 @@ namespace Application.UnitTests.WorkHours.Commands
             // Assert
             Mediator.Verify(m => m.Publish(It.IsAny<WorkHourCreated>(), It.IsAny<CancellationToken>()), Times.Once);
             _context.WorkHours.ToList().Count.ShouldBe(3);
+            _context.WorkHours
+                .Any(w =>
+                    w.EmployerId == workHourCommand.EmployerId &&
+                    w.StartTime == workHourCommand.StartTime &&
+                    w.EndTime == workHourCommand.EndTime &&
+                    w.CompanyId == UserService.CompanyId &&
+                    w.RecreationInMinutes == workHourCommand.RecreationInMinutes &&
+                    w.Created == MachineDateTime.Now &&
+                    w.CreatedBy == UserService.UserId &&
+                    w.User.Id == new Guid(UserService.UserId)
+                ).ShouldBe(true);
         }
     }
 }
