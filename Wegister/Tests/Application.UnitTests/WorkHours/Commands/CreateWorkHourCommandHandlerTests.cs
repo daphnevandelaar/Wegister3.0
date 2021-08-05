@@ -24,14 +24,14 @@ namespace Application.UnitTests.WorkHours.Commands
         {
             _context = WegisterTestContextFactory.CreateWorkHourDb(options, UserService, MachineDateTime);
 
-            _sut = new CreateWorkHourCommandHandler(_context, Mediator.Object, WorkHourFactory);
+            _sut = new CreateWorkHourCommandHandler(_context, Mediator.Object, WorkHourFactory, UserService, WorkHourBuilder);
         }
 
         [Fact]
         public void Handle_GivenValidRequest_ShouldRaiseWorkHourCreatedNotification()
         {
             // Arrange
-            _context.WorkHours.ToList().Count.ShouldBe(0);
+            _context.WorkHours.ToList().Count.ShouldBe(1);
             var workHourCommand = new CreateWorkHourCommand(MachineDateTime.Now, MachineDateTime.Now.AddMinutes(100), 10, 1);
 
             // Act
@@ -39,9 +39,9 @@ namespace Application.UnitTests.WorkHours.Commands
 
             // Assert
             Mediator.Verify(m => m.Publish(It.IsAny<WorkHourCreated>(), It.IsAny<CancellationToken>()), Times.Once);
-            _context.WorkHours.ToList().Count.ShouldBe(1);
-            var tst = _context.WorkHours.ToList();
+            _context.WorkHours.ToList().Count.ShouldBe(2);
             _context.WorkHours
+                .Include(w => w.User)
                 .Any(w =>
                     w.Employer.Id == workHourCommand.EmployerId &&
                     w.StartTime == workHourCommand.StartTime &&

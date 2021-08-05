@@ -37,7 +37,7 @@ namespace Application.UnitTests.Common
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            var items = new ItemDbSeeder(currentUserService).Seed();
+            var items = new ItemDbSeeder().Seed();
             context.Items.AddRange(items);
 
             context.SaveChangesAsync();
@@ -52,18 +52,19 @@ namespace Application.UnitTests.Common
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            var items = new ItemDbSeeder(currentUserService).Seed();
+            var items = new ItemDbSeeder().Seed();
+            var employers = new EmployerDbSeeder().Seed();
+            var users = new UserDbSeeder().Seed();
+            var workhours = new WorkHoudDbSeeder(currentUserService, dateTime).Seed();
+
             context.Items.AddRange(items);
+            context.Employers.AddRange(employers);
+            context.Users.AddRange(users);
+            context.WorkHours.AddRange(workhours);
 
             context.SaveChangesAsync();
 
             return context;
-        }
-
-        public static void Destroy(WegisterDbContext context)
-        {
-            context.Database.EnsureDeleted();
-            context.Dispose();
         }
     }
 }

@@ -22,6 +22,7 @@ namespace Application.WorkHours.Queries.GetHoursList
 
         public async Task<WorkHourListVm> Handle(GetWorkHoursListQuery request, CancellationToken cancellationToken)
         {
+            var count = _context.WorkHours.Count();
             var workhours = await _context.WorkHours
                 .Select(w => _factory.CreateLookUpDto(w))
                 .ToListAsync(cancellationToken);

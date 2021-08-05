@@ -1,21 +1,14 @@
-﻿using Application.Common.Interfaces;
-using Domain.Entities;
+﻿using Domain.Entities;
 using System.Collections.Generic;
 
 namespace Application.UnitTests.Common.DatabaseSeeders
 {
     public class ItemDbSeeder : ISeeder<Item>
     {
-        private readonly ICurrentUserService _userService;
-
-        public ItemDbSeeder(ICurrentUserService userService)
-        {
-            _userService = userService;
-        }
-
         public HashSet<Item> Seed()
         {
-            return new HashSet<Item> {
+            return new()
+            {
                 new Item
                 {
                     Name = "Computer mouse",
@@ -27,7 +20,6 @@ namespace Application.UnitTests.Common.DatabaseSeeders
                     Name = "USB-stick 5gb",
                     Price = 3.00m,
                     Unit = "Per piece",
-                    CompanyId = _userService.CompanyId +"Invisible Customer"
                 },
                 new Item
                 {

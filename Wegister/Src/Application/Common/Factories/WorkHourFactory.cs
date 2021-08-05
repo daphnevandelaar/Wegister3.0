@@ -16,6 +16,7 @@ namespace Application.Common.Factories
                 EndTime = entity.EndTime,
                 RecreationInMinutes = entity.RecreationInMinutes,
                 EmployerId = entity.Employer.Id,
+                UserId = entity.User.Id,
                 TotalWorkHoursInMinutes = entity.TotalWorkHoursInMinutes
             };
         }

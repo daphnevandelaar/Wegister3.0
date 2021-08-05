@@ -8,14 +8,11 @@ namespace Domain.Entities
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int RecreationInMinutes { get; set; }
-        
-        public int TotalWorkHoursInMinutes { 
-            get 
-            { 
-                return (int)(EndTime - StartTime).TotalMinutes - RecreationInMinutes; 
-            } 
-        }
-        
+        public int EmployerId { get; set; }
+        public string UserId { get; set; }
+
+        public int TotalWorkHoursInMinutes => (int)(EndTime - StartTime).TotalMinutes - RecreationInMinutes;
+
         public Employer Employer { get; set; }
         public User User { get; set; }
     }

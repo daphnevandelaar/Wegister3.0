@@ -1,4 +1,6 @@
 ﻿using System;
+using Application.Common.Builders;
+using Application.Common.Builders.Interfaces;
 using Application.Common.Factories;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
@@ -17,6 +19,7 @@ namespace Application.UnitTests.Common
         public IDateTime MachineDateTime { get; }
         public IWorkHourFactory WorkHourFactory { get; }
         public ICustomerFactory CustomerFactory { get; }
+        public IWorkHourBuilder WorkHourBuilder { get; }
         public IItemFactory ItemFactory { get; }
         public Mock<IMediator> Mediator { get; }
 
@@ -27,6 +30,7 @@ namespace Application.UnitTests.Common
             MachineDateTime = new TestMachineDate();
             WorkHourFactory = new WorkHourFactory();
             CustomerFactory = new CustomerFactory();
+            WorkHourBuilder = new WorkHourBuilder();
             ItemFactory = new ItemFactory();
             Mediator = new Mock<IMediator>();
 

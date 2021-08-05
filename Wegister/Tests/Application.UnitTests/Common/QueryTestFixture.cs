@@ -14,6 +14,7 @@ namespace Application.UnitTests.Common
         public IDateTime MachineDateTime { get; }
         public ICustomerFactory CustomerFactory { get; }
         public IItemFactory ItemFactory { get; }
+        public IWorkHourFactory WorkHourFactory { get; }
 
         public QueryTestFixture()
         {
@@ -21,6 +22,7 @@ namespace Application.UnitTests.Common
             MachineDateTime = new TestMachineDate();
             CustomerFactory = new CustomerFactory();
             ItemFactory = new ItemFactory();
+            WorkHourFactory = new WorkHourFactory();
         }
 
         public void Dispose()
