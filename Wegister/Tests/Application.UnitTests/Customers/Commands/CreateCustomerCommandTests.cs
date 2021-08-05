@@ -2,26 +2,21 @@
 using System.Threading;
 using Application.Customers.Commands.CreateCustomer;
 using Application.UnitTests.Common;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using Persistence;
 using Shouldly;
 using Xunit;
 
-namespace Application.UnitTests.Customers.Commands.CreateCustomers
+namespace Application.UnitTests.Customers.Commands
 {
     public class CreateCustomerCommandTests : CommandTestBase
     {
         private readonly WegisterDbContext _context;
         private readonly CreateCustomerCommandHandler _sut;
 
-        private readonly DbContextOptions<WegisterDbContext> options = new DbContextOptionsBuilder<WegisterDbContext>()
-            .UseSqlite("Data Source = WegisterCustomerCommandDb.db")
-            .Options;
-
         public CreateCustomerCommandTests()
         {
-            _context = WegisterTestContextFactory.CreateCustomerDb(options, UserService, MachineDateTime);
+            _context = WegisterTestContextFactory.CreateCustomerDb(Options, UserService, MachineDateTime);
 
             _sut = new CreateCustomerCommandHandler(_context, Mediator.Object, CustomerFactory);
         }

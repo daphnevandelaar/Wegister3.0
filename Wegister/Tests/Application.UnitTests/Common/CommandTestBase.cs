@@ -7,13 +7,19 @@ using Application.Common.Interfaces;
 using Application.UnitTests.Common.Implementations;
 using Common;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Moq;
+using Persistence;
 using Shouldly;
 
 namespace Application.UnitTests.Common
 {
     public class CommandTestBase : IDisposable
     {
+        public readonly DbContextOptions<WegisterDbContext> Options = new DbContextOptionsBuilder<WegisterDbContext>()
+            .UseSqlite($"Data Source = WegisterCommandDb{Guid.NewGuid()}.db")
+            .Options;
+
         public ICurrentUserService UserService { get; }
         public ICurrentUserService OtherUserService { get; }
         public IDateTime MachineDateTime { get; }
@@ -36,8 +42,6 @@ namespace Application.UnitTests.Common
 
             OtherUserService.CompanyId.ShouldNotBe(UserService.CompanyId);
         }
-
-
 
         public void Dispose()
         {

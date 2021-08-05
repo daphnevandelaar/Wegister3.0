@@ -16,13 +16,9 @@ namespace Application.UnitTests.WorkHours.Commands
         private readonly WegisterDbContext _context;
         private readonly CreateWorkHourCommandHandler _sut;
 
-        private readonly DbContextOptions<WegisterDbContext> options = new DbContextOptionsBuilder<WegisterDbContext>()
-                .UseSqlite("Data Source = WegisterWorkHourCommandDb.db")
-                .Options;
-
         public CreateWorkHourCommandHandlerTests()
         {
-            _context = WegisterTestContextFactory.CreateWorkHourDb(options, UserService, MachineDateTime);
+            _context = WegisterTestContextFactory.CreateWorkHourDb(Options, UserService, MachineDateTime);
 
             _sut = new CreateWorkHourCommandHandler(_context, Mediator.Object, WorkHourFactory, UserService, WorkHourBuilder);
         }

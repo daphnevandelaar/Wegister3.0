@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Viewmodels;
-using Application.Customers.Commands.CreateCustomer;
 using Application.Customers.Queries.GetCustomersList;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

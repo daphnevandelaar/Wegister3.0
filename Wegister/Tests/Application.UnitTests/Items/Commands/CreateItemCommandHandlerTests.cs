@@ -3,9 +3,7 @@ using System.Threading;
 using Application.Common.Interfaces;
 using Application.Items.Commands.CreateItem;
 using Application.UnitTests.Common;
-using Microsoft.EntityFrameworkCore;
 using Moq;
-using Persistence;
 using Shouldly;
 using Xunit;
 
@@ -13,16 +11,12 @@ namespace Application.UnitTests.Items.Commands
 {
     public class CreateItemCommandHandlerTests : CommandTestBase
     {
-        private readonly DbContextOptions<WegisterDbContext> options = new DbContextOptionsBuilder<WegisterDbContext>()
-            .UseSqlite("Data Source = WegisterItemCommandDb.db")
-            .Options;
-
         private readonly IWegisterDbContext _context;
         private readonly CreateItemCommandHandler _sut;
 
         public CreateItemCommandHandlerTests()
         {
-            _context = WegisterTestContextFactory.CreateWorkHourDb(options, UserService, MachineDateTime);
+            _context = WegisterTestContextFactory.CreateItemDb(Options, UserService, MachineDateTime);
 
             _sut = new CreateItemCommandHandler(_context, Mediator.Object, ItemFactory);
         }
@@ -32,7 +26,7 @@ namespace Application.UnitTests.Items.Commands
         {
             // Arrange
             _context.Items.ToList().Count.ShouldBe(3);
-            var itemCommand = new CreateItemCommand("Utrawide monitor", 1099m,"Piece per");
+            var itemCommand = new CreateItemCommand("Ultra wide monitor", 1099m,"Piece per");
 
             // Act
             var result = _sut.Handle(itemCommand, CancellationToken.None);
