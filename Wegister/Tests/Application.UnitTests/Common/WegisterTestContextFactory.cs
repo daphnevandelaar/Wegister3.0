@@ -25,7 +25,7 @@ namespace Application.UnitTests.Common
             var customers = new CustomerDbSeeder(currentUserService).Seed();
             context.Customers.AddRange(customers);
 
-            context.SaveChangesAsync();
+            context.SaveChanges();
 
             return context;
         }
@@ -37,10 +37,10 @@ namespace Application.UnitTests.Common
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            var items = new ItemDbSeeder().Seed();
+            var items = new ItemDbSeeder(currentUserService).Seed();
             context.Items.AddRange(items);
 
-            context.SaveChangesAsync();
+            context.SaveChanges();
 
             return context;
         }
@@ -52,7 +52,7 @@ namespace Application.UnitTests.Common
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            var items = new ItemDbSeeder().Seed();
+            var items = new ItemDbSeeder(currentUserService).Seed();
             var employers = new EmployerDbSeeder().Seed();
             var users = new UserDbSeeder().Seed();
             var workhours = new WorkHoudDbSeeder(currentUserService, dateTime).Seed();
@@ -62,7 +62,8 @@ namespace Application.UnitTests.Common
             context.Users.AddRange(users);
             context.WorkHours.AddRange(workhours);
 
-            context.SaveChangesAsync();
+            context.SaveChanges();
+            context.SaveChanges();
 
             return context;
         }

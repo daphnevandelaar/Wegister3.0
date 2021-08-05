@@ -25,7 +25,7 @@ namespace Application.UnitTests.Common.DatabaseSeeders
                     Place = "Amsterdam",
                     Street = "Heiligeweg",
                     ZipCode = "1012XP",
-                    CompanyId = "Invisible"
+                    CompanyId = _userService.CompanyId
                 },
                 new Customer
                 {
@@ -36,7 +36,7 @@ namespace Application.UnitTests.Common.DatabaseSeeders
                     Place = "Eindhoven",
                     Street = "'s-Gravenbrakelstraat",
                     ZipCode = "5628VS",
-                    CompanyId = _userService.CompanyId +"Invisible Customer"
+                    CompanyId = _userService.CompanyId +" invisible Customer"
                 },
                 new Customer
                 {
@@ -46,7 +46,8 @@ namespace Application.UnitTests.Common.DatabaseSeeders
                     HouseNumber = "36",
                     Place = "San Francisco",
                     Street = "California St",
-                    ZipCode = "94115"
+                    ZipCode = "94115",
+                    CompanyId = _userService.CompanyId
                 }
             };
         }

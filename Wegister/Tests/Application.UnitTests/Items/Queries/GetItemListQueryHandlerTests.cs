@@ -18,7 +18,6 @@ namespace Application.UnitTests.Items.Queries
     public class GetItemListQueryHandlerTests
     {
         private readonly ICurrentUserService _otherUserService;
-        private readonly IDateTime _dateTime;
         private readonly GetItemsListQueryHandler _sut;
 
         private readonly DbContextOptions<WegisterDbContext> options = new DbContextOptionsBuilder<WegisterDbContext>()
@@ -30,7 +29,6 @@ namespace Application.UnitTests.Items.Queries
             var factory = fixture.ItemFactory;
             var currentUserService = fixture.UserService;
             _otherUserService = new TestOtherUserService();
-            _dateTime = fixture.MachineDateTime;
             var context = WegisterTestContextFactory.CreateItemDb(options, fixture.UserService, fixture.MachineDateTime);
 
             _otherUserService.CompanyId.ShouldNotBe(currentUserService.CompanyId);
@@ -42,23 +40,14 @@ namespace Application.UnitTests.Items.Queries
         public async Task GetItemsFromOwnCompanyOnlyTest()
         {
             //Arrange
-            var dbContext = new WegisterDbContext(options, _otherUserService, _dateTime);
-            var itemToAdd = new Domain.Entities.Item
-            {
-                Name = "Harddisk 500GB",
-                Price = 100m,
-                Unit = "Price per piece"
-            };
-            dbContext.Items.Add(itemToAdd);
-            await dbContext.SaveChangesAsync(CancellationToken.None);
+            var query = new GetItemsListQuery();
 
             //Act
-            var result = await _sut.Handle(new GetItemsListQuery(), CancellationToken.None);
+            var result = await _sut.Handle(query, CancellationToken.None);
 
             //Assert
             result.ShouldBeOfType<ItemListVm>();
-            result.Items.Count.ShouldBe(3);
-            result.Items.Any(i => i.Name == itemToAdd.Name && i.Price == itemToAdd.Price).ShouldNotBe(true);
+            result.Items.Count.ShouldBe(2);
         }
     }
 }

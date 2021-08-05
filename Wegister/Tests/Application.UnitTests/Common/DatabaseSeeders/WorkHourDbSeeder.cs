@@ -26,8 +26,27 @@ namespace Application.UnitTests.Common.DatabaseSeeders
                     EndTime = _dateTime.Now.AddMinutes(40),
                     RecreationInMinutes = 10,
                     UserId = _userService.UserId,
-                    EmployerId = 1
-                }
+                    EmployerId = 1,
+                    CompanyId = _userService.CompanyId
+                },
+                new WorkHour
+                {
+                    StartTime = _dateTime.Now,
+                    EndTime = _dateTime.Now.AddMinutes(40),
+                    RecreationInMinutes = 10,
+                    UserId = _userService.UserId + " invisible workhour",
+                    EmployerId = 1,
+                    CompanyId = _userService + " invisible workhour"
+                },
+                new WorkHour
+                {
+                    StartTime = _dateTime.Now,
+                    EndTime = _dateTime.Now.AddMinutes(40),
+                    RecreationInMinutes = 10,
+                    UserId = _userService.UserId,
+                    EmployerId = 1,
+                    CompanyId = _userService.CompanyId
+                },
             };
         }
     }

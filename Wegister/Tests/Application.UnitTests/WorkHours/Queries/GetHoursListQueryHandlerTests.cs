@@ -44,27 +44,14 @@ namespace Application.UnitTests.WorkHours.Queries
         public async Task GetWorkHourFromOwnCompanyAndUserOnlyTest()
         {
             //Arrange
-            var dbContext = new WegisterDbContext(options, _otherUserService, _dateTime);
-            dbContext.WorkHours.Count().ShouldBe(1);
-
-            var workHourToAdd = new Domain.Entities.WorkHour
-            {
-                UserId = _otherUserService.UserId,
-                StartTime = _dateTime.Now,
-                EndTime = _dateTime.Now.AddMinutes(170),
-                RecreationInMinutes = 10,
-                EmployerId = dbContext.Employers.First().Id
-            };
-            dbContext.WorkHours.Add(workHourToAdd);
-            await dbContext.SaveChangesAsync(CancellationToken.None);
-            dbContext.WorkHours.Count().ShouldBe(1);
+            var query = new GetWorkHoursListQuery();
 
             //Act
-            var result = await _sut.Handle(new GetWorkHoursListQuery(), CancellationToken.None);
+            var result = await _sut.Handle(query, CancellationToken.None);
 
             //Assert
             result.ShouldBeOfType<WorkHourListVm>();
-            result.WorkHours.Count.ShouldBe(1);
+            result.WorkHours.Count.ShouldBe(2);
             result.WorkHours.Any(w => w.UserId == _otherUserService.UserId).ShouldNotBe(true);
         }
     }

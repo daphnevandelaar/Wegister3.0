@@ -45,7 +45,7 @@ namespace Application.UnitTests.Customers.Queries
 
             //Assert
             result.ShouldBeOfType<CustomerListVm>();
-            result.Customers.Count.ShouldBe(3);
+            result.Customers.Count.ShouldBe(2);
         }
     }
 }
