@@ -9,7 +9,7 @@ namespace Domain.Entities
         public DateTime EndTime { get; set; }
         public int RecreationInMinutes { get; set; }
         public int EmployerId { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         public int TotalWorkHoursInMinutes => (int)(EndTime - StartTime).TotalMinutes - RecreationInMinutes;
 

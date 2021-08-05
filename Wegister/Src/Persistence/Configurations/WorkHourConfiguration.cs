@@ -18,6 +18,7 @@ namespace Persistence.Configurations
 
         public void Configure(EntityTypeBuilder<WorkHour> builder)
         {
+            builder.HasOne(w => w.User).WithMany().HasForeignKey(w => w.UserId);
             builder.HasQueryFilter(i => i.CompanyId == _currentUserService.CompanyId);
         }
     }

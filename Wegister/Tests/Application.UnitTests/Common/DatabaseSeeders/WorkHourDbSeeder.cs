@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Application.Common.Interfaces;
 using Common;
 using Domain.Entities;
@@ -25,7 +26,7 @@ namespace Application.UnitTests.Common.DatabaseSeeders
                     StartTime = _dateTime.Now,
                     EndTime = _dateTime.Now.AddMinutes(40),
                     RecreationInMinutes = 10,
-                    UserId = _userService.UserId,
+                    UserId = new Guid(_userService.UserId),
                     EmployerId = 1,
                     CompanyId = _userService.CompanyId
                 },
@@ -34,7 +35,7 @@ namespace Application.UnitTests.Common.DatabaseSeeders
                     StartTime = _dateTime.Now,
                     EndTime = _dateTime.Now.AddMinutes(40),
                     RecreationInMinutes = 10,
-                    UserId = _userService.UserId + " invisible workhour",
+                    UserId = new Guid("10000000-0000-0000-0000-000000000003"),
                     EmployerId = 1,
                     CompanyId = _userService + " invisible workhour"
                 },
@@ -43,7 +44,7 @@ namespace Application.UnitTests.Common.DatabaseSeeders
                     StartTime = _dateTime.Now,
                     EndTime = _dateTime.Now.AddMinutes(40),
                     RecreationInMinutes = 10,
-                    UserId = _userService.UserId,
+                    UserId = new Guid(_userService.UserId),
                     EmployerId = 1,
                     CompanyId = _userService.CompanyId
                 },

@@ -117,7 +117,7 @@ namespace Persistence.IntegrationTests
                     EndTime = _dateTime.AddMinutes(20),
                     RecreationInMinutes = 10,
                     Employer = _sut.Employers.FirstOrDefault(),
-                    UserId = _userId,
+                    UserId = new Guid(_userId),
                     CompanyId = _companyId
                 },
                 new WorkHour
@@ -127,7 +127,7 @@ namespace Persistence.IntegrationTests
                     EndTime = _dateTime.AddMinutes(210),
                     RecreationInMinutes = 110,
                     Employer = _sut.Employers.FirstOrDefault(),
-                    UserId = _userId + " Invisible WorkHour",
+                    UserId = Guid.NewGuid(),
                     CompanyId = _companyId + " Invisible WorkHour"
                 },
                 new WorkHour
@@ -137,7 +137,7 @@ namespace Persistence.IntegrationTests
                     EndTime = _dateTime.AddMinutes(201),
                     RecreationInMinutes = 101,
                     Employer = _sut.Employers.FirstOrDefault(),
-                    UserId = _userId + " Other user WorkHour",
+                    UserId = Guid.NewGuid(),
                     CompanyId = _companyId
                 }
             );

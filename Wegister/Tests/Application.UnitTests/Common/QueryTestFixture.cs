@@ -4,12 +4,18 @@ using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
 using Application.UnitTests.Common.Implementations;
 using Common;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 using Xunit;
 
 namespace Application.UnitTests.Common
 {
     public class QueryTestFixture : IDisposable
     {
+        public readonly DbContextOptions<WegisterDbContext> Options = new DbContextOptionsBuilder<WegisterDbContext>()
+            .UseSqlite($"Data Source = WegisterQueryDb{Guid.NewGuid()}.db")
+            .Options;
+
         public ICurrentUserService UserService { get; }
         public IDateTime MachineDateTime { get; }
         public ICustomerFactory CustomerFactory { get; }

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using Application.UnitTests.Common;
 using Application.WorkHours.Commands.CreateWorkHour;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using Persistence;
 using Shouldly;
