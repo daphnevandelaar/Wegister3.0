@@ -18,7 +18,7 @@ Totaalgewerkt: @uren.TotalAmountOfWorkHoursInMinutes
 }
 else
 {
-    <table class="table">
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th>Klant</th>
@@ -30,23 +30,32 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var gewerktuur in uren.WorkHours)
+        @foreach (var gewerktuur in uren.WorkHours)
+        {
             {
-                <tr>
-                    <td>@gewerktuur.CustomerName</td>
-                    <td>@gewerktuur.Date</td>
-                    <td>@gewerktuur.StartTime</td>
-                    <td>@gewerktuur.EndTime</td>
-                    <td>@gewerktuur.RecreationInMinutes</td>
-                    <td>@gewerktuur.TotalWorkHoursInMinutes</td>
-                </tr>
+                dataTarget = dataTarget + gewerktuur.Id;
             }
+            <tr data-toggle="collapse" data-target="#@dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">
+                <td>@gewerktuur.CustomerName</td>
+                <td>@gewerktuur.Date</td>
+                <td>@gewerktuur.StartTime</td>
+                <td>@gewerktuur.EndTime</td>
+                <td>@gewerktuur.RecreationInMinutes</td>
+                <td>@gewerktuur.TotalWorkHoursInMinutes</td>
+            </tr>
+            <tr class="collapse" id="@dataTarget" style="background-color: rgb(255, 255, 255);">
+                <td colspan="6">
+                    @gewerktuur.Id
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
 }
 
 @code {
     private WorkHourListVm uren;
+    private string dataTarget = "toggle";
 
     protected override async Task OnInitializedAsync()
     {
