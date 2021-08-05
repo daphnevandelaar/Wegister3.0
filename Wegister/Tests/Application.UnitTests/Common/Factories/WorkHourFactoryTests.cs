@@ -94,7 +94,7 @@ namespace Application.UnitTests.Common.Factories
             };
 
             //Act
-            var result = _sut.CreateInternal(workHourToInsert);
+            var result = WorkHourFactory.CreateInternal(workHourToInsert);
 
             //Assert
             result.StartTime.ShouldBe(workHourToInsert.StartTime);

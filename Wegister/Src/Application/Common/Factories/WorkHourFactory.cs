@@ -9,7 +9,7 @@ namespace Application.Common.Factories
 {
     public class WorkHourFactory : FactoryBase, IWorkHourFactory
     {
-        public WorkHourVm CreateInternal(WorkHourLookupDto entity)
+        public static WorkHourVm CreateInternal(WorkHourLookupDto entity)
         {
             if (IsNull(entity))
                 return null;

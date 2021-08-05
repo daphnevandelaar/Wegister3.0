@@ -4,8 +4,15 @@ namespace Application.Items.Commands.CreateItem
 {
     public class CreateItemCommand : IRequest
     {
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public string Unit { get; set; }
+        public CreateItemCommand(string name, decimal price, string unit)
+        {
+            Name = name;
+            Price = price;
+            Unit = unit;
+        }
+
+        public string Name { get; }
+        public decimal Price { get; }
+        public string Unit { get; }
     }
 }

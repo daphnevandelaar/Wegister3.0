@@ -21,7 +21,7 @@ namespace Application.UnitTests.Customers.Commands.CreateCustomers
 
         public CreateCustomerCommandTests()
         {
-            _context = WegisterTestContextFactory.CreateWorkHourDb(options, UserService, MachineDateTime);
+            _context = WegisterTestContextFactory.CreateCustomerDb(options, UserService, MachineDateTime);
 
             _sut = new CreateCustomerCommandHandler(_context, Mediator.Object, CustomerFactory);
         }
@@ -30,7 +30,7 @@ namespace Application.UnitTests.Customers.Commands.CreateCustomers
         public void Handle_GivenValidRequest_ShouldRaiseCustomerCreatedNotification()
         {
             // Arrange
-            _context.Customers.ToList().Count.ShouldBe(0);
+            _context.Customers.ToList().Count.ShouldBe(3);
             var customerCommand = new CreateCustomerCommand("Uncle Bob", "rc@martin.com", "administration@martin.com", "Parklane avenue", "10", "New York", "892830");
 
             // Act
@@ -38,7 +38,7 @@ namespace Application.UnitTests.Customers.Commands.CreateCustomers
 
             // Assert
             Mediator.Verify(m => m.Publish(It.IsAny<CustomerCreated>(), It.IsAny<CancellationToken>()), Times.Once);
-            _context.Customers.ToList().Count.ShouldBe(1);
+            _context.Customers.ToList().Count.ShouldBe(4);
             _context.Customers.Any(c =>
                 c.Name == customerCommand.Name &&
                 c.Email == customerCommand.Email &&
