@@ -7,35 +7,37 @@ using Domain.Entities;
 
 namespace Application.Common.Factories
 {
-    public class WorkHourFactory : IWorkHourFactory
+    public class WorkHourFactory : FactoryBase, IWorkHourFactory
     {
         public WorkHourVm CreateInternal(WorkHourLookupDto entity)
         {
-            return new WorkHourVm {
+            if (IsNull(entity))
+                return null;
+
+            return new()
+            {
                 StartTime = entity.StartTime,
                 EndTime = entity.EndTime,
                 RecreationInMinutes = entity.RecreationInMinutes,
-                EmployerId = entity.Employer.Id,
-                UserId = entity.User.Id,
+                EmployerId = entity.Employer?.Id ?? 0,
+                UserId = !IsNull(entity.User) ? entity.User.Id : "",
                 TotalWorkHoursInMinutes = entity.TotalWorkHoursInMinutes
             };
         }
 
         public WorkHourListVm Create(List<WorkHourLookupDto> entities)
         {
-            if (entities != null || entities.Count != 0)
+            if (IsNull(entities))
+                return null;
+
+            var workHoursVm = new List<WorkHourVm>();
+
+            entities.ForEach(w =>
             {
-                var workHoursVm = new List<WorkHourVm>();
+                workHoursVm.Add(CreateInternal(w));
+            });
 
-                entities.ForEach(w =>
-                {
-                    workHoursVm.Add(CreateInternal(w));
-                });
-
-                return new WorkHourListVm(workHoursVm);
-            }
-
-            return null;
+            return new WorkHourListVm(workHoursVm);
         }
 
         public WorkHourLookupDto CreateLookUpDto(WorkHour workHour)
@@ -62,7 +64,7 @@ namespace Application.Common.Factories
 
         public CreateWorkHourCommand Create(WorkHourVm entity)
         {
-            return new CreateWorkHourCommand(entity.StartTime, entity.EndTime, entity.RecreationInMinutes, entity.EmployerId);
+            return new(entity.StartTime, entity.EndTime, entity.RecreationInMinutes, entity.EmployerId);
         }
 
         public WorkHour Create(CreateWorkHourCommand entity)
@@ -72,19 +74,16 @@ namespace Application.Common.Factories
                 StartTime = entity.StartTime,
                 EndTime = entity.EndTime,
                 RecreationInMinutes = entity.RecreationInMinutes,
-                Employer = new Employer
-                {
-                    Id = entity.EmployerId
-                }
+                EmployerId = entity.EmployerId
             };
         }
 
         public WorkHourCreated Create(WorkHour entity)
         {
-            if (entity != null)
-                return new WorkHourCreated(entity.Id);
-            
-            return null;
+            if (IsNull(entity))
+                return null;
+
+            return new WorkHourCreated(entity.Id);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Application.UnitTests.Common.Factories
             result.RecreationInMinutes.ShouldBe(workHourToInsert.RecreationInMinutes);
             result.StartTime.ShouldBe(workHourToInsert.StartTime);
             result.EndTime.ShouldBe(workHourToInsert.EndTime);
-            result.Employer.Id.ShouldBe(workHourToInsert.EmployerId);
+            result.EmployerId.ShouldBe(workHourToInsert.EmployerId);
             result.TotalWorkHoursInMinutes.ShouldBe((int)(workHourToInsert.EndTime - workHourToInsert.StartTime).TotalMinutes - workHourToInsert.RecreationInMinutes);
         }
 
@@ -108,9 +108,9 @@ namespace Application.UnitTests.Common.Factories
         public void WorkHourLookupDtoList_ReturnsWorkHourListVm_WithRightProperties()
         {
             //Arrange
-            var workHourToInsert = new List<WorkHourLookupDto>()
+            var workHourToInsert = new List<WorkHourLookupDto>
             {
-                new WorkHourLookupDto
+                new ()
                 {
                     Id = 1, 
                     TotalWorkHoursInMinutes = 27,
@@ -119,7 +119,7 @@ namespace Application.UnitTests.Common.Factories
                         Id = 12
                     }
                 },
-                new WorkHourLookupDto
+                new ()
                 {
                     Id = 1,
                     TotalWorkHoursInMinutes = 33,
