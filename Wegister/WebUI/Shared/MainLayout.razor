@@ -1,0 +1,30 @@
+﻿@using WebUI.Services
+@using WebUI.Models
+@inherits LayoutComponentBase
+@inject SessionService SessionService
+
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <div class="main">
+        <div class="top-row px-4">
+            <a target="_blank">@sessionInfo.UserName</a>
+        </div>
+
+        <div class="content px-4">
+            @Body
+        </div>
+    </div>
+</div>
+
+@code {
+    private SessionVm sessionInfo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        sessionInfo = SessionService.GetSessionInfo();
+    }
+}

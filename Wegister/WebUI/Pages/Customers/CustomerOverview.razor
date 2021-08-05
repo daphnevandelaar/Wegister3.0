@@ -1,0 +1,55 @@
+﻿@page "/klanten"
+
+@using WebUI.Services
+@using WebUI.Models
+@inject CustomerService CustomerService
+@inject NavigationManager UriHelper
+
+<h1>Klantenoverzicht</h1>
+
+<p>Het onderstaande overzicht is een lijst met de geregistreerde klanten</p>
+
+<button class="btn btn-primary" @onclick=@Navigate>Klant toevoegen</button>
+
+@if (customers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Woonplaats</th>
+                <th>Email</th>
+                <th>Administratie email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in customers)
+            {
+                <tr>
+                    <td>@customer.Name</td>
+                    <td>@customer.Place</td>
+                    <td>@customer.Email</td>
+                    <td>@customer.EmailToSendHoursTo</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<CustomerVm> customers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        customers = CustomerService.GetCustomers();
+    }
+
+    void Navigate()
+    {
+        UriHelper.NavigateTo("klanten/toevoegen");
+    }
+}

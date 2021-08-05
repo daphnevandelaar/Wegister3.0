@@ -1,0 +1,60 @@
+﻿@page "/uren"
+
+@using WebUI.Services
+@using WebUI.Models
+@inject WorkHourService WorkHourService
+@inject NavigationManager UriHelper
+
+<h1>Urenoverzicht</h1>
+
+<p>Het onderstaande overzicht is een lijst met de geregistreerde uren</p>
+
+<button class="btn btn-primary" @onclick=@Navigate>Uren registreren</button>
+
+Totaalgewerkt: @uren.TotalAmountOfWorkHoursInMinutes
+@if (uren == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Klant</th>
+                <th>Datum</th>
+                <th>Starttijd</th>
+                <th>Eindtijd</th>
+                <th>Pauze in min.</th>
+                <th>Totaal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var gewerktuur in uren.WorkHours)
+            {
+                <tr>
+                    <td>@gewerktuur.CustomerName</td>
+                    <td>@gewerktuur.Date</td>
+                    <td>@gewerktuur.StartTime</td>
+                    <td>@gewerktuur.EndTime</td>
+                    <td>@gewerktuur.RecreationInMinutes</td>
+                    <td>@gewerktuur.TotalWorkHoursInMinutes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private WorkHourListVm uren;
+
+    protected override async Task OnInitializedAsync()
+    {
+        uren = WorkHourService.GetHours();
+    }
+
+    void Navigate()
+    {
+        UriHelper.NavigateTo("uren/toevoegen");
+    }
+}

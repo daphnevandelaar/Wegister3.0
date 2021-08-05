@@ -1,0 +1,53 @@
+﻿@page "/items"
+
+@using WebUI.Services
+@using WebUI.Models
+@inject ItemService ItemService
+@inject NavigationManager UriHelper
+
+<h1>Productenoverizcht</h1>
+
+<p>Het onderstaande overzicht is een lijst met de geregistreerde producten/diensten</p>
+
+<button class="btn btn-primary" @onclick=@Navigate>Product toevoegen</button>
+
+@if (items == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Prijs in €</th>
+                <th>Unit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Price</td>
+                    <td>@item.Unit</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ItemVm> items;
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = ItemService.GetItems();
+    }
+
+    void Navigate()
+    {
+        UriHelper.NavigateTo("items/toevoegen");
+    }
+}

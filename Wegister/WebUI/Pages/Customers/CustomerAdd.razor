@@ -1,0 +1,38 @@
+﻿@page "/klanten/toevoegen"
+
+@using WebUI.Services
+@using WebUI.Models
+@inject NavigationManager UriHelper
+@inject CustomerService CustomerService
+
+<h1>Klant toevoegen</h1>
+<div class="form-group">
+    <EditForm Model="@customer" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <label>Naam:</label>
+        <InputText class="form-control" id="name" @bind-Value="customer.Name" />
+
+        <label>Woonplaats:</label>
+        <InputText class="form-control" id="place" @bind-Value="customer.Place" />
+        
+        <label>Email:</label>
+        <InputText class="form-control" id="email" @bind-Value="customer.Email" />
+
+        <label>Administratie Email:</label>
+        <InputText class="form-control" id="email" @bind-Value="customer.EmailToSendHoursTo" />
+
+        <button class="btn btn-primary" type="submit">Opslaan</button>
+    </EditForm>
+</div>
+
+@code {
+    private CustomerVm customer = new();
+
+    private void HandleValidSubmit()
+    {
+        CustomerService.AddCustomer(customer);
+        UriHelper.NavigateTo("klanten");
+    }
+}

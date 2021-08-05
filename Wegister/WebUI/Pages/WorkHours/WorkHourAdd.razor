@@ -1,0 +1,70 @@
+﻿@page "/uren/toevoegen"
+
+@using WebUI.Services
+@using WebUI.Dtos
+@using WebUI.Models
+@inject NavigationManager UriHelper
+@inject WorkHourService WorkHourService
+@inject CustomerService CustomerService
+
+<h1>Uren toevoegen</h1>
+<div class="form-group">
+    <EditForm Model="@_workHour" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <label>Klant:</label>
+        <InputSelect @bind-Value="_workHour.CustomerId" class="form-control">
+            @if (_customers != null)
+            {
+                @foreach (var customer in _customers)
+                {
+                    <option value="@customer.Id">@customer.Name</option>
+                }
+            }
+        </InputSelect>
+
+        <label>Datum:</label>
+        <InputDate id="date" @bind-Value="_workHour.Date"/>
+
+        <br />
+
+        <label>Starttijd:</label>
+        <InputText type="time" @bind-Value="StartTime" @bind-Value:format="HH:mm" />
+
+        <label>Eindtijd:</label>
+        <InputText type="time" @bind-Value="EndTime" @bind-Value:format="HH:mm" />
+
+        <br />
+        <label>Pauze in minuten:</label>
+        <InputNumber @bind-Value="_workHour.RecreationInMinutes"/>
+
+        <button class="btn btn-primary" type="submit">Opslaan</button>
+    </EditForm>
+</div>
+
+<br />
+
+@code {
+    private WorkHourDto _workHour = new()
+    {
+        Date = DateTime.Today
+    };
+
+    private List<CustomerVm> _customers = new();
+    public string StartTime = DateTime.Now.AddHours(-8).TimeOfDay.ToString();
+    public string EndTime = DateTime.Now.TimeOfDay.ToString();
+
+    private void HandleValidSubmit()
+    {
+        _workHour.StartTime = DateTime.Parse(StartTime).TimeOfDay;
+        _workHour.EndTime = DateTime.Parse(EndTime).TimeOfDay;
+        WorkHourService.AddWorkHour(_workHour);
+        UriHelper.NavigateTo("uren");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _customers = CustomerService.GetCustomers();
+    }
+}
