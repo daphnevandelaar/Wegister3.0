@@ -22,7 +22,6 @@ namespace Application.UnitTests.WorkHours.Queries
             .Options;
 
         private readonly ICurrentUserService _otherUserService;
-        private readonly IDateTime _dateTime;
 
         private readonly GetWorkHoursListQueryHandler _sut;
 
@@ -30,7 +29,6 @@ namespace Application.UnitTests.WorkHours.Queries
         {
             var currentUserService = fixture.UserService;
             _otherUserService = new TestOtherUserService();
-            _dateTime = fixture.MachineDateTime;
             var context = WegisterTestContextFactory.CreateWorkHourDb(options, fixture.UserService, fixture.MachineDateTime);
             var factory = fixture.WorkHourFactory;
 
