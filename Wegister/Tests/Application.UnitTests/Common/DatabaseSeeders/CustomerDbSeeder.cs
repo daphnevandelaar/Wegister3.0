@@ -15,7 +15,7 @@ namespace Application.UnitTests.Common.DatabaseSeeders
 
         public HashSet<Customer> Seed()
         {
-            return new HashSet<Customer> {
+            return new() {
                 new Customer
                 {
                     Name = "Alice Smith",
@@ -24,7 +24,8 @@ namespace Application.UnitTests.Common.DatabaseSeeders
                     HouseNumber = "36",
                     Place = "Amsterdam",
                     Street = "Heiligeweg",
-                    ZipCode = "1012XP"
+                    ZipCode = "1012XP",
+                    CompanyId = "Invisible"
                 },
                 new Customer
                 {

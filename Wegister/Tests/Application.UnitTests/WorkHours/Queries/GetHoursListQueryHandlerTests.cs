@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
 using Application.Common.Viewmodels;
 using Application.UnitTests.Common;
@@ -21,26 +20,24 @@ namespace Application.UnitTests.WorkHours.Queries
         private readonly DbContextOptions<WegisterDbContext> options = new DbContextOptionsBuilder<WegisterDbContext>()
             .UseSqlite("Data Source = WegisterWorkHourQueryDb.db")
             .Options;
-        private readonly ICurrentUserService _currentUserService;
+
         private readonly ICurrentUserService _otherUserService;
-        private readonly IWorkHourFactory _factory;
-        private readonly WegisterDbContext _context;
         private readonly IDateTime _dateTime;
 
         private readonly GetWorkHoursListQueryHandler _sut;
 
         public GetHoursListQueryHandlerTests(QueryTestFixture fixture)
         {
-            _currentUserService = fixture.UserService;
+            var currentUserService = fixture.UserService;
             _otherUserService = new TestOtherUserService();
             _dateTime = fixture.MachineDateTime;
-            _context = WegisterTestContextFactory.CreateWorkHourDb(options, fixture.UserService, fixture.MachineDateTime);
-            _factory = fixture.WorkHourFactory;
+            var context = WegisterTestContextFactory.CreateWorkHourDb(options, fixture.UserService, fixture.MachineDateTime);
+            var factory = fixture.WorkHourFactory;
 
-            _otherUserService.CompanyId.ShouldNotBe(_currentUserService.CompanyId);
-            _otherUserService.CompanyId.ShouldNotBe(_currentUserService.UserId);
+            _otherUserService.CompanyId.ShouldNotBe(currentUserService.CompanyId);
+            _otherUserService.CompanyId.ShouldNotBe(currentUserService.UserId);
 
-            _sut = new GetWorkHoursListQueryHandler(_context, _factory);
+            _sut = new GetWorkHoursListQueryHandler(context, factory);
         }
 
         [Fact]

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
 using Application.Common.Viewmodels;
 using Application.Items.Queries.GetItemsList;
@@ -18,9 +17,6 @@ namespace Application.UnitTests.Items.Queries
     [Collection("QueryCollection")]
     public class GetItemListQueryHandlerTests
     {
-        private readonly IItemFactory _factory;
-        private readonly WegisterDbContext _context;
-        private readonly ICurrentUserService _currentUserService;
         private readonly ICurrentUserService _otherUserService;
         private readonly IDateTime _dateTime;
         private readonly GetItemsListQueryHandler _sut;
@@ -31,15 +27,15 @@ namespace Application.UnitTests.Items.Queries
 
         public GetItemListQueryHandlerTests(QueryTestFixture fixture)
         {
-            _factory = fixture.ItemFactory;
-            _currentUserService = fixture.UserService;
+            var factory = fixture.ItemFactory;
+            var currentUserService = fixture.UserService;
             _otherUserService = new TestOtherUserService();
             _dateTime = fixture.MachineDateTime;
-            _context = WegisterTestContextFactory.CreateItemDb(options, fixture.UserService, fixture.MachineDateTime);
+            var context = WegisterTestContextFactory.CreateItemDb(options, fixture.UserService, fixture.MachineDateTime);
 
-            _otherUserService.CompanyId.ShouldNotBe(_currentUserService.CompanyId);
+            _otherUserService.CompanyId.ShouldNotBe(currentUserService.CompanyId);
 
-            _sut = new GetItemsListQueryHandler(_context, _factory);
+            _sut = new GetItemsListQueryHandler(context, factory);
         }
 
         [Fact]
