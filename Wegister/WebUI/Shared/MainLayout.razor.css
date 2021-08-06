@@ -68,3 +68,9 @@
         padding-right: 1.5rem !important;
     }
 }
+
+.container-filter {
+    display: flex;
+    width: 100%;
+    background-color: aquamarine;
+}

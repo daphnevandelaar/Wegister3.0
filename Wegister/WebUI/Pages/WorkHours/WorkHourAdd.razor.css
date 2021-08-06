@@ -1,0 +1,26 @@
+﻿.container-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.container-overview {
+    max-width: 650px;
+}
+
+.container-action {
+    display: flex;
+    margin: 10px 0;
+    -o-justify-content: flex-end;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+}
+
+.container-dates {
+    display: flex;
+    flex-direction: row;
+}
+.container-group {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}

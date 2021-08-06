@@ -10,6 +10,6 @@ namespace WebUI.Dtos
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public int RecreationInMinutes { get; set; }
-        public int TotalWorkHoursInMinutes { get; set; }
+        public string Description { get; set; }
     }
 }

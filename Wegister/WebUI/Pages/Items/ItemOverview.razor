@@ -9,7 +9,12 @@
 
 <p>Het onderstaande overzicht is een lijst met de geregistreerde producten/diensten</p>
 
-<button class="btn btn-primary" @onclick=@Navigate>Product toevoegen</button>
+<div class="container-overview">
+    <div class="container-action">
+        <button class="btn btn-primary" @onclick=@Navigate>Product toevoegen</button>
+
+    </div>
+</div>
 
 @if (items == null)
 {

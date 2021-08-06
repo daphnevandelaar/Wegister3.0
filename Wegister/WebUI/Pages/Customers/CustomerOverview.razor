@@ -9,7 +9,13 @@
 
 <p>Het onderstaande overzicht is een lijst met de geregistreerde klanten</p>
 
-<button class="btn btn-primary" @onclick=@Navigate>Klant toevoegen</button>
+<div class="container-overview">
+    <div class="container-filter">
+    </div>
+    <div class="container-action">
+        <button class="btn btn-primary" @onclick=@Navigate>Klant toevoegen</button>
+    </div>
+</div>
 
 @if (customers == null)
 {

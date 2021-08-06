@@ -8,6 +8,7 @@
         public string StartTime { get; set; }
         public string EndTime { get; set; }
         public int RecreationInMinutes { get; set; }
+        public string Description { get; set; }
         public int TotalWorkHoursInMinutes { get; set; }
     }
 }

@@ -6,24 +6,27 @@
 @inject CustomerService CustomerService
 
 <h1>Klant toevoegen</h1>
-<div class="form-group">
+<div class="form-group container-overview">
     <EditForm Model="@customer" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
+        <div class="container-input">
+            <label>Naam:</label>
+            <InputText class="form-control" id="name" @bind-Value="customer.Name" />
 
-        <label>Naam:</label>
-        <InputText class="form-control" id="name" @bind-Value="customer.Name" />
+            <label>Woonplaats:</label>
+            <InputText class="form-control" id="place" @bind-Value="customer.Place" />
+            
+            <label>Email:</label>
+            <InputText class="form-control" id="email" @bind-Value="customer.Email" />
 
-        <label>Woonplaats:</label>
-        <InputText class="form-control" id="place" @bind-Value="customer.Place" />
+            <label>Administratie Email:</label>
+            <InputText class="form-control" id="email" @bind-Value="customer.EmailToSendHoursTo" />
+        </div>
         
-        <label>Email:</label>
-        <InputText class="form-control" id="email" @bind-Value="customer.Email" />
-
-        <label>Administratie Email:</label>
-        <InputText class="form-control" id="email" @bind-Value="customer.EmailToSendHoursTo" />
-
-        <button class="btn btn-primary" type="submit">Opslaan</button>
+        <div class="container-action">
+            <button class="btn btn-primary" type="submit">Opslaan</button>
+        </div>
     </EditForm>
 </div>
 

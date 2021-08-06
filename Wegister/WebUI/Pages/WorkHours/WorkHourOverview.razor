@@ -2,6 +2,7 @@
 
 @using WebUI.Services
 @using WebUI.Models
+@using WebUI.Dtos
 @inject WorkHourService WorkHourService
 @inject NavigationManager UriHelper
 
@@ -9,10 +10,33 @@
 
 <p>Het onderstaande overzicht is een lijst met de geregistreerde uren</p>
 
-<button class="btn btn-primary" @onclick=@Navigate>Uren registreren</button>
+<div class="container-overview">
+    <div class="container-filter">
+        @foreach (var filter in _filters)
+        {
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @filter.Name
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" style="cursor: pointer;" @onclick='() => FilterOnWorkHours(filter.Type, "Alles")'>Alles</a>
+                    @foreach (var item in filter.FilterValues)
+                    {
+                        <a class="dropdown-item" style="cursor: pointer;" @onclick="() => FilterOnWorkHours(filter.Type, item.Value)">@item.Value</a>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    <div class="container-action">
+        <button class="btn btn-primary" @onclick=@Navigate>Uren registreren</button>
+    </div>
+</div>
+<div class="container-details">
+    Totaalgewerkt: @_uren.TotalAmountOfWorkHoursInMinutes
+</div>
 
-Totaalgewerkt: @uren.TotalAmountOfWorkHoursInMinutes
-@if (uren == null)
+@if (_uren == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -27,25 +51,29 @@ else
                 <th>Eindtijd</th>
                 <th>Pauze in min.</th>
                 <th>Totaal</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-        @foreach (var gewerktuur in uren.WorkHours)
+        @foreach (var gewerktuur in _uren.WorkHours)
         {
-            {
-                dataTarget = dataTarget + gewerktuur.Id;
-            }
-            <tr data-toggle="collapse" data-target="#@dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">
-                <td>@gewerktuur.CustomerName</td>
-                <td>@gewerktuur.Date</td>
-                <td>@gewerktuur.StartTime</td>
-                <td>@gewerktuur.EndTime</td>
-                <td>@gewerktuur.RecreationInMinutes</td>
-                <td>@gewerktuur.TotalWorkHoursInMinutes</td>
+            {_dataTarget = _dataTarget + gewerktuur.Id;}
+            <tr>
+                <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.CustomerName</td>
+                <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.Date</td>
+                <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.StartTime</td>
+                <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.EndTime</td>
+                <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.RecreationInMinutes</td>
+                <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.TotalWorkHoursInMinutes</td>
+                <td style="padding: 0; vertical-align: middle;">
+                    <span class="oi oi-trash red text-18 pointer" aria-hidden="true" @onclick='() => Delete(gewerktuur.Id)'></span>
+                </td>
             </tr>
-            <tr class="collapse" id="@dataTarget" style="background-color: rgb(255, 255, 255);">
+            <tr class="collapse" id="@_dataTarget" style="background-color: rgb(255, 255, 255);">
                 <td colspan="6">
-                    @gewerktuur.Id
+                    <div class="card-body">
+                        @gewerktuur.Description
+                    </div>
                 </td>
             </tr>
         }
@@ -54,16 +82,56 @@ else
 }
 
 @code {
-    private WorkHourListVm uren;
-    private string dataTarget = "toggle";
+    private WorkHourListVm _uren;
+    private List<FilterValueListVm> _filters;
+
+    private string _dataTarget = "toggle";
 
     protected override async Task OnInitializedAsync()
     {
-        uren = WorkHourService.GetHours();
+        _uren = WorkHourService.GetHours();
+        _filters = WorkHourService.GetFilters();
     }
 
     void Navigate()
     {
         UriHelper.NavigateTo("uren/toevoegen");
+    }
+
+    private List<FilterValueListDto> _selectedFilters = new ();
+
+    void FilterOnWorkHours(string filterType, string value)
+    {
+        _filters = _filters
+            .Select(f =>
+            {
+                f.Type = f.Type;
+                f.Name = f.Type == filterType ? value : f.Name;
+                f.FilterValues = f.FilterValues;
+                return f;
+            })
+            .ToList();
+
+        _selectedFilters ??= new();
+        _selectedFilters = _selectedFilters?.Where(f => f.Type != filterType).ToList();
+
+        _selectedFilters?.Add(
+            new FilterValueListDto
+            {
+                Type = filterType,
+                FilterValue = new FilterValueDto
+                {
+                    Value = value
+                }
+            }
+        );
+
+        _uren = WorkHourService.SearchHours(_selectedFilters);
+    }
+
+    void Delete(int id)
+    {
+        WorkHourService.DeleteWorkHour(id);
+        _uren = WorkHourService.GetHours();
     }
 }

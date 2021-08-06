@@ -8,38 +8,51 @@
 @inject CustomerService CustomerService
 
 <h1>Uren toevoegen</h1>
-<div class="form-group">
+<div class="form-group container-overview">
     <EditForm Model="@_workHour" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
-
-        <label>Klant:</label>
-        <InputSelect @bind-Value="_workHour.CustomerId" class="form-control">
-            @if (_customers != null)
-            {
-                @foreach (var customer in _customers)
+        <div class="container-input">
+            <label>Klant:</label>
+            <InputSelect @bind-Value="_workHour.CustomerId" class="form-control">
+                @if (_customers != null)
                 {
-                    <option value="@customer.Id">@customer.Name</option>
+                    @foreach (var customer in _customers)
+                    {
+                        <option value="@customer.Id">@customer.Name</option>
+                    }
                 }
-            }
-        </InputSelect>
+            </InputSelect>
 
-        <label>Datum:</label>
-        <InputDate id="date" @bind-Value="_workHour.Date"/>
+            <div class="container-dates">
 
-        <br />
+                <div class="container-group">
+                    <label>Datum:</label>
+                    <InputDate id="date" @bind-Value="_workHour.Date"/>
+                </div>
 
-        <label>Starttijd:</label>
-        <InputText type="time" @bind-Value="StartTime" @bind-Value:format="HH:mm" />
+                <div class="container-group">
+                    <label>Starttijd:</label>
+                    <InputText type="time" @bind-Value="StartTime" @bind-Value:format="HH:mm"/>
+                </div>
 
-        <label>Eindtijd:</label>
-        <InputText type="time" @bind-Value="EndTime" @bind-Value:format="HH:mm" />
+                <div class="container-group">
+                    <label>Eindtijd:</label>
+                    <InputText type="time" @bind-Value="EndTime" @bind-Value:format="HH:mm"/>
+                </div>
 
-        <br />
-        <label>Pauze in minuten:</label>
-        <InputNumber @bind-Value="_workHour.RecreationInMinutes"/>
+            </div>
 
-        <button class="btn btn-primary" type="submit">Opslaan</button>
+            <label>Pauze in minuten:</label>
+            <InputNumber @bind-Value="_workHour.RecreationInMinutes"/>
+            
+            <label>Omschrijving:</label>
+            <InputTextArea @bind-Value="_workHour.Description"/>
+        </div>
+
+        <div class="container-action">
+            <button class="btn btn-primary" type="submit">Opslaan</button>
+        </div>
     </EditForm>
 </div>
 
