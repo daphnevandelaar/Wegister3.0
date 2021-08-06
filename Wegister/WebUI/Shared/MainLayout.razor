@@ -23,8 +23,10 @@
 @code {
     private SessionVm sessionInfo;
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
         sessionInfo = SessionService.GetSessionInfo();
+
+        return null;
     }
 }

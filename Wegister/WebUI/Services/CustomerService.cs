@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Viewmodels;
 using Application.Customers.Queries.GetCustomersList;
+using Application.Customers.Queries.SearchCustomerList;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -22,20 +24,24 @@ namespace WebUI.Services
 
         public async Task<CustomerListVm> GetCustomers()
         {
+            _logger.LogInformation("GetCustomers() is called");
+
             return await _mediator.Send(new GetCustomersListQuery());
         }
 
         public async void AddCustomer(CustomerVm customer)
         {
+            _logger.LogInformation("AddCustomer() is called");
+
             var command = _customerFactory.Create(customer);
 
             await _mediator.Send(command);
         }
 
-        public async Task<CustomerListVm> SearchCustomers(string customerName)
+        public async Task<List<SearchVm>> SearchCustomers(string customerName)
         {
-            //TODO: Make search handler
-            return await _mediator.Send(new GetCustomersListQuery());
+            _logger.LogInformation("SearchCustomers(string) is called");
+            return await _mediator.Send(new SearchCustomerListQuery(customerName));
         }
     }
 }

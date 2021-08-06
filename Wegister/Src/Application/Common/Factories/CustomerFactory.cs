@@ -8,7 +8,7 @@ using Domain.Entities;
 
 namespace Application.Common.Factories
 {
-    internal class CustomerFactory : ICustomerFactory
+    internal class CustomerFactory : FactoryBase, ICustomerFactory
     {
         public CustomerVm CreateInternal(CustomerLookupDto entity)
         {
@@ -36,7 +36,6 @@ namespace Application.Common.Factories
 
             return returnValue;
         }
-
 
         CustomerLookupDto ICustomerFactory.CreateLookUpDto(Customer customer)
         {
@@ -77,6 +76,15 @@ namespace Application.Common.Factories
         public CreateCustomerCommand Create(CustomerVm entity)
         {
             return new(entity.Name, entity.Email, entity.EmailToSendHoursTo, entity.Street, entity.HouseNumber, entity.Place, entity.ZipCode);
+        }
+
+        public SearchDto CreateDto(Customer entity)
+        {
+            return new()
+            {
+                Id = entity.Id,
+                Value = entity.Name
+            };
         }
     }
 }
