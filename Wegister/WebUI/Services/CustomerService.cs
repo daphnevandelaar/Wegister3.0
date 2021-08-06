@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Viewmodels;
 using Application.Customers.Queries.GetCustomersList;
