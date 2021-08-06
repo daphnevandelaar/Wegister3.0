@@ -1,4 +1,4 @@
-﻿namespace WebUI.Models
+﻿namespace WebUI.ViewModels
 {
     public class AddressBaseVm
     {

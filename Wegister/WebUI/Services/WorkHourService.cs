@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Dtos;
-using WebUI.Models;
+using WebUI.ViewModels;
 
 namespace WebUI.Services
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using WebUI.Models;
+using WebUI.ViewModels;
 
 namespace WebUI.Services
 {

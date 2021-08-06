@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebUI.Models
+namespace WebUI.ViewModels
 {
     public class FilterValueListVm
     {
