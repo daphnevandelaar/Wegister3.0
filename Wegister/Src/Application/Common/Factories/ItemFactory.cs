@@ -7,7 +7,7 @@ using Domain.Entities;
 
 namespace Application.Common.Factories
 {
-    internal class ItemFactory : IItemFactory
+    internal class ItemFactory : FactoryBase, IItemFactory
     {
         public static ItemListVm Create()
         {

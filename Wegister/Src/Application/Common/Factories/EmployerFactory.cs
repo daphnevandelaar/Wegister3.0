@@ -7,7 +7,7 @@ using Domain.Entities;
 
 namespace Application.Common.Factories
 {
-    public class EmployerFactory : IEmployerFactory
+    public class EmployerFactory : FactoryBase, IEmployerFactory
     {
         public EmployerListVm Create(List<EmployerLookupDto> entity)
         {

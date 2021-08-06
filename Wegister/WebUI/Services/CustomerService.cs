@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Viewmodels;
 using Application.Customers.Queries.GetCustomersList;
-using Application.Customers.Queries.SearchCustomerList;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -36,12 +35,6 @@ namespace WebUI.Services
             var command = _customerFactory.Create(customer);
 
             await _mediator.Send(command);
-        }
-
-        public async Task<List<SearchVm>> SearchCustomers(string customerName)
-        {
-            _logger.LogInformation("SearchCustomers(string) is called");
-            return await _mediator.Send(new SearchCustomerListQuery(customerName));
         }
     }
 }
