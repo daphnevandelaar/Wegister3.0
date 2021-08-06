@@ -1,5 +1,5 @@
 ﻿@using WebUI.Services
-@using WebUI.ViewModels
+@using Application.Common.Viewmodels
 @inherits LayoutComponentBase
 @inject SessionService SessionService
 
@@ -11,7 +11,7 @@
 
     <div class="main">
         <div class="top-row px-4">
-            <a target="_blank">@sessionInfo.UserName</a>
+            <a>@sessionInfo.UserName</a>
         </div>
 
         <div class="content px-4">

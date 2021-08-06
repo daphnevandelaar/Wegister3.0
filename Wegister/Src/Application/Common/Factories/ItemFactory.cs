@@ -13,7 +13,6 @@ namespace Application.Common.Factories
         {
             return new ItemListVm()
             {
-                Items = new List<ItemLookupDto>()
             };
         }
 
@@ -23,7 +22,7 @@ namespace Application.Common.Factories
 
             if (entity != null)
             {
-                returnValue.Items = entity;
+                returnValue = null;
             }
 
             return returnValue;

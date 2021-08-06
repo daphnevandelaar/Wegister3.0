@@ -18,4 +18,13 @@
     <Content Include="Pages\WorkHours\WorkHourOverview.razor.css" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Src\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Src\Persistence\Persistence.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,7 @@
 ﻿@page "/klanten"
 
 @using WebUI.Services
-@using WebUI.ViewModels
+@using Application.Common.Viewmodels
 @inject CustomerService CustomerService
 @inject NavigationManager UriHelper
 
@@ -33,7 +33,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var customer in customers)
+            @foreach (var customer in customers.Customers)
             {
                 <tr>
                     <td>@customer.Name</td>
@@ -47,11 +47,11 @@ else
 }
 
 @code {
-    private List<CustomerVm> customers;
+    private CustomerListVm customers;
 
     protected override async Task OnInitializedAsync()
     {
-        customers = CustomerService.GetCustomers();
+        customers = await CustomerService.GetCustomers();
     }
 
     void Navigate()

@@ -1,14 +1,14 @@
-﻿using System;
-
-namespace Application.Common.Viewmodels
+﻿namespace Application.Common.Viewmodels
 {
     public class WorkHourVm
     {
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public int Id { get; set; }
+        public string CustomerName { get; set; }
+        public string Date { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
         public int RecreationInMinutes { get; set; }
-        public int EmployerId { get; set; }
-        public string UserId { get; set; }
+        public string Description { get; set; }
         public int TotalWorkHoursInMinutes { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 @using WebUI.Services
 @using WebUI.Dtos
-@using WebUI.ViewModels
+@using Application.Common.Viewmodels
 @inject NavigationManager UriHelper
 @inject WorkHourService WorkHourService
 @inject CustomerService CustomerService
@@ -17,7 +17,7 @@
             <InputSelect @bind-Value="_workHour.CustomerId" class="form-control">
                 @if (_customers != null)
                 {
-                    @foreach (var customer in _customers)
+                    @foreach (var customer in _customers.Customers)
                     {
                         <option value="@customer.Id">@customer.Name</option>
                     }
@@ -64,7 +64,7 @@
         Date = DateTime.Today
     };
 
-    private List<CustomerVm> _customers = new();
+    private CustomerListVm _customers = new();
     public string StartTime = DateTime.Now.AddHours(-8).TimeOfDay.ToString();
     public string EndTime = DateTime.Now.TimeOfDay.ToString();
 
@@ -78,6 +78,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _customers = CustomerService.GetCustomers();
+        _customers = await CustomerService.GetCustomers();
     }
 }

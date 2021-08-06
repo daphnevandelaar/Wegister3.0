@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using WebUI.ViewModels;
+using Application.Common.Viewmodels;
 
 namespace WebUI.Services
 {

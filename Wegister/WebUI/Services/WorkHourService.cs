@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Mvc;
+using Application.Common.Viewmodels;
+using Common;
 using WebUI.Dtos;
-using WebUI.ViewModels;
 
 namespace WebUI.Services
 {
@@ -61,6 +59,11 @@ namespace WebUI.Services
 
         private static WorkHourListVm Summaries = new (workhours);
 
+        public WorkHourService()
+        {
+            
+        }
+
         public WorkHourListVm GetHours()
         {
             return Summaries;
@@ -97,36 +100,10 @@ namespace WebUI.Services
                 if (filter.Type == "week")
                     if (filter.FilterValue.Value != "Alles")
                         summaries = new WorkHourListVm(summaries.WorkHours
-                            .Where(f => "Week " + GetWeeknumberFromString(f.Date) == filter.FilterValue.Value).ToList());
+                            .Where(f => "Week " + WeekNumberHelper.GetWeeknumberFromString(f.Date) == filter.FilterValue.Value).ToList());
             }
 
             return summaries;
-        }
-
-        public int GetWeeknumber(DateTime date)
-        {
-            var currentCulture = CultureInfo.CurrentCulture;
-            var weekNo = currentCulture.Calendar.GetWeekOfYear(
-                date,
-                currentCulture.DateTimeFormat.CalendarWeekRule,
-                currentCulture.DateTimeFormat.FirstDayOfWeek);
-
-            return weekNo;
-        }
-
-        public int GetWeeknumberFromString(string date)
-        {
-            var matchDay = new Regex(@"^\d{2}");
-            var matchMonth = new Regex(@"(?<=\-)\d{2}(?=\-)");
-            var matchYear = new Regex(@"(?<=\-)\d{3}?[^\-]");
-
-            var day = Convert.ToInt32(matchDay.Match(date).Value);
-            var month = Convert.ToInt32(matchMonth.Match(date).Value);
-            var year = Convert.ToInt32(matchYear.Match(date).Value);
-
-            var dateToGetWeekFrom = new DateTime(year, month, day);
-
-            return GetWeeknumber(dateToGetWeekFrom);
         }
 
         public List<FilterValueListVm> GetFilters()

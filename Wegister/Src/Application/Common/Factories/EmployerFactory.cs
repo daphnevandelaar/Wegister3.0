@@ -15,7 +15,7 @@ namespace Application.Common.Factories
 
             if (entity != null)
             {
-                returnValue.Employers = entity;
+                returnValue = null;
             }
 
             return returnValue;

@@ -1,4 +1,4 @@
-﻿namespace WebUI.ViewModels
+﻿namespace Application.Common.Viewmodels
 {
     public class ItemVm
     {

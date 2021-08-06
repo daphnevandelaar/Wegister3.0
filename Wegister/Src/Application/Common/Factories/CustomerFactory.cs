@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Application.Common.Dtos;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Viewmodels;
@@ -11,7 +12,17 @@ namespace Application.Common.Factories
     {
         public CustomerVm CreateInternal(CustomerLookupDto entity)
         {
-            return new CustomerVm();
+            return new()
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Email = entity.Email
+            };
+        }
+
+        private List<CustomerVm> CreateInternal(List<CustomerLookupDto> entities)
+        {
+            return entities.Select(CreateInternal).ToList();
         }
 
         public CustomerListVm Create(List<CustomerLookupDto> entity)
@@ -20,15 +31,16 @@ namespace Application.Common.Factories
 
             if (entity != null)
             {
-                returnValue.Customers = entity;
+                returnValue.Customers = CreateInternal(entity);
             }
 
             return returnValue;
         }
 
+
         CustomerLookupDto ICustomerFactory.CreateLookUpDto(Customer customer)
         {
-            return new CustomerLookupDto()
+            return new()
             {
                 Id = customer.Id,
                 Name = customer.Name,
@@ -64,7 +76,7 @@ namespace Application.Common.Factories
 
         public CreateCustomerCommand Create(CustomerVm entity)
         {
-            return new CreateCustomerCommand(entity.Name, entity.Email, entity.EmailToSendHoursTo, entity.Street, entity.HouseNumber, entity.Place, entity.ZipCode);
+            return new(entity.Name, entity.Email, entity.EmailToSendHoursTo, entity.Street, entity.HouseNumber, entity.Place, entity.ZipCode);
         }
     }
 }

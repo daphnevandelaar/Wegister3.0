@@ -1,82 +1,41 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using WebUI.ViewModels;
+﻿using System.Threading.Tasks;
+using Application.Common.Factories.Interfaces;
+using Application.Common.Viewmodels;
+using Application.Customers.Queries.GetCustomersList;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace WebUI.Services
 {
     public class CustomerService
     {
-        private static readonly List<CustomerVm> Summaries = new ()
-        {
-            new CustomerVm
-            {
-                Id = 1,
-                Name = "Alice Smith",
-                Email = "alice.smith@email.nl",
-                EmailToSendHoursTo = "bob.smith-fincancial@email.nl",
-                HouseNumber = "36",
-                Place = "Amsterdam",
-                Street = "Heiligeweg",
-                ZipCode = "1012XP"
-            },
-            new CustomerVm
-            {
-                Id = 2,
-                Name = "Bob Smith",
-                Email = "alice.smith@email.nl",
-                EmailToSendHoursTo = "bob.smith-fincancial@email.nl",
-                HouseNumber = "36",
-                Place = "Amsterdam",
-                Street = "Heiligeweg",
-                ZipCode = "1012XP"
-            },
-            new CustomerVm
-            {
-                Id = 3,
-                Name = "Glenis Smith",
-                Email = "alice.smith@email.nl",
-                EmailToSendHoursTo = "bob.smith-fincancial@email.nl",
-                HouseNumber = "36",
-                Place = "Amsterdam",
-                Street = "Heiligeweg",
-                ZipCode = "1012XP"
-            },
-            new CustomerVm
-            {
-                Id = 4,
-                Name = "Tom Smith",
-                Email = "alice.smith@email.nl",
-                EmailToSendHoursTo = "bob.smith-fincancial@email.nl",
-                HouseNumber = "36",
-                Place = "Amsterdam",
-                Street = "Heiligeweg",
-                ZipCode = "1012XP"
-            },
-            new CustomerVm
-            {
-                Id = 5,
-                Name = "Riley Smith",
-                Email = "alice.smith@email.nl",
-                EmailToSendHoursTo = "bob.smith-fincancial@email.nl",
-                HouseNumber = "36",
-                Place = "Amsterdam",
-                Street = "Heiligeweg",
-                ZipCode = "1012XP"
-            }
-        };
+        private readonly ILogger<CustomerService> _logger;
+        private readonly ICustomerFactory _customerFactory;
+        private readonly IMediator _mediator;
 
-        public List<CustomerVm> GetCustomers()
+        public CustomerService(ILogger<CustomerService> logger, ICustomerFactory customerFactory, IMediator mediator)
         {
-            return Summaries;
+            _logger = logger;
+            _customerFactory = customerFactory;
+            _mediator = mediator;
         }
 
-        public void AddCustomer(CustomerVm customer)
+        public async Task<CustomerListVm> GetCustomers()
         {
-            Summaries.Add(customer);
+            return await _mediator.Send(new GetCustomersListQuery());
         }
-        public List<CustomerVm> SearchCustomers(string customerName)
+
+        public async void AddCustomer(CustomerVm customer)
         {
-            return Summaries.Where(c => c.Name.Contains(customerName)).ToList();
+            var command = _customerFactory.Create(customer);
+
+            await _mediator.Send(command);
+        }
+
+        public async Task<CustomerListVm> SearchCustomers(string customerName)
+        {
+            //TODO: Make search handler
+            return await _mediator.Send(new GetCustomersListQuery());
         }
     }
 }

@@ -16,11 +16,11 @@ namespace Application.Common.Factories
 
             return new()
             {
-                StartTime = entity.StartTime,
-                EndTime = entity.EndTime,
+                StartTime = entity.StartTime.ToString(),
+                EndTime = entity.EndTime.ToString(),
                 RecreationInMinutes = entity.RecreationInMinutes,
-                EmployerId = entity.Employer?.Id ?? 0,
-                UserId = !IsNull(entity.User) ? entity.User.Id : "",
+                //EmployerId = entity.Employer?.Id ?? 0,
+                //UserId = !IsNull(entity.User) ? entity.User.Id : "",
                 TotalWorkHoursInMinutes = entity.TotalWorkHoursInMinutes
             };
         }
@@ -64,7 +64,7 @@ namespace Application.Common.Factories
 
         public CreateWorkHourCommand Create(WorkHourVm entity)
         {
-            return new(entity.StartTime, entity.EndTime, entity.RecreationInMinutes, entity.EmployerId);
+            return null; //new(entity.StartTime, entity.EndTime, entity.RecreationInMinutes, entity);
         }
 
         public WorkHour Create(CreateWorkHourCommand entity)

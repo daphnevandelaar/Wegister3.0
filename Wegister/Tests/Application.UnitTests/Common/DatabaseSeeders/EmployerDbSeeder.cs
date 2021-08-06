@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Application.Common.Interfaces;
 using Domain.Entities;
 
 namespace Application.UnitTests.Common.DatabaseSeeders
