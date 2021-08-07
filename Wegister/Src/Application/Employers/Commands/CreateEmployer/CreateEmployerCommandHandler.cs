@@ -8,24 +8,28 @@ namespace Application.Employers.Commands.CreateEmployer
 {
     public class CreateEmployerCommandHandler : IRequestHandler<CreateEmployerCommand>
     {
+        private readonly IWegisterDbContextFactory _contextFactory;
+
         private readonly IWegisterDbContext _context;
         private readonly IMediator _mediator;
         private readonly IEmployerFactory _factory;
 
-        public CreateEmployerCommandHandler(IWegisterDbContext context, IMediator mediator, IEmployerFactory factory)
+        public CreateEmployerCommandHandler(IWegisterDbContextFactory contextFactory, IMediator mediator, IEmployerFactory factory)
         {
-            _context = context;
+            _contextFactory = contextFactory;
             _mediator = mediator;
             _factory = factory;
         }
 
         public async Task<Unit> Handle(CreateEmployerCommand request, CancellationToken cancellationToken)
         {
+            var dbContext = _contextFactory.CreateDbContext();
+
             var employer = _factory.Create(request);
 
-            _context.Employers.Add(employer);
+            dbContext.Employers.Add(employer);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
             await _mediator.Publish(_factory.Create(employer), cancellationToken);
 

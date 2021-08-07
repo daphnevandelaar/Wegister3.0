@@ -11,15 +11,15 @@ namespace Application.WorkHours.Commands.CreateWorkHour
 {
     public class CreateWorkHourCommandHandler : IRequestHandler<CreateWorkHourCommand>
     {
-        private readonly IWegisterDbContext _context;
+        private readonly IWegisterDbContextFactory _contextFactory;
         private readonly IMediator _mediator;
         private readonly IWorkHourFactory _factory;
         private readonly IWorkHourBuilder _builder;
         private readonly ICurrentUserService _currentUserService;
 
-        public CreateWorkHourCommandHandler(IWegisterDbContext context, IMediator mediator, IWorkHourFactory factory, ICurrentUserService currentUserService, IWorkHourBuilder workHourBuilder)
+        public CreateWorkHourCommandHandler(IWegisterDbContextFactory contextFactory, IMediator mediator, IWorkHourFactory factory, ICurrentUserService currentUserService, IWorkHourBuilder workHourBuilder)
         {
-            _context = context;
+            _contextFactory = contextFactory;
             _mediator = mediator;
             _factory = factory;
             _currentUserService = currentUserService;
@@ -28,15 +28,15 @@ namespace Application.WorkHours.Commands.CreateWorkHour
 
         public async Task<Unit> Handle(CreateWorkHourCommand request, CancellationToken cancellationToken)
         {
-
+            var dbContext = _contextFactory.CreateDbContext();
             try
             {
                 var workHour = _factory.Create(request);
-                var currentUser = await _context.Users.SingleAsync(u => u.Id == new Guid(_currentUserService.UserId), cancellationToken);
+                var currentUser = await dbContext.Users.SingleAsync(u => u.Id == new Guid(_currentUserService.UserId), cancellationToken);
                 workHour = _builder.Build(workHour, currentUser);
 
-                _context.WorkHours.Add(workHour);
-                await _context.SaveChangesAsync(cancellationToken);
+                dbContext.WorkHours.Add(workHour);
+                await dbContext.SaveChangesAsync(cancellationToken);
                 await _mediator.Publish(_factory.Create(workHour), cancellationToken);
             }
             catch(Exception ex)

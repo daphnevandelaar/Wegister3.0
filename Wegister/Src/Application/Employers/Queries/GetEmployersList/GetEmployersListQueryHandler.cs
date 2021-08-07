@@ -11,18 +11,20 @@ namespace Application.Employers.Queries.GetEmployersList
 {
     public class GetEmployersListQueryHandler : IRequestHandler<GetEmployersListQuery, EmployerListVm>
     {
-        private readonly IWegisterDbContext _context;
+        private readonly IWegisterDbContextFactory _contextFactory;
         private readonly IEmployerFactory _factory;
 
-        public GetEmployersListQueryHandler(IWegisterDbContext context, IEmployerFactory factory)
+        public GetEmployersListQueryHandler(IWegisterDbContextFactory contextFactory, IEmployerFactory factory)
         {
-            _context = context;
+            _contextFactory = contextFactory;
             _factory = factory;
         }
 
         public async Task<EmployerListVm> Handle(GetEmployersListQuery request, CancellationToken cancellationToken)
         {
-            var customers = await _context.Employers
+            var dbContext = _contextFactory.CreateDbContext();
+
+            var customers = await dbContext.Employers
                 .Select(e => _factory.CreateLookUpDto(e))
                 .ToListAsync(cancellationToken);
 

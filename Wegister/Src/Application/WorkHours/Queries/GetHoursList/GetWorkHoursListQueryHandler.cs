@@ -11,18 +11,20 @@ namespace Application.WorkHours.Queries.GetHoursList
 {
     public class GetWorkHoursListQueryHandler : IRequestHandler<GetWorkHoursListQuery, WorkHourListVm>
     {
-        private readonly IWegisterDbContext _context;
+        private readonly IWegisterDbContextFactory _contextFactory;
         private readonly IWorkHourFactory _factory;
 
-        public GetWorkHoursListQueryHandler(IWegisterDbContext context, IWorkHourFactory factory)
+        public GetWorkHoursListQueryHandler(IWegisterDbContextFactory contextFactory, IWorkHourFactory factory)
         {
-            _context = context;
+            _contextFactory = contextFactory;
             _factory = factory;
         }
 
         public async Task<WorkHourListVm> Handle(GetWorkHoursListQuery request, CancellationToken cancellationToken)
         {
-            var workhours = await _context.WorkHours
+            var dbContext = _contextFactory.CreateDbContext();
+
+            var workhours = await dbContext.WorkHours
                 .Select(w => _factory.CreateLookUpDto(w))
                 .ToListAsync(cancellationToken);
 

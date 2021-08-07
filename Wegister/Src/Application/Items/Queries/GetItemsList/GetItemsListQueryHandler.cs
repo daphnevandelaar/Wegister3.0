@@ -11,18 +11,20 @@ namespace Application.Items.Queries.GetItemsList
 {
     public class GetItemsListQueryHandler : IRequestHandler<GetItemsListQuery, ItemListVm>
     {
-        private readonly IWegisterDbContext _context;
+        private readonly IWegisterDbContextFactory _contextFactory;
         private readonly IItemFactory _factory;
 
-        public GetItemsListQueryHandler(IWegisterDbContext context, IItemFactory factory)
+        public GetItemsListQueryHandler(IWegisterDbContextFactory contextFactory, IItemFactory factory)
         {
-            _context = context;
+            _contextFactory = contextFactory;
             _factory = factory;
         }
 
         public async Task<ItemListVm> Handle(GetItemsListQuery request, CancellationToken cancellationToken)
         {
-            var items = await _context.Items
+            var dbContext = _contextFactory.CreateDbContext();
+
+            var items = await dbContext.Items
                 .Select(i => _factory.CreateLookUpDto(i))
                 .ToListAsync(cancellationToken);
 
