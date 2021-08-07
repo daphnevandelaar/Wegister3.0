@@ -1,5 +1,3 @@
-using System;
-using System.Reflection;
 using System.Text;
 using Application;
 using Application.Common.Interfaces;
@@ -10,7 +8,6 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -39,12 +36,13 @@ namespace WebUI
             services.AddApplication();
             services.AddScoped<IRequestHandler<GetCustomersListQuery, CustomerListVm>, GetCustomersListQueryHandler>();
 
-            services.AddRazorPages();
-            services.AddServerSideBlazor();
             services.AddSingleton<SessionService>();
             services.AddSingleton<WorkHourService>();
             services.AddSingleton<ItemService>();
             services.AddSingleton<CustomerService>();
+
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
 
             //TODO: Development startup production
             services.AddScoped<ICurrentUserService, CurrentUserServiceDev>();

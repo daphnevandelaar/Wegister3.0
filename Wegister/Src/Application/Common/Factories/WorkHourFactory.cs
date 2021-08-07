@@ -3,7 +3,9 @@ using Application.Common.Dtos;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Viewmodels;
 using Application.WorkHours.Commands.CreateWorkHour;
+using Application.WorkHours.Commands.DeleteWorkHour;
 using Domain.Entities;
+using WebUI.Dtos;
 
 namespace Application.Common.Factories
 {
@@ -16,11 +18,11 @@ namespace Application.Common.Factories
 
             return new()
             {
-                StartTime = entity.StartTime.ToString(),
-                EndTime = entity.EndTime.ToString(),
+                Date = entity.StartTime.ToString("dd/MM/yyyy"),
+                StartTime = entity.StartTime.TimeOfDay.ToString(@"hh\:mm"),
+                EndTime = entity.EndTime.TimeOfDay.ToString(@"hh\:mm"),
                 RecreationInMinutes = entity.RecreationInMinutes,
-                //EmployerId = entity.Employer?.Id ?? 0,
-                //UserId = !IsNull(entity.User) ? entity.User.Id : "",
+                CustomerName = entity.Employer?.Name ?? "",
                 TotalWorkHoursInMinutes = entity.TotalWorkHoursInMinutes
             };
         }
@@ -53,16 +55,11 @@ namespace Application.Common.Factories
                 {
                     Id = workHour.Employer?.Id ?? 0,
                     Name = workHour.Employer?.Name ?? ""
-                },
-                User = new UserDto
-                {
-                    Id = workHour.User?.Id.ToString() ?? "",
-                    DisplayName = workHour.Employer?.Name ?? ""
                 }
             };
         }
 
-        public CreateWorkHourCommand Create(WorkHourVm entity)
+        public CreateWorkHourCommand CreateCommand(WorkHourVm entity)
         {
             return null; //new(entity.StartTime, entity.EndTime, entity.RecreationInMinutes, entity);
         }
@@ -84,6 +81,19 @@ namespace Application.Common.Factories
                 return null;
 
             return new WorkHourCreated(entity.Id);
+        }
+
+        public CreateWorkHourCommand CreateCommand(WorkHourDto entity)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public WorkHour Create(DeleteWorkHourCommand entity)
+        {
+            return new ()
+            {
+                Id = entity.Id
+            };
         }
     }
 }

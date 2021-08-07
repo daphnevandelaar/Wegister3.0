@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Viewmodels;
-using Application.WorkHours.Queries.GetHoursList;
+using Application.WorkHours.Queries.GetWorkHoursList;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApi.Controllers.Abstracts;

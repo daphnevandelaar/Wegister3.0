@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "klanten",
+      "launchUrl": "uren",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

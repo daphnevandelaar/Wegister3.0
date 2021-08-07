@@ -32,6 +32,7 @@
         <button class="btn btn-primary" @onclick=@Navigate>Uren registreren</button>
     </div>
 </div>
+
 <div class="container-details">
     Totaalgewerkt: @_uren.TotalAmountOfWorkHoursInMinutes
 </div>
@@ -55,28 +56,28 @@ else
             </tr>
         </thead>
         <tbody>
-        @foreach (var gewerktuur in _uren.WorkHours)
-        {
-            {_dataTarget = _dataTarget + gewerktuur.Id;}
-            <tr>
-                <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.CustomerName</td>
-                <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.Date</td>
-                <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.StartTime</td>
-                <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.EndTime</td>
-                <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.RecreationInMinutes</td>
-                <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.TotalWorkHoursInMinutes</td>
-                <td style="padding: 0; vertical-align: middle;">
-                    <span class="oi oi-trash red text-18 pointer" aria-hidden="true" @onclick='() => Delete(gewerktuur.Id)'></span>
-                </td>
-            </tr>
-            <tr class="collapse" id="@_dataTarget" style="background-color: rgb(255, 255, 255);">
-                <td colspan="6">
-                    <div class="card-body">
-                        @gewerktuur.Description
-                    </div>
-                </td>
-            </tr>
-        }
+            @foreach (var gewerktuur in _uren.WorkHours)
+            {
+                { _dataTarget = _dataTarget + gewerktuur.Id; }
+                <tr>
+                    <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.CustomerName</td>
+                    <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.Date</td>
+                    <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.StartTime</td>
+                    <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.EndTime</td>
+                    <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.RecreationInMinutes</td>
+                    <td data-toggle="collapse" data-target="#@_dataTarget" aria-expanded="false" aria-controls="collapseExample" style="cursor: pointer;">@gewerktuur.TotalWorkHoursInMinutes</td>
+                    <td style="padding: 0; vertical-align: middle;">
+                        <span class="oi oi-trash red text-18 pointer" aria-hidden="true" @onclick='() => Delete(gewerktuur.Id)'></span>
+                    </td>
+                </tr>
+                <tr class="collapse" id="@_dataTarget" style="background-color: rgb(255, 255, 255);">
+                    <td colspan="6">
+                        <div class="card-body">
+                            @gewerktuur.Description
+                        </div>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 }
@@ -89,8 +90,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _uren = WorkHourService.GetHours();
-        _filters = WorkHourService.GetFilters();
+        _filters = await WorkHourService.GetFilters();
+        _uren = await WorkHourService.GetWorkHours();
     }
 
     void Navigate()
@@ -98,9 +99,9 @@ else
         UriHelper.NavigateTo("uren/toevoegen");
     }
 
-    private List<FilterValueListDto> _selectedFilters = new ();
+    private List<FilterValueListDto> _selectedFilters = new();
 
-    void FilterOnWorkHours(string filterType, string value)
+    async void FilterOnWorkHours(string filterType, string value)
     {
         _filters = _filters
             .Select(f =>
@@ -126,12 +127,12 @@ else
             }
         );
 
-        _uren = WorkHourService.SearchHours(_selectedFilters);
+        _uren = await WorkHourService.SearchHours(_selectedFilters);
     }
 
-    void Delete(int id)
+    async void Delete(int id)
     {
         WorkHourService.DeleteWorkHour(id);
-        _uren = WorkHourService.GetHours();
+        _uren = await WorkHourService.GetWorkHours();
     }
 }

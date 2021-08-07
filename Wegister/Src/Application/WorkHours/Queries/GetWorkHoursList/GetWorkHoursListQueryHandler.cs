@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
 using Application.Common.Viewmodels;
+using Application.WorkHours.Queries.GetWorkHoursList;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,9 +25,10 @@ namespace Application.WorkHours.Queries.GetHoursList
         {
             var dbContext = _contextFactory.CreateDbContext();
 
-            var workhours = await dbContext.WorkHours
+            var workhours = dbContext.WorkHours
+                .Include(w => w.Employer)
                 .Select(w => _factory.CreateLookUpDto(w))
-                .ToListAsync(cancellationToken);
+                .ToList();
 
             return _factory.Create(workhours);
         }
