@@ -11,18 +11,20 @@ namespace Application.Customers.Queries.GetCustomersList
 {
     public class GetCustomersListQueryHandler : IRequestHandler<GetCustomersListQuery, CustomerListVm>
     {
-        private readonly IWegisterDbContext _context;
+        private readonly IWegisterDbContextFactory _contextFactory;
         private readonly ICustomerFactory _factory;
 
-        public GetCustomersListQueryHandler(IWegisterDbContext context, ICustomerFactory factory)
+        public GetCustomersListQueryHandler(IWegisterDbContextFactory contextFactory, ICustomerFactory factory)
         {
-            _context = context;
+            _contextFactory = contextFactory;
             _factory = factory;
         }
 
         public async Task<CustomerListVm> Handle(GetCustomersListQuery request, CancellationToken cancellationToken)
         {
-            var customers = await _context.Customers
+            var dbContext = _contextFactory.CreateDbContext();
+
+            var customers = await dbContext.Customers
                 .Select(c => _factory.CreateLookUpDto(c))
                 .ToListAsync(cancellationToken);
 

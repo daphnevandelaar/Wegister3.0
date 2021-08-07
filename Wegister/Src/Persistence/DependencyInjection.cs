@@ -9,10 +9,17 @@ namespace Persistence
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<WegisterDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("WegisterDbConnectionString")));
+            services.AddSingleton<IWegisterDbContextFactory, WegisterDbContextFactory>()
+                .AddOptions<DatabaseSettings>()
+                .Configure<IConfiguration>((settings, config) =>
+                {
+                    config.GetSection("Database").Bind(settings);
+                });
 
-            services.AddScoped<IWegisterDbContext>(provider => provider.GetService<WegisterDbContext>());
+            services.AddDbContext<WegisterDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("Database")));
+
+            //services.AddScoped<IWegisterDbContext>(provider => provider.GetService<WegisterDbContext>());
 
             return services;
         }

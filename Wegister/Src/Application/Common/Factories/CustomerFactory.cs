@@ -16,7 +16,12 @@ namespace Application.Common.Factories
             {
                 Id = entity.Id,
                 Name = entity.Name,
-                Email = entity.Email
+                Email = entity.Email,
+                EmailToSendHoursTo = entity.EmailToSendHoursTo,
+                Place = entity.Place,
+                HouseNumber = entity.HouseNumber,
+                Street = entity.Street,
+                ZipCode = entity.ZipCode
             };
         }
 
@@ -43,7 +48,12 @@ namespace Application.Common.Factories
             {
                 Id = customer.Id,
                 Name = customer.Name,
-                Email = customer.Email
+                Email = customer.Email,
+                EmailToSendHoursTo = customer.EmailToSendHoursTo,
+                Place = customer.Place,
+                HouseNumber = customer.HouseNumber,
+                Street = customer.Street,
+                ZipCode = customer.ZipCode
             };
         }
 
