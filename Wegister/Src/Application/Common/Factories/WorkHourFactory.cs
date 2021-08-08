@@ -23,7 +23,8 @@ namespace Application.Common.Factories
                 EndTime = entity.EndTime.TimeOfDay.ToString(@"hh\:mm"),
                 RecreationInMinutes = entity.RecreationInMinutes,
                 CustomerName = entity.Employer?.Name ?? "",
-                TotalWorkHoursInMinutes = entity.TotalWorkHoursInMinutes
+                TotalWorkHoursInMinutes = entity.TotalWorkHoursInMinutes,
+                Description = entity.Description
             };
         }
 
@@ -53,9 +54,10 @@ namespace Application.Common.Factories
                 TotalWorkHoursInMinutes = workHour.TotalWorkHoursInMinutes,
                 Employer = new EmployerMiniDto
                 {
-                    Id = workHour.Employer?.Id ?? 0,
-                    Name = workHour.Employer?.Name ?? ""
-                }
+                    Id = workHour.Customer?.Id ?? 0,
+                    Name = workHour.Customer?.Name ?? ""
+                },
+                Description = workHour.Description
             };
         }
 
@@ -71,7 +73,8 @@ namespace Application.Common.Factories
                 StartTime = entity.StartTime,
                 EndTime = entity.EndTime,
                 RecreationInMinutes = entity.RecreationInMinutes,
-                EmployerId = entity.EmployerId
+                CustomerId = entity.CustomerId,
+                Description = entity.Description
             };
         }
 
@@ -85,7 +88,10 @@ namespace Application.Common.Factories
 
         public CreateWorkHourCommand CreateCommand(WorkHourDto entity)
         {
-            throw new System.NotImplementedException();
+            var startDateTime = entity.Date + entity.StartTime;
+            var endDateTime = entity.Date + entity.EndTime;
+
+            return new CreateWorkHourCommand(startDateTime, endDateTime, entity.RecreationInMinutes, entity.CustomerId, entity.Description);
         }
 
         public WorkHour Create(DeleteWorkHourCommand entity)

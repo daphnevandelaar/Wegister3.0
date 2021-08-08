@@ -3,9 +3,9 @@
 @using WebUI.Services
 @using WebUI.Dtos
 @using Application.Common.Viewmodels
-@inject NavigationManager UriHelper
-@inject WorkHourService WorkHourService
-@inject CustomerService CustomerService
+@inject NavigationManager _uriHelper
+@inject WorkHourService _workHourService
+@inject CustomerService _customerService
 
 <h1>Uren toevoegen</h1>
 <div class="form-group container-overview">
@@ -14,16 +14,22 @@
         <ValidationSummary />
         <div class="container-input">
             <label>Klant:</label>
-            <InputSelect @bind-Value="_workHour.CustomerId" class="form-control">
-                @if (_customers != null)
-                {
-                    @foreach (var customer in _customers.Customers)
+            @if (_customers == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else
+            {
+                <InputSelect @bind-Value="_workHour.CustomerId" class="form-control">
+                    @if (_customers != null)
                     {
-                        <option value="@customer.Id">@customer.Name</option>
+                        @foreach (var customer in _customers.Customers)
+                        {
+                            <option value="@customer.Id">@customer.Name</option>
+                        }
                     }
-                }
-            </InputSelect>
-
+                </InputSelect>
+            }
             <div class="container-dates">
 
                 <div class="container-group">
@@ -64,20 +70,21 @@
         Date = DateTime.Today
     };
 
-    private CustomerListVm _customers = new();
+    private CustomerListVm _customers;
     public string StartTime = DateTime.Now.AddHours(-8).TimeOfDay.ToString();
     public string EndTime = DateTime.Now.TimeOfDay.ToString();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _customers = await _customerService.GetCustomers();
+    }
 
     private void HandleValidSubmit()
     {
         _workHour.StartTime = DateTime.Parse(StartTime).TimeOfDay;
         _workHour.EndTime = DateTime.Parse(EndTime).TimeOfDay;
-        WorkHourService.AddWorkHour(_workHour);
-        UriHelper.NavigateTo("uren");
+        _workHourService.AddWorkHour(_workHour);
+        _uriHelper.NavigateTo("uren");
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        _customers = await CustomerService.GetCustomers();
-    }
 }

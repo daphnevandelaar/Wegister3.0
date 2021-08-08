@@ -26,7 +26,7 @@ namespace Application.WorkHours.Queries.GetHoursList
             var dbContext = _contextFactory.CreateDbContext();
 
             var workhours = dbContext.WorkHours
-                .Include(w => w.Employer)
+                .Include(w => w.Customer)
                 .Select(w => _factory.CreateLookUpDto(w))
                 .ToList();
 

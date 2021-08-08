@@ -26,12 +26,12 @@ namespace Application.WorkHours.Queries.GetWorkHourFiltersList
         {
             var dbContext = _contextFactory.CreateDbContext();
             
-            var employeeFilter = dbContext.WorkHours
-                .Include(w => w.Employer)
+            var customerFilter = dbContext.WorkHours
+                .Include(w => w.Customer)
                 .Select(w => new FilterValueVm
                 {
-                    Id = w.Employer.Id,
-                    Value = w.Employer.Name
+                    Id = w.Customer.Id,
+                    Value = w.Customer.Name
                 })
                 .Distinct()
                 .ToList();
@@ -68,7 +68,7 @@ namespace Application.WorkHours.Queries.GetWorkHourFiltersList
                 {
                     Type = "customer",
                     Name = "Selecteer klant",
-                    FilterValues = employeeFilter
+                    FilterValues = customerFilter
                 }
             };
         }

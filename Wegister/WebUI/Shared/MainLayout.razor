@@ -1,7 +1,7 @@
 ﻿@using WebUI.Services
 @using Application.Common.Viewmodels
 @inherits LayoutComponentBase
-@inject SessionService SessionService
+@inject SessionService _sessionService
 
 
 <div class="page">
@@ -11,7 +11,7 @@
 
     <div class="main">
         <div class="top-row px-4">
-            <a>@sessionInfo.UserName</a>
+            <a>@_sessionInfo.UserName</a>
         </div>
 
         <div class="content px-4">
@@ -21,11 +21,11 @@
 </div>
 
 @code {
-    private SessionVm sessionInfo;
+    private SessionVm _sessionInfo;
 
     protected override Task OnInitializedAsync()
     {
-        sessionInfo = SessionService.GetSessionInfo();
+        _sessionInfo = _sessionService.GetSessionInfo();
 
         return Task.FromResult(new SessionVm
         {

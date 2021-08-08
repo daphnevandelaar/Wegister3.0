@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Persistence;
 
@@ -22,8 +21,8 @@ namespace WebUI
 
                 try
                 {
-                    var wegisterContext = services.GetRequiredService<WegisterDbContext>();
-                    wegisterContext.Database.Migrate();
+                    var context = services.GetRequiredService<WegisterDbContext>();
+                    context.Database.Migrate();
                 }
                 catch (Exception ex)
                 {
@@ -53,12 +52,5 @@ namespace WebUI
                 })
                 .UseDefaultServiceProvider(options => options.ValidateScopes = false)
                 .UseStartup<Startup>();
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
     }
 }

@@ -6,7 +6,7 @@ namespace WebUI.Services
     {
         public CurrentUserServiceDev()
         {
-            UserId = "1";
+            UserId = "429F1831-D113-4FE3-ABFD-29B2BF8E7E3D";
             CompanyId = "35";
             IsAuthenticated = true;
         }

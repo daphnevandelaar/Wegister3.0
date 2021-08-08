@@ -13,13 +13,12 @@ namespace Persistence
                 .AddOptions<DatabaseSettings>()
                 .Configure<IConfiguration>((settings, config) =>
                 {
-                    config.GetSection("Database").Bind(settings);
+                    config.GetSection("ConnectionStrings").Bind(settings);
                 });
 
+            //This is for migration purposes
             services.AddDbContext<WegisterDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("Database")));
-
-            //services.AddScoped<IWegisterDbContext>(provider => provider.GetService<WegisterDbContext>());
+                options.UseSqlServer(configuration.GetConnectionString("WegisterDbConnectionString")));
 
             return services;
         }

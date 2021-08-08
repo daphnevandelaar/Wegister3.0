@@ -3,8 +3,8 @@
 @using WebUI.Services
 @using WebUI.Dtos
 @using Application.Common.Viewmodels
-@inject WorkHourService WorkHourService
-@inject NavigationManager UriHelper
+@inject WorkHourService _workHourService
+@inject NavigationManager _uriHelper
 
 <h1>Urenoverzicht</h1>
 
@@ -12,20 +12,26 @@
 
 <div class="container-overview">
     <div class="container-filter">
-        @foreach (var filter in _filters)
+        @if(_filters != null)
         {
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    @filter.Name
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" style="cursor: pointer;" @onclick='() => FilterOnWorkHours(filter.Type, "Alles")'>Alles</a>
-                    @foreach (var item in filter.FilterValues)
-                    {
-                        <a class="dropdown-item" style="cursor: pointer;" @onclick="() => FilterOnWorkHours(filter.Type, item.Value)">@item.Value</a>
-                    }
-                </div>
-            </div>
+            @foreach (var filter in _filters)
+            {
+                if (filter.FilterValues != null)
+                {
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @filter.Name
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" style="cursor: pointer;" @onclick='() => FilterOnWorkHours(filter.Type, "Alles")'>Alles</a>
+                            @foreach (var item in filter.FilterValues)
+                            {
+                                <a class="dropdown-item" style="cursor: pointer;" @onclick="() => FilterOnWorkHours(filter.Type, item.Value)">@item.Value</a>
+                            }
+                        </div>
+                    </div>
+                }
+            }
         }
     </div>
     <div class="container-action">
@@ -34,12 +40,12 @@
 </div>
 
 <div class="container-details">
-    Totaalgewerkt: @_uren.TotalAmountOfWorkHoursInMinutes
+    Totaalgewerkt: @_uren?.TotalAmountOfWorkHoursInMinutes
 </div>
 
 @if (_uren == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>Er zijn geen uren geregistreerd</em></p>
 }
 else
 {
@@ -90,13 +96,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _filters = await WorkHourService.GetFilters();
-        _uren = await WorkHourService.GetWorkHours();
+        _filters = await _workHourService.GetFilters();
+        _uren = await _workHourService.GetWorkHours();
     }
 
     void Navigate()
     {
-        UriHelper.NavigateTo("uren/toevoegen");
+        _uriHelper.NavigateTo("uren/toevoegen");
     }
 
     private List<FilterValueListDto> _selectedFilters = new();
@@ -127,12 +133,12 @@ else
             }
         );
 
-        _uren = await WorkHourService.SearchHours(_selectedFilters);
+        _uren = await _workHourService.SearchHours(_selectedFilters);
     }
 
     async void Delete(int id)
     {
-        WorkHourService.DeleteWorkHour(id);
-        _uren = await WorkHourService.GetWorkHours();
+        _workHourService.DeleteWorkHour(id);
+        _uren = await _workHourService.GetWorkHours();
     }
 }

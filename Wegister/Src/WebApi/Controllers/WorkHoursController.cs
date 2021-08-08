@@ -35,7 +35,7 @@ namespace WebApi.Controllers
         {
             _logger.LogInformation("Create workhour");
 
-            var command = _workHourFactory.Create(workHour);
+            var command = _workHourFactory.CreateCommand(workHour);
 
             var response = await Mediator.Send(command);
 

@@ -2,8 +2,8 @@
 
 @using WebUI.Services
 @using Application.Common.Viewmodels
-@inject CustomerService CustomerService
-@inject NavigationManager UriHelper
+@inject CustomerService _customerService
+@inject NavigationManager _uriHelper
 
 <h1>Klantenoverzicht</h1>
 
@@ -17,7 +17,7 @@
     </div>
 </div>
 
-@if (customers == null)
+@if (_customers == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -33,7 +33,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var customer in customers.Customers)
+            @foreach (var customer in _customers.Customers)
             {
                 <tr>
                     <td>@customer.Name</td>
@@ -47,15 +47,15 @@ else
 }
 
 @code {
-    private CustomerListVm customers;
+    private CustomerListVm _customers;
 
     protected override async Task OnInitializedAsync()
     {
-        customers = await CustomerService.GetCustomers();
+        _customers = await _customerService.GetCustomers();
     }
 
     void Navigate()
     {
-        UriHelper.NavigateTo("klanten/toevoegen");
+        _uriHelper.NavigateTo("klanten/toevoegen");
     }
 }

@@ -10,5 +10,6 @@ namespace Application.Common.Dtos
         public int RecreationInMinutes { get; set; }
         public int TotalWorkHoursInMinutes { get; set; }
         public EmployerMiniDto Employer { get; set; }
+        public string Description { get; set; }
     }
 }
