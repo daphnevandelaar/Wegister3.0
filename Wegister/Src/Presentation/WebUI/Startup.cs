@@ -3,8 +3,10 @@ using Application;
 using Application.Common.Interfaces;
 using Application.Common.Viewmodels;
 using Application.Customers.Queries.GetCustomersList;
+using Domain.Entities;
 using Infrastructure;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -47,6 +49,18 @@ namespace WebUI
             //TODO: Development startup production
             services.AddScoped<ICurrentUserService, CurrentUserServiceDev>();
 
+            //services
+            //    .AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<WegisterDbContext>();
+
+            //services
+            //    .AddIdentityServer()
+            //    .AddApiAuthorization<User, WegisterDbContext>();
+
+            //services
+            //    .AddAuthentication()
+            //    .AddIdentityServerJwt();
+
             _services = services;
         }
 
@@ -64,6 +78,12 @@ namespace WebUI
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseIdentityServer();
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

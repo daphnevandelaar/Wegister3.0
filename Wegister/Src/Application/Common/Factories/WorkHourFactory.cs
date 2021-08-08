@@ -16,7 +16,7 @@ namespace Application.Common.Factories
             if (IsNull(entity))
                 return null;
 
-            return new()
+            return new WorkHourVm
             {
                 Date = entity.StartTime.ToString("dd/MM/yyyy"),
                 StartTime = entity.StartTime.TimeOfDay.ToString(@"hh\:mm"),
