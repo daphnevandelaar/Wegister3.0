@@ -45,13 +45,19 @@ namespace Application.WorkHours.Queries.GetWorkHourFiltersList
             var weekFilter = dbContext.WorkHours
                 .Select(w => new FilterValueVm
                 {
-                    Value = "Week " + WeekNumberHelper.GetWeeknumber(w.StartTime)
+                    Value = "Week " + WeekNumberHelper.GetWeeknumber(w.StartTime.Date)
                 })
                 .Distinct()
                 .ToList();
 
             return new ()
             {
+                new FilterValueListVm
+                {
+                    Type = "week",
+                    Name = "Selecteer week",
+                    FilterValues = weekFilter
+                },
                 new FilterValueListVm
                 {
                     Type = "year",
@@ -63,12 +69,6 @@ namespace Application.WorkHours.Queries.GetWorkHourFiltersList
                     Type = "customer",
                     Name = "Selecteer klant",
                     FilterValues = employeeFilter
-                },
-                new FilterValueListVm
-                {
-                    Type = "week",
-                    Name = "Selecteer week",
-                    FilterValues = weekFilter
                 }
             };
         }

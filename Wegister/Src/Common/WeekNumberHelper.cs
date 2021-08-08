@@ -20,8 +20,8 @@ namespace Common
         public static int GetWeeknumberFromString(string date)
         {
             var matchDay = new Regex(@"^\d{2}");
-            var matchMonth = new Regex(@"(?<=\-)\d{2}(?=\-)");
-            var matchYear = new Regex(@"(?<=\-)\d{3}?[^\-]");
+            var matchMonth = new Regex(@"(?<=\/)\d{2}(?=\/)");
+            var matchYear = new Regex(@"(?<=\/)\d{3}?[^\/]");
 
             var day = Convert.ToInt32(matchDay.Match(date).Value);
             var month = Convert.ToInt32(matchMonth.Match(date).Value);
