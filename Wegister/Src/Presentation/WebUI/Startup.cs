@@ -79,11 +79,11 @@ namespace WebUI
                 app.UseHsts();
             }
 
-            app.UseIdentityServer();
+            //app.UseIdentityServer();
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
