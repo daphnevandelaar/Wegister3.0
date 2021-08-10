@@ -28,14 +28,12 @@ namespace AuthUI
 
             var serviceProvider = services.BuildServiceProvider();
 
-            using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                scope.ServiceProvider.GetService<PersistedGrantDbContext>().Database.Migrate();
+            using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            scope.ServiceProvider.GetService<PersistedGrantDbContext>().Database.Migrate();
 
-                var context = scope.ServiceProvider.GetService<ConfigurationDbContext>();
-                context.Database.Migrate();
-                EnsureSeedData(context);
-            }
+            var context = scope.ServiceProvider.GetService<ConfigurationDbContext>();
+            context.Database.Migrate();
+            EnsureSeedData(context);
         }
 
         private static void EnsureSeedData(ConfigurationDbContext context)
