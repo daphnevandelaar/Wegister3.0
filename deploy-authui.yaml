@@ -1,0 +1,22 @@
+name: Build & Deploy
+on: 
+  push:
+    branches: [master]
+   
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy AuthUI
+        uses: unknown/ssh-action@v9.1.2
+        with:
+          host: ${{secrets.SSH_HOST}}
+          key: ${{secrets.SSH_KEYS}}
+          username: $${{secrets.SSH_USERNAME}}
+          
+          script: |
+            mkdir wegister-auth-ui
+            cd wegister-auth-ui
+            git clone git@github.com:daphnevandelaar/Wegister3.0.git
+            echo 'Deployment successful'
+            
