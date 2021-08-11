@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Pages\Customers\CustomerAdd.razor.css" />
+    <None Remove="Pages\Customers\CustomerOverview.razor.css" />
+    <None Remove="Pages\WorkHours\WorkHourAdd.razor.css" />
+    <None Remove="Pages\WorkHours\WorkHourOverview.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Pages\Customers\CustomerAdd.razor.css" />
+    <Content Include="Pages\Customers\CustomerOverview.razor.css" />
+    <Content Include="Pages\WorkHours\WorkHourAdd.razor.css" />
+    <Content Include="Pages\WorkHours\WorkHourOverview.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.9" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.9" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Src\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Src\Persistence\Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

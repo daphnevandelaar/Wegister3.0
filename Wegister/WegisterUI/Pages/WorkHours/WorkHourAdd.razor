@@ -1,0 +1,90 @@
+﻿@page "/uren/toevoegen"
+
+@using WebUI.Dtos
+@using Application.Common.Viewmodels
+@using WegisterUI.Services
+@inject NavigationManager _uriHelper
+@inject WorkHourService _workHourService
+@inject CustomerService _customerService
+
+<h1>Uren toevoegen</h1>
+<div class="form-group container-overview">
+    <EditForm Model="@_workHour" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="container-input">
+            <label>Klant:</label>
+            @if (_customers == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else
+            {
+                <InputSelect @bind-Value="_workHour.CustomerId" class="form-control">
+                    @if (_customers != null)
+                    {
+                        @foreach (var customer in _customers.Customers)
+                        {
+                            <option value="@customer.Id">@customer.Name</option>
+                        }
+                    }
+                </InputSelect>
+            }
+            <div class="container-dates">
+
+                <div class="container-group">
+                    <label>Datum:</label>
+                    <InputDate id="date" @bind-Value="_workHour.Date"/>
+                </div>
+
+                <div class="container-group">
+                    <label>Starttijd:</label>
+                    <InputText type="time" @bind-Value="StartTime" @bind-Value:format="HH:mm"/>
+                </div>
+
+                <div class="container-group">
+                    <label>Eindtijd:</label>
+                    <InputText type="time" @bind-Value="EndTime" @bind-Value:format="HH:mm"/>
+                </div>
+
+            </div>
+
+            <label>Pauze in minuten:</label>
+            <InputNumber @bind-Value="_workHour.RecreationInMinutes"/>
+            
+            <label>Omschrijving:</label>
+            <InputTextArea @bind-Value="_workHour.Description"/>
+        </div>
+
+        <div class="container-action">
+            <button class="btn btn-primary" type="submit">Opslaan</button>
+        </div>
+    </EditForm>
+</div>
+
+<br />
+
+@code {
+    private WorkHourDto _workHour = new()
+    {
+        Date = DateTime.Today
+    };
+
+    private CustomerListVm _customers;
+    public string StartTime = DateTime.Now.AddHours(-8).TimeOfDay.ToString();
+    public string EndTime = DateTime.Now.TimeOfDay.ToString();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _customers = await _customerService.GetCustomers();
+    }
+
+    private void HandleValidSubmit()
+    {
+        _workHour.StartTime = DateTime.Parse(StartTime).TimeOfDay;
+        _workHour.EndTime = DateTime.Parse(EndTime).TimeOfDay;
+        _workHourService.AddWorkHour(_workHour);
+        _uriHelper.NavigateTo("uren");
+    }
+
+}

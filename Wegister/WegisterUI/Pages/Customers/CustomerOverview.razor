@@ -1,0 +1,61 @@
+﻿@page "/klanten"
+
+@using Application.Common.Viewmodels
+@using WegisterUI.Services
+@inject CustomerService _customerService
+@inject NavigationManager _uriHelper
+
+<h1>Klantenoverzicht</h1>
+
+<p>Het onderstaande overzicht is een lijst met de geregistreerde klanten</p>
+
+<div class="container-overview">
+    <div class="container-filter">
+    </div>
+    <div class="container-action">
+        <button class="btn btn-primary" @onclick=@Navigate>Klant toevoegen</button>
+    </div>
+</div>
+
+@if (_customers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Woonplaats</th>
+                <th>Email</th>
+                <th>Administratie email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in _customers.Customers)
+            {
+                <tr>
+                    <td>@customer.Name</td>
+                    <td>@customer.Place</td>
+                    <td>@customer.Email</td>
+                    <td>@customer.EmailToSendHoursTo</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private CustomerListVm _customers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _customers = await _customerService.GetCustomers();
+    }
+
+    void Navigate()
+    {
+        _uriHelper.NavigateTo("klanten/toevoegen");
+    }
+}
