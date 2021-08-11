@@ -14,9 +14,9 @@ namespace Application
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
+            services.AddTransient<IItemFactory, ItemFactory>();
             services.AddTransient<ICustomerFactory, CustomerFactory>();
             services.AddTransient<IWorkHourFactory, WorkHourFactory>();
-
             services.AddTransient<IWorkHourBuilder, WorkHourBuilder>();
 
             return services;

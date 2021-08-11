@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using Common;
 using Domain.Entities;
 using Domain.Entities.Abstracts;
@@ -11,7 +12,7 @@ namespace Persistence
 {
     public class WegisterDbContext : DbContext, IWegisterDbContext
     {
-        private readonly ICurrentUserService _currentUserService;
+        private readonly CurrentUser _currentUser;
         private readonly IDateTime _dateTime;
 
         public WegisterDbContext(DbContextOptions<WegisterDbContext> options)
@@ -24,7 +25,7 @@ namespace Persistence
             IDateTime dateTime)
             : base(options)
         {
-            _currentUserService = currentUserService;
+            _currentUser = currentUserService.CreateSession();
             _dateTime = dateTime;
         }
 
@@ -47,12 +48,12 @@ namespace Persistence
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = _currentUserService.UserId;
+                        entry.Entity.CreatedBy = _currentUser.UserId;
                         entry.Entity.Created = _dateTime.Now;
-                        entry.Entity.CompanyId = _currentUserService.CompanyId;
+                        entry.Entity.CompanyId = _currentUser.CompanyId;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                        entry.Entity.LastModifiedBy = _currentUser.UserId;
                         entry.Entity.LastModified = _dateTime.Now;
                         break;
                 }
@@ -62,9 +63,9 @@ namespace Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: check if all configurations are injected (else throw exception)
-            modelBuilder.ApplyConfiguration(new CustomerConfiguration(_currentUserService));
-            modelBuilder.ApplyConfiguration(new ItemConfiguration(_currentUserService));
-            modelBuilder.ApplyConfiguration(new WorkHourConfiguration(_currentUserService));
+            modelBuilder.ApplyConfiguration(new CustomerConfiguration(_currentUser));
+            //modelBuilder.ApplyConfiguration(new ItemConfiguration(_currentUser));
+            modelBuilder.ApplyConfiguration(new WorkHourConfiguration(_currentUser));
         }
     }
 }
