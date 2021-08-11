@@ -8,27 +8,22 @@ namespace WegisterUI.Services
 {
     public class CurrentUserService : ICurrentUserService
     {
-        private IHttpContextAccessor _httpContextAccessor;
-
-        public string UserId { get; }
-        public string CompanyId { get; }
-        public bool IsAuthenticated { get; }
-
-        public CurrentUser CreateSession()
-        {
-            _httpContextAccessor = _httpContextAccessor;
-            var claimsPrincipal = _httpContextAccessor?.HttpContext?.User;
-            return new CurrentUser(GetUserId(claimsPrincipal), GetCompanyId(claimsPrincipal));
-        }
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CurrentUserService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public CurrentUser CreateSession()
+        {
+            var claimsPrincipal = _httpContextAccessor?.HttpContext?.User;
+            return new CurrentUser(GetUserId(claimsPrincipal), GetCompanyId(claimsPrincipal));
+        }
+
         private static string GetUserId(ClaimsPrincipal claimsPrincipal)
         {
-            if (claimsPrincipal.Claims.Any())
+            if (claimsPrincipal.Claims.Any() && claimsPrincipal.Claims.Any(c => c.Type == "nameidentifier"))
             {
                 return claimsPrincipal.Claims.Single(c => c.Type.Contains("nameidentifier")).Value;
             }
@@ -38,7 +33,7 @@ namespace WegisterUI.Services
 
         private static string GetCompanyId(ClaimsPrincipal claimsPrincipal)
         {
-            if (claimsPrincipal.Claims.Any())
+            if (claimsPrincipal.Claims.Any() && claimsPrincipal.Claims.Any(c => c.Type == "companyId"))
             {
                 return claimsPrincipal.Claims.First(c => c.Type.Contains("companyId")).Value;
             }

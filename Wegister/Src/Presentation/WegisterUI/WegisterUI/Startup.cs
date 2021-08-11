@@ -18,19 +18,25 @@ namespace WegisterUI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuration { get; }
+        public IHostEnvironment Environment { get; }
+
+        public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             //TODO: Development startup production
-            services.AddSingleton<ICurrentUserService, CurrentUserService>();
+            if(Environment.IsDevelopment())
+                services.AddSingleton<ICurrentUserService, CurrentUserServiceDev>();
+
+            if(Environment.IsProduction())
+                services.AddSingleton<ICurrentUserService, CurrentUserService>();
 
             services.AddPersistence(Configuration);
             services.AddInfrastructure();
@@ -52,8 +58,6 @@ namespace WegisterUI
                 .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            services.AddScoped<SignInManager<IdentityUser>, SignInManagerOverride<IdentityUser>>();
 
             services.AddRazorPages();
             services.AddServerSideBlazor();

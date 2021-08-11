@@ -18,7 +18,6 @@ namespace Persistence.Configurations
 
         public void Configure(EntityTypeBuilder<Item> builder)
         {
-            builder.HasQueryFilter(i => i.CompanyId == _currentUserService.CompanyId);
         }
     }
 }

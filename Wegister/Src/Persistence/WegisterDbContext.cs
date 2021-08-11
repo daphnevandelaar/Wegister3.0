@@ -62,6 +62,12 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            //This global query filter doesn't work with the ConfigurationModels
+            modelBuilder.Entity<WorkHour>().HasQueryFilter(c => EF.Property<string>(c, "CompanyId") == _currentUser.CompanyId);
+            modelBuilder.Entity<Customer>().HasQueryFilter(c => EF.Property<string>(c, "CompanyId") == _currentUser.CompanyId);
+
             //TODO: check if all configurations are injected (else throw exception)
             modelBuilder.ApplyConfiguration(new CustomerConfiguration(_currentUser));
             //modelBuilder.ApplyConfiguration(new ItemConfiguration(_currentUser));

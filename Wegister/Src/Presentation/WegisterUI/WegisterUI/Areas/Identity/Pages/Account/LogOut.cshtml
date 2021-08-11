@@ -9,13 +9,22 @@
     @{
         if (User.Identity.IsAuthenticated)
         {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
-            </form>
+            <p>
+                Weet je zeker dat je wilt uitloggen? 
+            </p>
+            <div style="display: flex;">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                    <button type="submit" class="btn btn-primary">Uitloggen</button> 
+                </form>
+                <a href="/">
+                    <button class="btn btn-primary" style="margin-left: 100px;">Terug</button>
+                </a>
+            </div>
         }
         else
         {
-            <p>You have successfully logged out of the application.</p>
+            <p>Je bent succesvol uitgelogd.</p>
+            <p><a href="/">Klik hier</a> om terug te gaan.</p>
         }
     }
 </header>

@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using System;
+using Application.Common.Models;
 
 namespace Application.UnitTests.Common.Implementations
 {
@@ -10,5 +11,9 @@ namespace Application.UnitTests.Common.Implementations
         public string CompanyId => new Guid("f22ba6a5-9155-4649-8d55-a80c12670d01").ToString();
 
         public bool IsAuthenticated => true;
+        public CurrentUser CreateSession()
+        {
+            return new CurrentUser("", "");
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Models;
 
 namespace Application.UnitTests.Common.Implementations
 {
@@ -9,5 +10,9 @@ namespace Application.UnitTests.Common.Implementations
         public string CompanyId => "10000000-0000-0000-0000-000000000001";
 
         public bool IsAuthenticated => true;
+        public CurrentUser CreateSession()
+        {
+            return new CurrentUser("", "");
+        }
     }
 }

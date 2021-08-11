@@ -9,7 +9,7 @@ namespace Persistence
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IWegisterDbContextFactory, WegisterDbContextFactory>()
+            services.AddTransient<IWegisterDbContextFactory, WegisterDbContextFactory>()
                 .AddOptions<DatabaseSettings>()
                 .Configure<IConfiguration>((settings, config) =>
                 {

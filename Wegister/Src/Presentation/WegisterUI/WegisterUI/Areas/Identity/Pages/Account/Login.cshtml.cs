@@ -93,8 +93,10 @@ namespace WegisterUI.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
                     var user = await _userManager.FindByEmailAsync(Input.Email);
-                    //_contextFactory.CreateDbContext();
-                    await _userManager.AddClaimAsync(user, new Claim("companyId", "999119f9-ed3c-41b3-994b-96d666cf0d7c"));
+                    var context = _contextFactory.CreateDbContext();
+                    var companyId = context.Users.Single(u => u.Id == new Guid(user.Id)).CompanyId;
+
+                    await _userManager.AddClaimAsync(user, new Claim("companyId", companyId));
                     var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(user);
                     await _signInManager.RefreshSignInAsync(user);
 

@@ -1,23 +1,53 @@
-﻿using Application.Common.Interfaces;
+﻿using System;
+using System.Linq;
+using System.Security.Claims;
+using Application.Common.Interfaces;
 using Application.Common.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace WegisterUI.Services
 {
     public class CurrentUserServiceDev : ICurrentUserService
     {
-        public string UserId { get; }
-        public string CompanyId { get; }
-        public bool IsAuthenticated { get; }
-        public CurrentUser CreateSession()
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public CurrentUserServiceDev(IHttpContextAccessor httpContextAccessor)
         {
-            throw new System.NotImplementedException();
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public CurrentUserServiceDev()
+        public CurrentUser CreateSession()
         {
-            UserId = "429F1831-D113-4FE3-ABFD-29B2BF8E7E3D";
-            CompanyId = "35";
-            IsAuthenticated = true;
+            try
+            {
+                var claimsPrincipal = _httpContextAccessor?.HttpContext?.User;
+                var currentUser = new CurrentUser(GetUserId(claimsPrincipal), GetCompanyId(claimsPrincipal));
+                return currentUser;
+            }
+            catch (Exception ex)
+            {
+                return new CurrentUser("9C1414D8-C895-4390-AC5D-0B41200B7ECA", "999119f9-ed3c-41b3-994b-96d666cf0d7c");
+            }
+        }
+
+        private static string GetUserId(ClaimsPrincipal claimsPrincipal)
+        {
+            if (claimsPrincipal.Claims.Any() && claimsPrincipal.Claims.Any(c => c.Type == "nameidentifier"))
+            {
+                return claimsPrincipal.Claims.Single(c => c.Type.Contains("nameidentifier")).Value;
+            }
+
+            throw new Exception("No user specified");
+        }
+
+        private static string GetCompanyId(ClaimsPrincipal claimsPrincipal)
+        {
+            if (claimsPrincipal.Claims.Any() && claimsPrincipal.Claims.Any(c => c.Type == "companyId"))
+            {
+                return claimsPrincipal.Claims.First(c => c.Type.Contains("companyId")).Value;
+            }
+
+            throw new Exception("No user specified");
         }
     }
 }

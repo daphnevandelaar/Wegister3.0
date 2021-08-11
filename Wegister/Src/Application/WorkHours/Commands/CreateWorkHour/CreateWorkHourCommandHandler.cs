@@ -32,7 +32,7 @@ namespace Application.WorkHours.Commands.CreateWorkHour
             try
             {
                 var workHour = _factory.Create(request);
-                var currentUser = await dbContext.Users.SingleAsync(u => u.Id == new Guid(_currentUserService.UserId), cancellationToken);
+                var currentUser = await dbContext.Users.SingleAsync(u => u.Id == new Guid(_currentUserService.CreateSession().UserId), cancellationToken);
                 workHour = _builder.Build(workHour, currentUser);
 
                 dbContext.WorkHours.Add(workHour);
