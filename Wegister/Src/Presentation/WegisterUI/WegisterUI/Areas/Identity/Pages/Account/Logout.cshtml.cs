@@ -43,9 +43,9 @@ namespace WegisterUI.Areas.Identity.Pages.Account
             await _userManager.RemoveClaimsAsync(user, 
                 new List<Claim>
                 {
-                    new Claim("companyId", "tst"), 
-                    new Claim("companyId", "999119f9-ed3c-41b3-994b-96d666cf0d7c"),
-                    new Claim("companyId", companyId)
+                    new ("companyId", "tst"), 
+                    new ("companyId", "999119f9-ed3c-41b3-994b-96d666cf0d7c"),
+                    new ("companyId", companyId)
                 });
 
             _logger.LogInformation("User logged out.");

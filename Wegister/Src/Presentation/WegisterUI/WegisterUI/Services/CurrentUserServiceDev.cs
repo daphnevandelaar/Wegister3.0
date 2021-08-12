@@ -26,13 +26,13 @@ namespace WegisterUI.Services
             }
             catch (Exception ex)
             {
-                return new CurrentUser("9C1414D8-C895-4390-AC5D-0B41200B7ECA", "999119f9-ed3c-41b3-994b-96d666cf0d7c");
+                return new CurrentUser("", "");
             }
         }
 
         private static string GetUserId(ClaimsPrincipal claimsPrincipal)
         {
-            if (claimsPrincipal.Claims.Any() && claimsPrincipal.Claims.Any(c => c.Type == "nameidentifier"))
+            if (claimsPrincipal.Claims.Any() && claimsPrincipal.Claims.Any(c => c.Type.Contains("nameidentifier")))
             {
                 return claimsPrincipal.Claims.Single(c => c.Type.Contains("nameidentifier")).Value;
             }
@@ -42,7 +42,7 @@ namespace WegisterUI.Services
 
         private static string GetCompanyId(ClaimsPrincipal claimsPrincipal)
         {
-            if (claimsPrincipal.Claims.Any() && claimsPrincipal.Claims.Any(c => c.Type == "companyId"))
+            if (claimsPrincipal.Claims.Any() && claimsPrincipal.Claims.Any(c => c.Type.Contains("companyId")))
             {
                 return claimsPrincipal.Claims.First(c => c.Type.Contains("companyId")).Value;
             }

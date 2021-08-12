@@ -9,7 +9,7 @@ using WegisterUI.Data;
 
 namespace WegisterUI.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(WegisterAuthDbContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {

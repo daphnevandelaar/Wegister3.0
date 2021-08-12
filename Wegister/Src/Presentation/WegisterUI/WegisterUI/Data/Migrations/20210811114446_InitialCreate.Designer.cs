@@ -9,7 +9,7 @@ using WegisterUI.Data;
 
 namespace WegisterUI.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(WegisterAuthDbContext))]
     [Migration("20210811114446_InitialCreate")]
     partial class InitialCreate
     {

@@ -3,11 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WegisterUI.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class WegisterAuthDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public WegisterAuthDbContext(DbContextOptions<WegisterAuthDbContext> options)
             : base(options)
-        {
-        }
+        { }
     }
 }
