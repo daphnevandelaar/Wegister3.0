@@ -16,19 +16,23 @@ namespace Application.WorkHours.Queries.GetWorkHourFiltersList
     {
         private readonly IWegisterDbContextFactory _contextFactory;
         private readonly WeekValueRetriever _weekValueRetriever;
+        private readonly YearValueRetriever _yearValueRetriever;
+        private readonly CustomerValueRetriever _customerValueRetriever;
 
         public GetWorkHourFilterQueryHandler(IWegisterDbContextFactory contextFactory)
         {
             _contextFactory = contextFactory;
             _weekValueRetriever = new WeekValueRetriever(contextFactory.CreateDbContext());
+            _yearValueRetriever = new YearValueRetriever(contextFactory.CreateDbContext());
+            _customerValueRetriever = new CustomerValueRetriever(contextFactory.CreateDbContext());
         }
 
         public async Task<List<FilterValueListVm>> Handle(GetWorkHourFilterQuery request, CancellationToken cancellationToken)
         {
             var dbContext = _contextFactory.CreateDbContext();
             
-            var customerFilter = GetCustomerFilterValues(dbContext);
-            var yearFilter = GetYearFilterValues(dbContext);
+            var customerFilter = _customerValueRetriever.GetFilterValues(request);
+            var yearFilter = _yearValueRetriever.GetFilterValues(request);
 
             var weekFilter = _weekValueRetriever.GetFilterValues(request);
 
@@ -53,28 +57,6 @@ namespace Application.WorkHours.Queries.GetWorkHourFiltersList
                     FilterValues = customerFilter
                 }
             };
-        }
-
-        private List<FilterValueVm> GetWeekFilterValues(IWegisterDbContext dbContext)
-        {
-            return dbContext.WorkHours
-                            .Select(w => new FilterValueVm
-                                {
-                                    Value = "Week " + WeekNumberHelper.GetWeeknumber(w.StartTime.Date)
-                                })
-                            .Distinct()
-                            .ToList();
-        }
-
-        private List<FilterValueVm> GetYearFilterValues(IWegisterDbContext dbContext)
-        {
-            return dbContext.WorkHours
-                            .Select(w => new FilterValueVm
-                                {
-                                    Value = w.StartTime.Year.ToString()
-                                })
-                            .Distinct()
-                            .ToList();
         }
 
         private List<FilterValueVm> GetCustomerFilterValues(IWegisterDbContext dbContext)

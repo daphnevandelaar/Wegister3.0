@@ -7,11 +7,11 @@ using System.Linq;
 
 namespace Application.WorkHours.Queries.GetWorkHourFiltersList.ValueRetrievers
 {
-    internal class WeekValueRetriever
+    internal class YearValueRetriever
     {
         private readonly IWegisterDbContext _context;
 
-        public WeekValueRetriever(IWegisterDbContext context)
+        public YearValueRetriever(IWegisterDbContext context)
         {
             _context = context;
         }
@@ -22,11 +22,12 @@ namespace Application.WorkHours.Queries.GetWorkHourFiltersList.ValueRetrievers
 
             if(request != null && request.SelectedFilters != null && request.SelectedFilters.Any(f => f.Type != null && f.Value != null))
             {
-                if (request.SelectedFilters.Any(f => f.Type == FilterTypes.Year.ToString()))
-                {
-                    var year = request.SelectedFilters.First(s => s.Type == FilterTypes.Year.ToString()).Value;
-                    query = query.Where(w => w.StartTime.Year.ToString() == year);
-                }
+                //Test this (doesn't work yet)
+                //if (request.SelectedFilters.Any(f => f.Type == FilterTypes.Week.ToString()))
+                //{
+                //    var week = request.SelectedFilters.First(s => s.Type == FilterTypes.Week.ToString()).Value;
+                //    query = query.Where(w => "Week " + WeekNumberHelper.GetWeeknumber(w.StartTime.Date) == week);
+                //}
 
                 if (request.SelectedFilters.Any(f => f.Type == FilterTypes.Customer.ToString()))
                 {
@@ -37,7 +38,7 @@ namespace Application.WorkHours.Queries.GetWorkHourFiltersList.ValueRetrievers
           
             return query.Select(w => new FilterValueVm
                                 {
-                                    Value = "Week " + WeekNumberHelper.GetWeeknumber(w.StartTime.Date)
+                                    Value = w.StartTime.Year.ToString()
                                 })
                             .Distinct()
                             .ToList();
