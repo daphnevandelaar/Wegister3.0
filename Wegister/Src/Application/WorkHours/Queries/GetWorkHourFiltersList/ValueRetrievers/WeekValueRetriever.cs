@@ -35,20 +35,13 @@ namespace Application.WorkHours.Queries.GetWorkHourFiltersList.ValueRetrievers
                     query = query.Where(w => w.Customer.Name == customerName);
                 }
             }
-            try
-            {
-                var result = query.Select(w => new FilterValueVm
-                                    {
-                                        Value = "Week " + WeekNumberHelper.GetWeeknumber(w.StartTime.Date)
-                                    })
-                                .Distinct()
-                                .ToList();
-                return result;
-            }catch(Exception ex)
-            {
-                throw;
-            }
-            
+          
+            return query.Select(w => new FilterValueVm
+                                {
+                                    Value = "Week " + WeekNumberHelper.GetWeeknumber(w.StartTime.Date)
+                                })
+                            .Distinct()
+                            .ToList();
         }
     }
 }
