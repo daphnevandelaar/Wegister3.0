@@ -56,6 +56,7 @@ namespace WegisterUI.Services
                     if (filter.FilterValue.Value != "Alles")
                         summaries = new WorkHourListVm(summaries.WorkHours
                             .Where(f => f.Date.Contains(filter.FilterValue.Value)).ToList());
+                
                 if (filter.Type == FilterTypes.Customer.ToString())
                     if (filter.FilterValue.Value != "Alles")
                         summaries = new WorkHourListVm(summaries.WorkHours

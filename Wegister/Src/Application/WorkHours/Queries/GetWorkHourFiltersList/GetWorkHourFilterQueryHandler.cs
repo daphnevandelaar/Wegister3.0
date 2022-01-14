@@ -37,19 +37,19 @@ namespace Application.WorkHours.Queries.GetWorkHourFiltersList
                 new FilterValueListVm
                 {
                     Type = FilterTypes.Week.ToString(),
-                    Name = "Selecteer week",
+                    Name = request.SelectedFilters.Any(f => f.Type == FilterTypes.Week.ToString()) ? request.SelectedFilters.First(f => f.Type == FilterTypes.Week.ToString()).Value : "Selecteer week",
                     FilterValues = weekFilter
                 },
                 new FilterValueListVm
                 {
                     Type = FilterTypes.Year.ToString(),
-                    Name = "Selecteer jaartal",
+                    Name = request.SelectedFilters.Any(f => f.Type == FilterTypes.Year.ToString()) ? request.SelectedFilters.First(f => f.Type == FilterTypes.Year.ToString()).Value : "Selecteer jaartal",
                     FilterValues = yearFilter
                 },
                 new FilterValueListVm
                 {
                     Type = FilterTypes.Customer.ToString(),
-                    Name = "Selecteer klant",
+                    Name = request.SelectedFilters.Any(f => f.Type == FilterTypes.Customer.ToString()) ? request.SelectedFilters.First(f => f.Type == FilterTypes.Customer.ToString()).Value : "Selecteer klant",
                     FilterValues = customerFilter
                 }
             };
