@@ -7,7 +7,7 @@ using System.IO;
 namespace Persistence
 {
     public abstract class DesignTimeDbContextFactoryBase<TContext> :
-        IDesignTimeDbContextFactory<TContext> where TContext : DbContext
+        IDesignTimeDbContextFactory<TContext> where TContext : WegisterDbContext
     {
         private const string ConnectionStringName = "WegisterDbConnectionString";
         private const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
@@ -29,7 +29,8 @@ namespace Persistence
                 .AddEnvironmentVariables()
                 .Build();
 
-            var connectionString = configuration.GetConnectionString(ConnectionStringName);
+            //var connectionString = configuration.GetConnectionString(ConnectionStringName);
+            var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WegisterDBDesTime;Integrated Security=True;Trusted_Connection=True;MultipleActiveResultSets=True;Application Name=WegisterAPI;";
 
             return Create(connectionString);
         }

@@ -32,3 +32,13 @@
 .pointer {
     cursor: pointer;
 }
+
+.hover {
+    padding: 8px;
+    border-radius: 25px;
+}
+
+.hover:hover {
+    background-color: lightgray;
+    color: darkred !important;
+}

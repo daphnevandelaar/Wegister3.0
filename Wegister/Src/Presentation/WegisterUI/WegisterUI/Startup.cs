@@ -33,7 +33,6 @@ namespace WegisterUI
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddPersistence(Configuration);
             services.AddInfrastructure();
             services.AddApplication();

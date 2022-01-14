@@ -18,9 +18,10 @@ namespace WegisterUI
             services.AddSingleton<ItemService>();
             services.AddSingleton<CustomerService>();
 
+            var connString = configuration.GetConnectionString("WegisterAuthDbConnectionString");
+
             services.AddDbContext<WegisterAuthDbContext>(options =>
-                options.UseSqlServer(
-                    configuration.GetConnectionString("WegisterAuthDbConnectionString")));
+                options.UseSqlServer(connString));
 
             services
                 .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

@@ -1,6 +1,8 @@
-﻿namespace Application.Common.Interfaces
+﻿using System;
+
+namespace Application.Common.Interfaces
 {
-    public interface IWegisterDbContextFactory  
+    public interface IWegisterDbContextFactory
     {
         IWegisterDbContext CreateDbContext();
     }

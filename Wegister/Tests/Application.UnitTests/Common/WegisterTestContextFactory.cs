@@ -1,71 +1,89 @@
-﻿//using Application.Common.Interfaces;
-//using Application.UnitTests.Common.DatabaseSeeders;
-//using Common;
-//using Microsoft.EntityFrameworkCore;
-//using Persistence;
+﻿using Application.Common.Interfaces;
+using Application.UnitTests.Common.DatabaseSeeders;
+using Common;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Persistence;
 
-//namespace Application.UnitTests.Common
-//{
-//    public class WegisterTestContextFactory
-//    {
-//        public static WegisterDbContext Create(DbContextOptions<WegisterDbContext> options, ICurrentUserService currentUserService, IDateTime dateTime)
-//        {
-//            var context = new WegisterDbContext(options, currentUserService, dateTime);
+namespace Application.UnitTests.Common
+{
+    public class WegisterTestContextFactory : IWegisterDbContextFactory
+    {
+        private readonly DbContextOptionsBuilder<WegisterDbContext> _dbOptionsBuilder;
+        private readonly ICurrentUserService _currentUserService;
+        private readonly IDateTime _dateTime;
 
-//            return context;
-//        }
+        public WegisterTestContextFactory(
+            IOptions<DatabaseSettings> settingOptions,
+            ICurrentUserService currentUserService,
+            IDateTime dateTime
+        )
+        {
+            var settings = settingOptions.Value;
+            _dbOptionsBuilder = new DbContextOptionsBuilder<WegisterDbContext>();
+            _dbOptionsBuilder.UseSqlServer(settings.WegisterDbConnectionString);
 
-//        public static WegisterDbContext CreateCustomerDb(DbContextOptions<WegisterDbContext> options, ICurrentUserService currentUserService, IDateTime dateTime)
-//        {
-//            var context = new WegisterDbContext(options, currentUserService, dateTime);
+            _currentUserService = currentUserService;
+            _dateTime = dateTime;
+        }
 
-//            context.Database.EnsureDeleted();
-//            context.Database.EnsureCreated();
+        public IWegisterDbContext CreateDbContext()
+        {
+            var dbContextOptions = _dbOptionsBuilder.Options;
+            return new WegisterDbContext(dbContextOptions, _currentUserService, _dateTime);
+        }
 
-//            var customers = new CustomerDbSeeder(currentUserService).Seed();
-//            context.Customers.AddRange(customers);
+        //public static WegisterDbContext CreateCustomerDb(DbContextOptions<WegisterDbContext> options, ICurrentUserService currentUserService, IDateTime dateTime)
+        //{
+        //    var context = new WegisterDbContext(options, currentUserService, dateTime);
 
-//            context.SaveChanges();
+        //    context.Database.EnsureDeleted();
+        //    context.Database.EnsureCreated();
 
-//            return context;
-//        }
+        //    var customers = new CustomerDbSeeder(currentUserService).Seed();
+        //    context.Customers.AddRange(customers);
 
-//        public static WegisterDbContext CreateItemDb(DbContextOptions<WegisterDbContext> options, ICurrentUserService currentUserService, IDateTime dateTime)
-//        {
-//            var context = new WegisterDbContext(options, currentUserService, dateTime);
+        //    context.SaveChanges();
 
-//            context.Database.EnsureDeleted();
-//            context.Database.EnsureCreated();
+        //    return context;
+        //}
 
-//            var items = new ItemDbSeeder(currentUserService).Seed();
-//            context.Items.AddRange(items);
+        //public static WegisterDbContext CreateItemDb(DbContextOptions<WegisterDbContext> options, ICurrentUserService currentUserService, IDateTime dateTime)
+        //{
+        //    var context = new WegisterDbContext(options, currentUserService, dateTime);
 
-//            context.SaveChanges();
+        //    context.Database.EnsureDeleted();
+        //    context.Database.EnsureCreated();
 
-//            return context;
-//        }
+        //    var items = new ItemDbSeeder(currentUserService).Seed();
+        //    context.Items.AddRange(items);
 
-//        public static WegisterDbContext CreateWorkHourDb(DbContextOptions<WegisterDbContext> options, ICurrentUserService currentUserService, IDateTime dateTime)
-//        {
-//            var context = new WegisterDbContext(options, currentUserService, dateTime);
+        //    context.SaveChanges();
 
-//            context.Database.EnsureDeleted();
-//            context.Database.EnsureCreated();
+        //    return context;
+        //}
 
-//            var items = new ItemDbSeeder(currentUserService).Seed();
-//            var employers = new EmployerDbSeeder().Seed();
-//            var users = new UserDbSeeder().Seed();
-//            var workhours = new WorkHoudDbSeeder(currentUserService, dateTime).Seed();
+        //public static WegisterDbContext CreateWorkHourDb(DbContextOptions<WegisterDbContext> options, ICurrentUserService currentUserService, IDateTime dateTime)
+        //{
+        //    var context = new WegisterDbContext(options, currentUserService, dateTime);
 
-//            context.Items.AddRange(items);
-//            context.Employers.AddRange(employers);
-//            context.Users.AddRange(users);
-//            context.WorkHours.AddRange(workhours);
+        //    context.Database.EnsureDeleted();
+        //    context.Database.EnsureCreated();
 
-//            context.SaveChanges();
-//            context.SaveChanges();
+        //    var items = new ItemDbSeeder(currentUserService).Seed();
+        //    var employers = new EmployerDbSeeder().Seed();
+        //    var users = new UserDbSeeder().Seed();
+        //    var workhours = new WorkHoudDbSeeder(currentUserService, dateTime).Seed();
 
-//            return context;
-//        }
-//    }
-//}
+        //    context.Items.AddRange(items);
+        //    context.Employers.AddRange(employers);
+        //    context.Users.AddRange(users);
+        //    context.WorkHours.AddRange(workhours);
+
+        //    context.SaveChanges();
+        //    context.SaveChanges();
+
+        //    return context;
+        //}
+    }
+}

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Common;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Viewmodels;
 using Application.WorkHours.Commands.DeleteWorkHour;
@@ -51,16 +52,16 @@ namespace WegisterUI.Services
 
             foreach (var filter in filters)
             {
-                if (filter.Type == "year")
+                if (filter.Type == FilterTypes.Year.ToString())
                     if (filter.FilterValue.Value != "Alles")
                         summaries = new WorkHourListVm(summaries.WorkHours
                             .Where(f => f.Date.Contains(filter.FilterValue.Value)).ToList());
-                if (filter.Type == "customer")
+                if (filter.Type == FilterTypes.Customer.ToString())
                     if (filter.FilterValue.Value != "Alles")
                         summaries = new WorkHourListVm(summaries.WorkHours
                             .Where(f => f.CustomerName.Contains(filter.FilterValue.Value)).ToList());
 
-                if (filter.Type == "week")
+                if (filter.Type == FilterTypes.Week.ToString())
                     if (filter.FilterValue.Value != "Alles")
                         summaries = new WorkHourListVm(summaries.WorkHours
                             .Where(f => "Week " + WeekNumberHelper.GetWeeknumberFromString(f.Date) == filter.FilterValue.Value).ToList());
@@ -69,9 +70,18 @@ namespace WegisterUI.Services
             return summaries;
         }
 
-        public async Task<List<FilterValueListVm>> GetFilters()
+        private List<FilterValueSelectionVm> _selectedFilters = new List<FilterValueSelectionVm>();
+
+        public async Task<List<FilterValueListVm>> GetFilters(string type, string value)
         {
-            return await _mediator.Send(new GetWorkHourFilterQuery());
+            if (_selectedFilters.Any(f => f.Type == type && value != "Alles"))
+                _selectedFilters = _selectedFilters.Where(f => f.Type == type).Select(f => { f.Value = value; return f; }).ToList();
+            else if (type != null && value != null && value != "Alles")
+                _selectedFilters.Add(new FilterValueSelectionVm() { Type = type, Value = value });
+            else if (value == "Alles")
+                _selectedFilters = _selectedFilters.Where(f => f.Type != type).ToList();
+
+            return await _mediator.Send(new GetWorkHourFilterQuery(_selectedFilters));
         }
 
         public async Task<Unit> DeleteWorkHour(int workHourId)

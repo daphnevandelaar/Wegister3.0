@@ -16,9 +16,11 @@ namespace Persistence
                     config.GetSection("ConnectionStrings").Bind(settings);
                 });
 
+            var connString = configuration.GetConnectionString("WegisterDbConnectionString");
+
             //This is for migration purposes
             services.AddDbContext<WegisterDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("WegisterDbConnectionString")));
+                options.UseSqlServer(connString));
 
             return services;
         }
