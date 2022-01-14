@@ -58,18 +58,5 @@ namespace Application.WorkHours.Queries.GetWorkHourFiltersList
                 }
             };
         }
-
-        private List<FilterValueVm> GetCustomerFilterValues(IWegisterDbContext dbContext)
-        {
-            return dbContext.WorkHours
-                            .Include(w => w.Customer)
-                            .Select(w => new FilterValueVm
-                                {
-                                    Id = w.Customer.Id,
-                                    Value = w.Customer.Name
-                                })
-                            .Distinct()
-                            .ToList();
-        }
     }
 }

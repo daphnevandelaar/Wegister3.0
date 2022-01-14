@@ -1,7 +1,6 @@
 ﻿using Application.Common;
 using Application.Common.Interfaces;
 using Application.Common.Viewmodels;
-using Common;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
