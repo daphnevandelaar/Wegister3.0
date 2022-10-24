@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using System;
 using Application.Common.Models;
+using System.Runtime.InteropServices;
 
 namespace Application.UnitTests.Common.Implementations
 {
@@ -13,7 +14,7 @@ namespace Application.UnitTests.Common.Implementations
         public bool IsAuthenticated => true;
         public CurrentUser CreateSession()
         {
-            return new CurrentUser("", "");
+            return new CurrentUser(UserId, CompanyId);
         }
     }
 }

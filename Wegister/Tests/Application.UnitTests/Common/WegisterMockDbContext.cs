@@ -16,7 +16,7 @@ namespace Application.UnitTests.Common
         public DbSet<WorkHour> WorkHours { get => CreateDbSet(WorkHourTestList.GetWorkHours()); set => throw new System.NotImplementedException(); }
         public DbSet<User> Users { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public DbSet<Item> Items { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public DbSet<Customer> Customers { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public DbSet<Customer> Customers { get => CreateDbSet(CustomerTestList.GetCustomers()); set => throw new NotImplementedException(); }
 
         public void Dispose()
         {
@@ -25,7 +25,7 @@ namespace Application.UnitTests.Common
 
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(1);
         }
 
         private static DbSet<T> CreateDbSet<T>(IEnumerable<T> elements) where T : class

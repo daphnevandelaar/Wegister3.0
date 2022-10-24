@@ -26,6 +26,7 @@ namespace WegisterUI.Services
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return new CurrentUser("", "");
             }
         }
@@ -47,7 +48,7 @@ namespace WegisterUI.Services
                 return claimsPrincipal.Claims.First(c => c.Type.Contains("companyId")).Value;
             }
 
-            throw new Exception("No user specified");
+            throw new Exception("No company specified");
         }
     }
 }

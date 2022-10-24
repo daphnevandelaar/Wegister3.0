@@ -1,52 +1,46 @@
-﻿using Application.Common.Interfaces;
+﻿using System;
+using System.Threading;
+using Application.Common.Interfaces;
 using Application.UnitTests.Common.DatabaseSeeders;
 using Common;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Persistence;
 
 namespace Application.UnitTests.Common
 {
     public class WegisterTestContextFactory : IWegisterDbContextFactory
     {
-        private readonly DbContextOptionsBuilder<WegisterDbContext> _dbOptionsBuilder;
+        private readonly DbContextOptions<WegisterDbContext> Options = new DbContextOptionsBuilder<WegisterDbContext>()
+            .UseSqlite($"Data Source = WegisterTestDb{Guid.NewGuid()}.db")
+            .Options;
         private readonly ICurrentUserService _currentUserService;
         private readonly IDateTime _dateTime;
 
         public WegisterTestContextFactory(
-            IOptions<DatabaseSettings> settingOptions,
             ICurrentUserService currentUserService,
             IDateTime dateTime
         )
         {
-            var settings = settingOptions.Value;
-            _dbOptionsBuilder = new DbContextOptionsBuilder<WegisterDbContext>();
-            _dbOptionsBuilder.UseSqlServer(settings.WegisterDbConnectionString);
-
             _currentUserService = currentUserService;
             _dateTime = dateTime;
         }
 
         public IWegisterDbContext CreateDbContext()
         {
-            var dbContextOptions = _dbOptionsBuilder.Options;
-            return new WegisterDbContext(dbContextOptions, _currentUserService, _dateTime);
+            return new WegisterMockDbContext();
         }
 
-        //public static WegisterDbContext CreateCustomerDb(DbContextOptions<WegisterDbContext> options, ICurrentUserService currentUserService, IDateTime dateTime)
-        //{
-        //    var context = new WegisterDbContext(options, currentUserService, dateTime);
+        public static IWegisterDbContext CreateCustomerDb(DbContextOptions<WegisterDbContext> options, ICurrentUserService currentUserService, IDateTime dateTime)
+        {
+            var context = new WegisterMockDbContext();
 
-        //    context.Database.EnsureDeleted();
-        //    context.Database.EnsureCreated();
+            var customers = new CustomerDbSeeder(currentUserService).Seed();
+            context.Customers.AddRange(customers);
 
-        //    var customers = new CustomerDbSeeder(currentUserService).Seed();
-        //    context.Customers.AddRange(customers);
+            context.SaveChangesAsync(CancellationToken.None);
 
-        //    context.SaveChanges();
-
-        //    return context;
-        //}
+            return context;
+        }
 
         //public static WegisterDbContext CreateItemDb(DbContextOptions<WegisterDbContext> options, ICurrentUserService currentUserService, IDateTime dateTime)
         //{

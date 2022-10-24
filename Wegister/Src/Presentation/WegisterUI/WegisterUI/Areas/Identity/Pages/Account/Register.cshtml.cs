@@ -135,6 +135,7 @@ namespace WegisterUI.Areas.Identity.Pages.Account
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return Page();
             }
 

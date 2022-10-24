@@ -40,11 +40,9 @@ namespace WegisterUI.Areas.Identity.Pages.Account
 
             var companyId = context.Users.Single(u => u.Id == new Guid(user.Id)).CompanyId;
 
-            await _userManager.RemoveClaimsAsync(user, 
+            var result = await _userManager.RemoveClaimsAsync(user, 
                 new List<Claim>
                 {
-                    new ("companyId", "tst"), 
-                    new ("companyId", "999119f9-ed3c-41b3-994b-96d666cf0d7c"),
                     new ("companyId", companyId)
                 });
 

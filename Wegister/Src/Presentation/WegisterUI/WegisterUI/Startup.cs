@@ -40,7 +40,7 @@ namespace WegisterUI
 
             try
             {
-                services.AddSingleton<ICurrentUserService, CurrentUserServiceInit>();
+                //services.AddSingleton<ICurrentUserService, CurrentUserServiceInit>();
                 var context = services.BuildServiceProvider().GetService<WegisterDbContext>();
                 var authContext = services.BuildServiceProvider().GetService<WegisterAuthDbContext>();
 

@@ -12,7 +12,7 @@ namespace Application.UnitTests.Common.Implementations
         public bool IsAuthenticated => true;
         public CurrentUser CreateSession()
         {
-            return new CurrentUser("", "");
+            return new CurrentUser(UserId, CompanyId);
         }
     }
 }
