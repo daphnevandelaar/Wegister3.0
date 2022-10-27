@@ -17,11 +17,11 @@ namespace Application.UnitTests.WorkHours.Queries.Filters
 
         public WeekValueRetrieverTests()
         {
-            var mock = new WegisterMockDbContext();
+            //var mock = new WegisterMockDbContext();
 
-            var test = mock.WorkHours.Select(w => w.Id);
+            //var test = mock.WorkHours.Select(w => w.Id);
 
-            _sut = new WeekValueRetriever(mock);
+            //_sut = new WeekValueRetriever(mock);
         }
 
         [Fact]

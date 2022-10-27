@@ -7,21 +7,13 @@ using Application.Common.Interfaces;
 using Application.UnitTests.Common.Implementations;
 using Common;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Moq;
-using Persistence;
 using Shouldly;
-using WegisterUI.Services;
 
 namespace Application.UnitTests.Common
 {
-    public class CommandTestBase : IDisposable
+    public class TestFixture : IDisposable
     {
-        public readonly DbContextOptions<WegisterDbContext> Options = new DbContextOptionsBuilder<WegisterDbContext>()
-            .UseSqlite($"Data Source = WegisterCommandDb{Guid.NewGuid()}.db")
-            .Options;
-
         public ICurrentUserService UserService { get; }
         public ICurrentUserService OtherUserService { get; }
         public IDateTime MachineDateTime { get; }
@@ -32,7 +24,7 @@ namespace Application.UnitTests.Common
         public IItemFactory ItemFactory { get; }
         public Mock<IMediator> Mediator { get; }
 
-        public CommandTestBase()
+        public TestFixture()
         {
             UserService = new TestUserService();
             OtherUserService = new TestOtherUserService();

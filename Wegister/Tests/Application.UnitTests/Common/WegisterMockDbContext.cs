@@ -1,32 +1,30 @@
 ﻿using Application.Common.Interfaces;
-using Application.UnitTests.Common.TestLists;
+using Common;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using System;
+using Persistence;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Application.UnitTests.Common
 {
-    public class WegisterMockDbContext : IWegisterDbContext
+    public class WegisterMockDbContext : WegisterDbContext, IWegisterDbContext
     {
-        public DbSet<WorkHour> WorkHours { get => CreateDbSet(WorkHourTestList.GetWorkHours()); set => throw new System.NotImplementedException(); }
-        public DbSet<User> Users { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public DbSet<Item> Items { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public DbSet<Customer> Customers { get => CreateDbSet(CustomerTestList.GetCustomers()); set => throw new NotImplementedException(); }
-
-        public void Dispose()
+        public WegisterMockDbContext(
+            DbContextOptions<WegisterDbContext> options,
+            ICurrentUserService currentUserService,
+            IDateTime dateTime)
+            :base(options, currentUserService, dateTime)
         {
-            throw new System.NotImplementedException();
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
         }
 
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
-        {
-            return Task.FromResult(1);
-        }
+        public DbSet<WorkHour> WorkHours { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Item> Items { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
         private static DbSet<T> CreateDbSet<T>(IEnumerable<T> elements) where T : class
         {

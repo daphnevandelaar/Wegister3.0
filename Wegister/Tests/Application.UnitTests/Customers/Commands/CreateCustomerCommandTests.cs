@@ -1,21 +1,16 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Customers.Commands.CreateCustomer;
 using Application.UnitTests.Common;
-using Common;
-using Microsoft.Extensions.Options;
 using Moq;
-using Persistence;
 using Shouldly;
-using WegisterUI.Services;
 using Xunit;
 
 namespace Application.UnitTests.Customers.Commands
 {
-    public class CreateCustomerCommandTests : CommandTestBase
+    public class CreateCustomerCommandTests : TestFixture
     {
         private readonly IWegisterDbContext _context;
         private readonly CurrentUser _user; 
@@ -23,9 +18,10 @@ namespace Application.UnitTests.Customers.Commands
 
         public CreateCustomerCommandTests()
         {
-            _context = WegisterTestContextFactory.CreateCustomerDb(Options, UserService, MachineDateTime);
+            _context = WegisterTestContextFactory.CreateCustomerDb();
             _user = UserService.CreateSession();
-            _sut = new CreateCustomerCommandHandler(WegisterTestContextFactory, Mediator.Object, CustomerFactory);
+            var contextFactory = new WegisterTestContextFactory(UserService, MachineDateTime, _context);
+            _sut = new CreateCustomerCommandHandler(contextFactory, Mediator.Object, CustomerFactory);
         }
 
         [Fact]
@@ -40,7 +36,7 @@ namespace Application.UnitTests.Customers.Commands
 
             // Assert
             Mediator.Verify(m => m.Publish(It.IsAny<CustomerCreated>(), It.IsAny<CancellationToken>()), Times.Once);
-            _context.Customers.ToList().Count.ShouldBe(4);
+            _context.Customers.ToList().Count.ShouldBe(3);
             _context.Customers.Any(c =>
                 c.Name == customerCommand.Name &&
                 c.Email == customerCommand.Email &&

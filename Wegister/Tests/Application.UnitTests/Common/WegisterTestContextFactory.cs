@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using Application.Common.Interfaces;
 using Application.UnitTests.Common.DatabaseSeeders;
 using Common;
@@ -10,11 +9,10 @@ namespace Application.UnitTests.Common
 {
     public class WegisterTestContextFactory : IWegisterDbContextFactory
     {
-        private readonly DbContextOptions<WegisterDbContext> Options = new DbContextOptionsBuilder<WegisterDbContext>()
-            .UseSqlite($"Data Source = WegisterTestDb{Guid.NewGuid()}.db")
-            .Options;
+        private readonly DbContextOptions<WegisterDbContext> _options = new DbContextOptionsBuilder<WegisterDbContext>().UseInMemoryDatabase($"WegisterTest").Options;
         private readonly ICurrentUserService _currentUserService;
         private readonly IDateTime _dateTime;
+        private readonly IWegisterDbContext _context;
 
         public WegisterTestContextFactory(
             ICurrentUserService currentUserService,
@@ -23,21 +21,33 @@ namespace Application.UnitTests.Common
         {
             _currentUserService = currentUserService;
             _dateTime = dateTime;
+            _context = new WegisterMockDbContext(_options, _currentUserService, _dateTime);
+        }
+
+        public WegisterTestContextFactory(
+            ICurrentUserService currentUserService,
+            IDateTime dateTime,
+            IWegisterDbContext context
+        )
+        {
+            _currentUserService = currentUserService;
+            _dateTime = dateTime;
+            _context = context;
         }
 
         public IWegisterDbContext CreateDbContext()
         {
-            return new WegisterMockDbContext();
+            return _context;
         }
 
-        public static IWegisterDbContext CreateCustomerDb(DbContextOptions<WegisterDbContext> options, ICurrentUserService currentUserService, IDateTime dateTime)
+        public IWegisterDbContext CreateCustomerDb()
         {
-            var context = new WegisterMockDbContext();
+            var context = new WegisterMockDbContext(_options, _currentUserService, _dateTime);
 
-            var customers = new CustomerDbSeeder(currentUserService).Seed();
+            var customers = new CustomerDbSeeder(_currentUserService).Seed();
             context.Customers.AddRange(customers);
 
-            context.SaveChangesAsync(CancellationToken.None);
+            context.SaveChanges();
 
             return context;
         }
@@ -57,27 +67,26 @@ namespace Application.UnitTests.Common
         //    return context;
         //}
 
-        //public static WegisterDbContext CreateWorkHourDb(DbContextOptions<WegisterDbContext> options, ICurrentUserService currentUserService, IDateTime dateTime)
-        //{
-        //    var context = new WegisterDbContext(options, currentUserService, dateTime);
+        public WegisterDbContext CreateWorkHourDb()
+        {
+            var context = new WegisterDbContext(_options, _currentUserService, _dateTime);
 
-        //    context.Database.EnsureDeleted();
-        //    context.Database.EnsureCreated();
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
 
-        //    var items = new ItemDbSeeder(currentUserService).Seed();
-        //    var employers = new EmployerDbSeeder().Seed();
-        //    var users = new UserDbSeeder().Seed();
-        //    var workhours = new WorkHoudDbSeeder(currentUserService, dateTime).Seed();
+            //var items = new ItemDbSeeder(currentUserService).Seed();
+            //var employers = new EmployerDbSeeder().Seed();
+            var users = new UserDbSeeder().Seed();
+            var workhours = new WorkHoudDbSeeder(_currentUserService, _dateTime).Seed();
 
-        //    context.Items.AddRange(items);
-        //    context.Employers.AddRange(employers);
-        //    context.Users.AddRange(users);
-        //    context.WorkHours.AddRange(workhours);
+            //context.Items.AddRange(items);
+            //context.Employers.AddRange(employers);
+            context.Users.AddRange(users);
+            context.WorkHours.AddRange(workhours);
 
-        //    context.SaveChanges();
-        //    context.SaveChanges();
+            context.SaveChanges();
 
-        //    return context;
-        //}
+            return context;
+        }
     }
 }
