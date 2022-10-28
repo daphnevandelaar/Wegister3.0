@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -41,7 +42,7 @@ namespace Persistence
             return base.SaveChangesAsync(cancellationToken);
         }
 
-        private void SetAuditableEntityDetails()
+        protected virtual void SetAuditableEntityDetails()
         {
             foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
             {
@@ -51,6 +52,8 @@ namespace Persistence
                         entry.Entity.CreatedBy = _currentUser.UserId;
                         entry.Entity.Created = _dateTime.Now;
                         entry.Entity.CompanyId = _currentUser.CompanyId;
+                        entry.Entity.LastModified = null;
+                        entry.Entity.LastModifiedBy = null;
                         break;
                     case EntityState.Modified:
                         entry.Entity.LastModifiedBy = _currentUser.UserId;
@@ -65,8 +68,9 @@ namespace Persistence
             base.OnModelCreating(modelBuilder);
 
             //This global query filter doesn't work with the ConfigurationModels
-            modelBuilder.Entity<WorkHour>().HasQueryFilter(c => EF.Property<string>(c, "CompanyId") == _currentUser.CompanyId);
+            modelBuilder.Entity<WorkHour>().HasQueryFilter(c => EF.Property<string>(c, "CompanyId") == _currentUser.CompanyId && EF.Property<Guid>(c, "UserId") == new Guid(_currentUser.UserId));
             modelBuilder.Entity<Customer>().HasQueryFilter(c => EF.Property<string>(c, "CompanyId") == _currentUser.CompanyId);
+            modelBuilder.Entity<Item>().HasQueryFilter(c => EF.Property<string>(c, "CompanyId") == _currentUser.CompanyId);
 
             //TODO: check if all configurations are injected (else throw exception)
             modelBuilder.ApplyConfiguration(new CustomerConfiguration(_currentUser));

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace Persistence
 {
-    internal class WegisterDbContextFactory : IWegisterDbContextFactory
+    public class WegisterDbContextFactory : IWegisterDbContextFactory
     {
         private readonly DbContextOptionsBuilder<WegisterDbContext> _dbOptionsBuilder;
         private readonly ICurrentUserService _currentUserService;

@@ -6,9 +6,7 @@ using Application.Common;
 using Application.Common.Interfaces;
 using Application.Common.Viewmodels;
 using Application.WorkHours.Queries.GetWorkHourFiltersList.ValueRetrievers;
-using Common;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.WorkHours.Queries.GetWorkHourFiltersList
 {

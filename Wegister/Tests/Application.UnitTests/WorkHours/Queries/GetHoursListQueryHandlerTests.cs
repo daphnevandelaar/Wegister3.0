@@ -1,52 +1,58 @@
-﻿//using System.Linq;
-//using System.Threading;
-//using System.Threading.Tasks;
-//using Application.Common.Interfaces;
-//using Application.Common.Viewmodels;
-//using Application.UnitTests.Common;
-//using Application.UnitTests.Common.Implementations;
-//using Application.WorkHours.Queries.GetHoursList;
-//using Shouldly;
-//using Xunit;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.Common.Factories;
+using Application.Common.Models;
+using Application.Common.Viewmodels;
+using Application.UnitTests.Common;
+using Application.UnitTests.Common.DatabaseSeeders;
+using Application.UnitTests.Common.Implementations;
+using Application.WorkHours.Queries.GetHoursList;
+using Application.WorkHours.Queries.GetWorkHoursList;
+using Common;
+using MediatR;
+using Moq;
+using Persistence;
+using Shouldly;
+using Xunit;
 
-//namespace Application.UnitTests.WorkHours.Queries
-//{
-//    [Collection("QueryCollection")]
-//    public class GetHoursListQueryHandlerTests
-//    {
-//        private readonly ICurrentUserService _currentUserService;
-//        private readonly ICurrentUserService _otherUserService;
+namespace Application.UnitTests.WorkHours.Queries
+{
+    public class GetHoursListQueryHandlerTests
+    {
+        private readonly WegisterTestContextFactory _contextFactory;
+        private readonly GetWorkHoursListQueryHandler _sut;
 
-//        private readonly GetWorkHoursListQueryHandler _sut;
+        public GetHoursListQueryHandlerTests()
+        {
+            _contextFactory = new WegisterTestContextFactory(new TestUserService(), new TestMachineDate(), "GetHoursListQueryHandlerTests");
+            Seed();
 
-//        public GetHoursListQueryHandlerTests(QueryTestFixture fixture)
-//        {
-//            _currentUserService = fixture.UserService;
-//            _otherUserService = new TestOtherUserService();
-//            var context = WegisterTestContextFactory.CreateWorkHourDb(fixture.Options, fixture.UserService, fixture.MachineDateTime);
-//            var factory = fixture.WorkHourFactory;
+            _sut = new GetWorkHoursListQueryHandler(_contextFactory, new WorkHourFactory());
+        }
 
-//            _otherUserService.CompanyId.ShouldNotBe(_currentUserService.CompanyId);
-//            _otherUserService.CompanyId.ShouldNotBe(_currentUserService.UserId);
+        private void Seed()
+        {
+            var context = (WegisterDbContext)_contextFactory.CreateDbContext();
+            _contextFactory.CleanDatabase(context);
+            context.WorkHours.AddRange(WorkHourSeed.GetList());
+            context.SaveChangesAsync(CancellationToken.None);
+        }
 
-//            _sut = new GetWorkHoursListQueryHandler(context, factory);
-//        }
+        [Fact]
+        public async Task GetWorkHourFromOwnCompanyAndUserOnlyTest()
+        {
+            //Arrange
+            var query = new GetWorkHoursListQuery();
 
-//        [Fact]
-//        public async Task GetWorkHourFromOwnCompanyAndUserOnlyTest()
-//        {
-//            //Arrange
-//            var query = new GetWorkHoursListQuery();
+            //Act
+            var result = await _sut.Handle(query, CancellationToken.None);
 
-//            //Act
-//            var result = await _sut.Handle(query, CancellationToken.None);
-
-//            //Assert
-//            result.ShouldBeOfType<WorkHourListVm>();
-//            result.WorkHours.Count.ShouldBe(2);
-//            result.WorkHours.All(w => w.UserId == _otherUserService.UserId).ShouldBeFalse();
-//            result.WorkHours.Any(w => w.UserId == _otherUserService.UserId).ShouldBeFalse();
-//            result.WorkHours.All(w => w.UserId == _currentUserService.UserId).ShouldBeTrue();
-//        }
-//    }
-//}
+            //Assert
+            result.ShouldBeOfType<WorkHourListVm>();
+            result.WorkHours.Count.ShouldBe(3);
+            //result.WorkHours.Any(w => w.UserId == ).ShouldBeFalse();
+            //result.WorkHours.All(w => w. == _user.UserId).ShouldBeTrue();
+        }
+    }
+}

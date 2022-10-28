@@ -8,7 +8,7 @@ using Domain.Entities;
 
 namespace Application.Common.Factories
 {
-    internal class CustomerFactory : FactoryBase, ICustomerFactory
+    public class CustomerFactory : FactoryBase, ICustomerFactory
     {
         public CustomerVm CreateInternal(CustomerLookupDto entity)
         {

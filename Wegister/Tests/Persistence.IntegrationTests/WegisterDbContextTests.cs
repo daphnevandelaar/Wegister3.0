@@ -1,287 +1,177 @@
-//using System;
-//using System.Linq;
-//using System.Threading;
-//using System.Threading.Tasks;
-//using Application.Common.Interfaces;
-//using Common;
-//using Domain.Entities;
-//using Microsoft.EntityFrameworkCore;
-//using Moq;
-//using Shouldly;
-//using Xunit;
+﻿using System.Threading.Tasks;
+using System.Threading;
+using Xunit;
+using Persistence.UnitTests.Common;
+using Persistence.UnitTests.Common.Implementations;
+using Application.UnitTests.Common.DatabaseSeeders;
+using System.Linq;
+using Shouldly;
+using Application.Common.Models;
+using Domain.Entities;
+using System;
 
-//namespace Persistence.IntegrationTests
-//{
-//    public class WegisterDbContextTests : IDisposable
-//    {
-//        private readonly string _userId;
-//        private readonly string _companyId;
-//        private readonly DateTime _dateTime;
-//        private readonly WegisterDbContext _sut;
+namespace Persistence.UnitTests
+{
+    public class WegisterDbContextTests : TestFixture
+    {
+        private readonly TestWegisterContextFactory _contextFactory;
+        private readonly CurrentUser _currentUser;
+        private readonly WegisterDbContext _sut;
 
-//        public WegisterDbContextTests()
-//        {
-//            _dateTime = new DateTime(3001, 1, 1);
-//            var dateTimeMock = new Mock<IDateTime>();
-//            dateTimeMock.Setup(m => m.Now).Returns(_dateTime);
+        public WegisterDbContextTests()
+        {
+            _contextFactory = WegisterTestContextFactory;
+            _currentUser = UserService.CreateSession();
 
-//            _userId = "00000000-0000-0000-0000-000000000001";
-//            _companyId = "00000000-0000-0000-0000-000000000002";
-//            var currentUserServiceMock = new Mock<ICurrentUserService>();
-//            currentUserServiceMock.Setup(m => m.UserId).Returns(_userId);
-//            currentUserServiceMock.Setup(m => m.CompanyId).Returns(_companyId);
+            _sut = (WegisterDbContext)WegisterTestContextFactory.CreateDbContext();
+            _sut.Database.EnsureDeleted();
+            _sut.Database.EnsureCreated();
+        }
 
-//            var options = new DbContextOptionsBuilder<WegisterDbContext>()
-//                .UseInMemoryDatabase(Guid.NewGuid().ToString())
-//                .EnableSensitiveDataLogging()
-//                .Options;
+        [Fact]
+        public async Task Customers_ShouldReturnCustomersFromOwnCompany()
+        {
+            //Arrange
+            var context = _contextFactory.CreateTestDbContext();
+            context.Customers.AddRange(new CustomerDbSeeder(UserService, MachineDateTime).Seed());
+            await context.SaveChangesAsync(CancellationToken.None);
 
-//            _sut = new WegisterDbContext(options, currentUserServiceMock.Object, dateTimeMock.Object);
+            context.Customers.Count().ShouldBe(3);
+            var invisibleCustomer = context.Customers.Single(c => c.Id == 3);
+            invisibleCustomer.CompanyId.ShouldNotBe("10000000-0000-0000-0000-000000000001");
 
-//            SeedTestDatabase();
-//        }
+            //Act
+            var result = _sut.Customers;
 
-//        void SeedTestDatabase()
-//        {
-//            _sut.Customers.AddRange(
-//                new Customer
-//                {
-//                    Id = 100,
-//                    Name = "Bob Smith",
-//                    Email = "bob.smith@email.nl",
-//                    EmailToSendHoursTo = "bob.smith-fincancial@email.nl",
-//                    HouseNumber = "36",
-//                    Place = "Amsterdam",
-//                    Street = "Heiligeweg",
-//                    ZipCode = "1012 XP",
-//                    CompanyId = _companyId
-//                },
-//                new Customer
-//                {
-//                    Id = 101,
-//                    Name = "Bob1 Smith",
-//                    Email = "bob1.smith@email.nl",
-//                    EmailToSendHoursTo = "bob1.smith-fincancial@email.nl",
-//                    HouseNumber = "361",
-//                    Place = "Amsterdam1",
-//                    Street = "Heiligeweg1",
-//                    ZipCode = "1012 XP1",
-//                    CompanyId = _companyId + "Invisible Customer"
-//                },
-//                new Customer
-//                {
-//                    Id = 102,
-//                    Name = "Bob2 Smith",
-//                    Email = "bob2.smith@email.nl",
-//                    EmailToSendHoursTo = "bob2.smith-fincancial@email.nl",
-//                    HouseNumber = "362",
-//                    Place = "Amsterdam2",
-//                    Street = "Heiligeweg2",
-//                    ZipCode = "1012 XP2",
-//                    CompanyId = _companyId
-//                }
-//            );
+            //Assert
+            result.Count().ShouldBe(2);
+            result.Any(c => c.CompanyId == "10000000-0000-0000-0000-000000000001invisible").ShouldBeFalse();
+        }
 
-//            _sut.Items.AddRange(
-//                new Item
-//                {
-//                    Id = 100,
-//                    Name = "Programming",
-//                    Price = 2.50m,
-//                    Unit = "Uur",
-//                    CompanyId = _companyId
-//                },
-//                new Item
-//                {
-//                    Id = 101,
-//                    Name = "Programming",
-//                    Price = 2.50m,
-//                    Unit = "Uur",
-//                    CompanyId = _companyId + " Invisible Item"
-//                },
-//                new Item
-//                {
-//                    Id = 102,
-//                    Name = "Programming",
-//                    Price = 2.50m,
-//                    Unit = "Uur",
-//                    CompanyId = _companyId
-//                }
-//            );
+        [Fact]
+        public async Task WorkHours_ShouldReturnWorkHours_FromOwnCompany()
+        {
+            //Arrange
+            var context = _contextFactory.CreateTestDbContext();
+            context.Users.AddRange(new UserDbSeeder(UserService).Seed());
+            context.Customers.AddRange(new CustomerDbSeeder(UserService, MachineDateTime).Seed());
+            context.WorkHours.AddRange(new WorkHourDbSeeder(UserService, MachineDateTime).Seed());
+            
+            await context.SaveChangesAsync(CancellationToken.None);
 
-//            _sut.WorkHours.AddRange(
-//                new WorkHour
-//                {
-//                    Id = 100,
-//                    StartTime = _dateTime,
-//                    EndTime = _dateTime.AddMinutes(20),
-//                    RecreationInMinutes = 10,
-//                    Employer = _sut.Employers.FirstOrDefault(),
-//                    UserId = new Guid(_userId),
-//                    CompanyId = _companyId
-//                },
-//                new WorkHour
-//                {
-//                    Id = 101,
-//                    StartTime = _dateTime,
-//                    EndTime = _dateTime.AddMinutes(210),
-//                    RecreationInMinutes = 110,
-//                    Employer = _sut.Employers.FirstOrDefault(),
-//                    UserId = Guid.NewGuid(),
-//                    CompanyId = _companyId + " Invisible WorkHour"
-//                },
-//                new WorkHour
-//                {
-//                    Id = 102,
-//                    StartTime = _dateTime,
-//                    EndTime = _dateTime.AddMinutes(201),
-//                    RecreationInMinutes = 101,
-//                    Employer = _sut.Employers.FirstOrDefault(),
-//                    UserId = Guid.NewGuid(),
-//                    CompanyId = _companyId
-//                }
-//            );
+            context.WorkHours.Count().ShouldBe(4);
+            var workHourOtherUser = context.WorkHours.Single(c => c.Id == 2);
+            workHourOtherUser.UserId.ShouldNotBe(new Guid(_currentUser.UserId));
 
-//            _sut.SaveChanges();
-//        }
+            var workHourOtherCompany = context.WorkHours.Single(c => c.Id == 4);
+            workHourOtherCompany.CompanyId.ShouldNotBe(_currentUser.CompanyId);
 
-//        [Fact]
-//        public async Task SaveChangesAsync_GivenNewCustomer_ShouldSetCreatedProperties()
-//        {
-//            var customer = new Customer
-//            {
-//                Id = 2,
-//                Name = "Alice Smith",
-//                Email = "alice.smith@email.nl",
-//                EmailToSendHoursTo = "bob.smith-fincancial@email.nl",
-//                HouseNumber = "36",
-//                Place = "Amsterdam",
-//                Street = "Heiligeweg",
-//                ZipCode = "1012 XP"
-//            };
+            //Act
+            var result = _sut.WorkHours;
 
-//            _sut.Customers.Add(customer);
+            //Assert
+            result.Count().ShouldBe(2);
+            result.Any(c => c.CompanyId == "10000000-0000-0000-0000-000000000001invisible").ShouldBeFalse();
+            result.Any(c => c.UserId == new Guid("10000000-0000-0000-0000-000000000003")).ShouldBeFalse();
+        }
 
-//            await _sut.SaveChangesAsync();
+        [Fact]
+        public async Task Items_ShouldReturnItems_FromOwnCompany()
+        {
+            //Arrange
+            var context = _contextFactory.CreateTestDbContext();
+            context.Items.AddRange(new ItemDbSeeder(UserService, MachineDateTime).Seed());
+            await context.SaveChangesAsync(CancellationToken.None);
 
-//            customer.Created.ShouldBe(_dateTime);
-//            customer.CreatedBy.ShouldBe(_userId);
-//            customer.CompanyId.ShouldBe(_companyId);
-//        }
+            context.Items.Count().ShouldBe(3);
+            var invisibleItem = context.Items.Single(c => c.Id == 3);
+            invisibleItem.CompanyId.ShouldNotBe("10000000-0000-0000-0000-000000000001");
 
-//        [Fact]
-//        public async Task SaveChangesAsync_GivenExistingCustomer_ShouldSetLastModifiedProperties()
-//        {
-//            var customer = await _sut.Customers.FindAsync(101);
+            //Act
+            var result = _sut.Items;
 
-//            customer.HouseNumber = "10";
+            //Assert
+            result.Count().ShouldBe(2);
+            result.Any(c => c.CompanyId == "10000000-0000-0000-0000-000000000001invisible").ShouldBeFalse();
+        }
 
-//            await _sut.SaveChangesAsync();
+        [Fact]
+        public async Task SetAuditableEntityDetails_WhenSaving_ShouldSetDetails()
+        {
+            //Arrange
+            var date = DateTime.UtcNow;
+            var customer = new Customer
+            {
+                Name = "Uncle Bob",
+                Email = "r.c.martin@email.nl",
+                EmailToSendHoursTo = "r.c.martin@email.nl",
+                HouseNumber = "36",
+                Place = "San Francisco",
+                Street = "California St",
+                ZipCode = "94115",
+                CompanyId = "Test",
+                Created = date,
+                CreatedBy = "1",
+                Id = 2,
+                LastModified = date,
+                LastModifiedBy = "1"
+            };
+            _sut.Customers.Add(customer);
 
-//            customer.LastModified.ShouldNotBeNull();
-//            customer.LastModified.ShouldBe(_dateTime);
-//            customer.LastModifiedBy.ShouldBe(_userId);
-//        }
+            //Act
+            _sut.SaveChangesAsync(CancellationToken.None);
+            var result = _sut.Customers;
 
-//        [Fact]
-//        public async Task SaveChangesAsync_GivenNewItem_ShouldSetCreatedProperties()
-//        {
-//            var item = new Item
-//            {
-//                Id = 2,
-//                Name = "Programming",
-//                Price = 2.50m,
-//                Unit = "Uur"
-//            };
+            //Assert
+            result.Count().ShouldBe(1);
+            result.Any(c => c.CompanyId == "Test").ShouldBeFalse();
+            result.Any(c => c.CreatedBy == "1").ShouldBeFalse();
+            result.Any(c => c.Created == date).ShouldBeFalse();
+            result.Any(c => c.CompanyId == _currentUser.CompanyId).ShouldBeTrue();
+            result.Any(c => c.CreatedBy == _currentUser.UserId).ShouldBeTrue();
+            result.Any(c => c.Created == MachineDateTime.Now).ShouldBeTrue();
+            result.Any(c => c.LastModified == null).ShouldBeTrue();
+            result.Any(c => c.LastModifiedBy == null).ShouldBeTrue();
+        }
+        
+        [Fact]
+        public async Task SetAuditableEntityDetails_WhenUpdating_ShouldSetDetails()
+        {
+            //Arrange
+            var date = DateTime.UtcNow;
+            var customer = new Customer
+            {
+                Name = "Uncle Bob",
+                Email = "r.c.martin@email.nl",
+                EmailToSendHoursTo = "r.c.martin@email.nl",
+                HouseNumber = "36",
+                Place = "San Francisco",
+                Street = "California St",
+                ZipCode = "94115",
+                CompanyId = "Test",
+                Created = date,
+                CreatedBy = "1",
+                Id = 2,
+                LastModified = date,
+                LastModifiedBy = "1"
+            };
+            _sut.Customers.Add(customer);
+            _sut.SaveChangesAsync(CancellationToken.None);
 
-//            _sut.Items.Add(item);
+            var customerToUpdate = _sut.Customers.Single(c => c.Id == 2);
 
-//            await _sut.SaveChangesAsync();
+            //Act
+            customerToUpdate.HouseNumber = "36A";
+            _sut.SaveChangesAsync(CancellationToken.None);
 
-//            item.Created.ShouldBe(_dateTime);
-//            item.CreatedBy.ShouldBe(_userId);
-//        }
+            var result = _sut.Customers;
 
-//        [Fact]
-//        public async Task SaveChangesAsync_GivenExistingItem_ShouldSetLastModifiedProperties()
-//        {
-//            var item = await _sut.Items.FindAsync(101);
-
-//            item.Unit = "Stuks";
-
-//            await _sut.SaveChangesAsync();
-
-//            item.LastModified.ShouldNotBeNull();
-//            item.LastModified.ShouldBe(_dateTime);
-//            item.LastModifiedBy.ShouldBe(_userId);
-//        }
-
-//        [Fact]
-//        public async Task SaveChangesAsync_GivenNewWorkHour_ShouldSetCreatedProperties()
-//        {
-//            var workHour = new WorkHour()
-//            {
-//                Id = 3,
-//                StartTime = _dateTime,
-//                EndTime = _dateTime.AddMinutes(20),
-//                RecreationInMinutes = 10,
-//                Employer = _sut.Employers.FirstOrDefault(),
-//                User = new User()
-//            };
-
-//            _sut.WorkHours.Add(workHour);
-
-//            await _sut.SaveChangesAsync();
-
-//            workHour.Created.ShouldBe(_dateTime);
-//            workHour.CreatedBy.ShouldBe(_userId);
-//            workHour.CompanyId.ShouldBe(_companyId);
-//        }
-
-//        [Fact]
-//        public async Task SaveChangesAsync_GivenExistingWorkHour_ShouldSetLastModifiedProperties()
-//        {
-//            var workHour = await _sut.WorkHours.FindAsync(100);
-
-//            workHour.EndTime = _dateTime.AddMinutes(21);
-
-//            await _sut.SaveChangesAsync();
-
-//            workHour.LastModified.ShouldNotBeNull();
-//            workHour.LastModified.ShouldBe(_dateTime);
-//            workHour.LastModifiedBy.ShouldBe(_userId);
-//        }
-
-//        [Fact]
-//        public async Task ToListAsync_WorkHours_ShouldGetHoursOfOwnCompany()
-//        {
-//            var workHours = await _sut.WorkHours.ToListAsync(CancellationToken.None);
-
-//            workHours.Count.ShouldBe(2);
-//            workHours.Any(w => w.Id == 101).ShouldBeFalse();
-//        }
-
-//        [Fact]
-//        public async Task ToListAsync_Customers_ShouldGetHoursOfOwnCompany()
-//        {
-//            var workHours = await _sut.Customers.ToListAsync(CancellationToken.None);
-
-//            workHours.Count.ShouldBe(2);
-//            workHours.Any(w => w.Id == 101).ShouldBeFalse();
-//        }
-
-//        [Fact]
-//        public async Task ToListAsync_Items_ShouldGetHoursOfOwnCompany()
-//        {
-//            var workHours = await _sut.Items.ToListAsync(CancellationToken.None);
-
-//            workHours.Count.ShouldBe(2);
-//            workHours.Any(w => w.Id == 101).ShouldBeFalse();
-//        }
-
-//        public void Dispose()
-//        {
-//            GC.SuppressFinalize(this);
-//        }
-//    }
-//}
+            //Assert
+            result.Count().ShouldBe(1);
+            result.Any(c => c.LastModified == null).ShouldBeFalse();
+            result.Any(c => c.LastModifiedBy == null).ShouldBeFalse();
+            result.Any(c => c.LastModified == MachineDateTime.Now).ShouldBeTrue();
+            result.Any(c => c.LastModifiedBy == _currentUser.UserId).ShouldBeTrue();
+        }
+    }
+}

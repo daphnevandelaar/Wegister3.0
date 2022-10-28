@@ -23,10 +23,10 @@ namespace Application.WorkHours.Queries.GetHoursList
 
         public async Task<WorkHourListVm> Handle(GetWorkHoursListQuery request, CancellationToken cancellationToken)
         {
-            var dbContext = _contextFactory.CreateDbContext();
+            using var dbContext = _contextFactory.CreateDbContext();
 
             var workhours = dbContext.WorkHours
-                .Include(w => w.Customer)
+                //.Include(w => w.Customer)
                 .Select(w => _factory.CreateLookUpDto(w))
                 .ToList();
 

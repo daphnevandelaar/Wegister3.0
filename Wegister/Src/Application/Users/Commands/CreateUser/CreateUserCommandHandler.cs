@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Common.Builders.Interfaces;
-using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
-using Application.WorkHours.Commands.CreateWorkHour;
 using Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Users.Commands.CreateUser
 {

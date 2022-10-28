@@ -5,7 +5,6 @@ using Application.Common.Builders.Interfaces;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.WorkHours.Commands.CreateWorkHour
 {
@@ -32,19 +31,17 @@ namespace Application.WorkHours.Commands.CreateWorkHour
             try
             {
                 var workHour = _factory.Create(request);
-                var currentUser = await dbContext.Users.SingleAsync(u => u.Id == new Guid(_currentUserService.CreateSession().UserId), cancellationToken);
-                workHour = _builder.Build(workHour, currentUser);
+                workHour = _builder.Build(workHour, _currentUserService.CreateSession().UserId);
 
                 dbContext.WorkHours.Add(workHour);
                 await dbContext.SaveChangesAsync(cancellationToken);
                 await _mediator.Publish(_factory.Create(workHour), cancellationToken);
+                return Unit.Value;
             }
             catch(Exception ex)
             {
-
+                throw;
             }
-
-            return Unit.Value;
         }
     }
 }

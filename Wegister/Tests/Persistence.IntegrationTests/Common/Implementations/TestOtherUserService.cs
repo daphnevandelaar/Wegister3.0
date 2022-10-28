@@ -1,9 +1,8 @@
 ﻿using Application.Common.Interfaces;
 using System;
 using Application.Common.Models;
-using System.Runtime.InteropServices;
 
-namespace Application.UnitTests.Common.Implementations
+namespace Persistence.UnitTests.Common.Implementations
 {
     public class TestOtherUserService : ICurrentUserService
     {

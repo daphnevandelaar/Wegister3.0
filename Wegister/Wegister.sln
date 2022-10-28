@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Src\Common\Common
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Src\Application\Application.csproj", "{C3B14F50-1275-44D4-9D13-3B3430009038}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.IntegrationTests", "Tests\Persistence.IntegrationTests\Persistence.IntegrationTests.csproj", "{74BA1235-6FF3-45E8-8DBA-4FF5987FF54B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.UnitTests", "Tests\Persistence.IntegrationTests\Persistence.UnitTests.csproj", "{74BA1235-6FF3-45E8-8DBA-4FF5987FF54B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.UnitTests", "Tests\Application.UnitTests\Application.UnitTests.csproj", "{49B66B1E-5649-4989-B3F7-87760426ED7F}"
 EndProject

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
@@ -21,16 +22,23 @@ namespace Application.Customers.Commands.CreateCustomer
 
         public async Task<Unit> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
-            var dbContext = _contextFactory.CreateDbContext();
+            try
+            {
+                var dbContext = _contextFactory.CreateDbContext();
 
-            var customer = _factory.Create(request);
+                var customer = _factory.Create(request);
 
-            dbContext.Customers.Add(customer);
-            await dbContext.SaveChangesAsync(cancellationToken);
+                dbContext.Customers.Add(customer);
+                await dbContext.SaveChangesAsync(cancellationToken);
 
-            await _mediator.Publish(_factory.Create(customer), cancellationToken);
+                await _mediator.Publish(_factory.Create(customer), cancellationToken);
 
-            return Unit.Value;
+                return Unit.Value;
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
     }
 }
