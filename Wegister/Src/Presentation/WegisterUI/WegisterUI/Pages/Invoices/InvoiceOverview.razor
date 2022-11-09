@@ -1,0 +1,107 @@
+﻿@page "/facturen"
+
+@using Application.Common.Viewmodels
+@using WegisterUI.Services
+@inject NavigationManager _uriHelper
+
+<AuthorizeView>
+    <Authorized>
+        <h1>Facturenoverzicht</h1>
+
+        <p>Het onderstaande overzicht is een lijst met facturen</p>
+        <div class="container-overview">
+            <div class="container-filter">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuInvoiceTypeButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Factuurtype
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuInvoiceTypeButton">
+                        <a class="dropdown-item" href="#">Debit</a>
+                        <a class="dropdown-item" href="#">Credit</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuPaymentStatusButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Betaalstatus
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuPaymentStatusButton">
+                        <a class="dropdown-item" href="#">Betaald</a>
+                        <a class="dropdown-item" href="#">Onbetaald</a>
+                    </div>
+                </div>
+            </div>
+            <div class="container-action">
+                <button class="btn btn-primary" @onclick=@Navigate>Factuur toevoegen</button>
+            </div>
+        </div>
+
+        @if (_invoices == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Factuurnummer</th>
+                        <th>Klant</th>
+                        <th>Betaalstatus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var invoice in _invoices.Invoices)
+                    {
+                        <tr>
+                            <td>@invoice.InvoiceType</td>
+                            <td>@invoice.Date</td>
+                            <td>@invoice.InvoiceNumber</td>
+                            <td>@invoice.Customer.Name</td>
+                            <td>@invoice.PaymentDetail.PaymentStatus</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    </Authorized>
+    <NotAuthorized>
+        <p>Je bent niet geauthorizeerd deze pagina te bekijken...</p>
+        <p><a href="identity/account/login">Klik hier</a> om in te loggen of neem contact op met beheerder.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    private InvoiceListVm _invoices;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _invoices = new InvoiceListVm(){
+            Invoices = new List<InvoiceVm>(){
+                new InvoiceVm(){
+                    Id = Guid.NewGuid().ToString(),
+                    Date = DateTime.UtcNow,
+                    InvoiceNumber = 122,
+                    InvoiceType = InvoiceType.Debit,
+                    InvoiceLines = new List<InvoiceLineVm>(){
+                    },
+                    PaymentDetail = new PaymentDetailsVm(){
+                        PaymentStatus = PaymentStatus.Payed
+                    },
+                    Customer = new CustomerVm(){
+                        Name = "Burger King"
+                    }
+                }
+            }
+        };
+    }
+
+    void Navigate()
+    {
+        _uriHelper.NavigateTo("facturen/toevoegen");
+    }
+}

@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Pages\Invoices\InvoiceAdd.razor.css" />
+    <None Remove="Pages\Invoices\InvoiceOverview.razor.css" />
     <None Remove="Pages\Customers\CustomerAdd.razor.css" />
     <None Remove="Pages\Customers\CustomerOverview.razor.css" />
     <None Remove="Pages\WorkHours\WorkHourAdd.razor.css" />
@@ -15,6 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Pages\Invoices\InvoiceAdd.razor.css" />
+    <Content Include="Pages\Invoices\InvoiceOverview.razor.css" />
     <Content Include="Pages\Customers\CustomerAdd.razor.css" />
     <Content Include="Pages\Customers\CustomerOverview.razor.css" />
     <Content Include="Pages\WorkHours\WorkHourAdd.razor.css" />

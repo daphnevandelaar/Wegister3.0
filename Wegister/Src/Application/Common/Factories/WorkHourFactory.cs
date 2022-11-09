@@ -22,7 +22,7 @@ namespace Application.Common.Factories
                 StartTime = entity.StartTime.TimeOfDay.ToString(@"hh\:mm"),
                 EndTime = entity.EndTime.TimeOfDay.ToString(@"hh\:mm"),
                 RecreationInMinutes = entity.RecreationInMinutes,
-                CustomerName = entity.Employer?.Name ?? "",
+                CustomerName = entity.Customer?.Name ?? "",
                 TotalWorkHoursInMinutes = entity.TotalWorkHoursInMinutes,
                 Description = entity.Description
             };
@@ -52,7 +52,7 @@ namespace Application.Common.Factories
                 EndTime = workHour.EndTime,
                 RecreationInMinutes = workHour.RecreationInMinutes,
                 TotalWorkHoursInMinutes = workHour.TotalWorkHoursInMinutes,
-                Employer = new EmployerMiniDto
+                Customer = new CustomerMiniDto
                 {
                     Id = workHour.Customer?.Id ?? 0,
                     Name = workHour.Customer?.Name ?? ""

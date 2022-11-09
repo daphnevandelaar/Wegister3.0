@@ -1,0 +1,15 @@
+﻿@page "/facturen/toevoegen"
+
+@using Application.Common.Viewmodels
+@using WegisterUI.Services
+@inject NavigationManager _uriHelper
+
+<h1>Factuur toevoegen</h1>
+
+
+@code {
+    private void HandleValidSubmit()
+    {
+        _uriHelper.NavigateTo("facturen");
+    }
+}

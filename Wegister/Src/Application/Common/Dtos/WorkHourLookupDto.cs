@@ -9,7 +9,7 @@ namespace Application.Common.Dtos
         public DateTime EndTime { get; set; }
         public int RecreationInMinutes { get; set; }
         public int TotalWorkHoursInMinutes { get; set; }
-        public EmployerMiniDto Employer { get; set; }
+        public CustomerMiniDto Customer { get; set; }
         public string Description { get; set; }
     }
 }

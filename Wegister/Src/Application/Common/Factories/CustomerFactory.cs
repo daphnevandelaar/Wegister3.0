@@ -42,7 +42,7 @@ namespace Application.Common.Factories
             return returnValue;
         }
 
-        CustomerLookupDto ICustomerFactory.CreateLookUpDto(Customer customer)
+        public CustomerLookupDto CreateLookUpDto(Customer customer)
         {
             return new()
             {
