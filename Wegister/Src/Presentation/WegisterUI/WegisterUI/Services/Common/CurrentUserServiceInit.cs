@@ -2,7 +2,7 @@
 using Application.Common.Interfaces;
 using Application.Common.Models;
 
-namespace WegisterUI.Services
+namespace WegisterUI.Services.Common
 {
     public class CurrentUserServiceInit : ICurrentUserService
     {

@@ -15,5 +15,6 @@ namespace Application.Common.Factories.Interfaces
         IDtoFactory<Customer, SearchDto>
     {
         public CustomerLookupDto CreateLookUpDto(Customer customer);
+        public CustomerMiniDto CreateMiniDto(Customer customer);
     }
 }

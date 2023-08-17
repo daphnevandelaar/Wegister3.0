@@ -1,6 +1,6 @@
 ﻿using Application.Common.Viewmodels;
 
-namespace WegisterUI.Services
+namespace WegisterUI.Services.Common
 {
     public class SessionService
     {

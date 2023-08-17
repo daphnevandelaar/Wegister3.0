@@ -52,8 +52,8 @@ namespace Persistence
                         entry.Entity.CreatedBy = _currentUser.UserId;
                         entry.Entity.Created = _dateTime.Now;
                         entry.Entity.CompanyId = _currentUser.CompanyId;
-                        entry.Entity.LastModified = null;
-                        entry.Entity.LastModifiedBy = null;
+                        entry.Entity.LastModified = _dateTime.Now;
+                        entry.Entity.LastModifiedBy = _currentUser.UserId;
                         break;
                     case EntityState.Modified:
                         entry.Entity.LastModifiedBy = _currentUser.UserId;

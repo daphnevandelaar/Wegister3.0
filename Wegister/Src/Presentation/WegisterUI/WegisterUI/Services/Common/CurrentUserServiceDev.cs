@@ -5,7 +5,7 @@ using Application.Common.Interfaces;
 using Application.Common.Models;
 using Microsoft.AspNetCore.Http;
 
-namespace WegisterUI.Services
+namespace WegisterUI.Services.Common
 {
     public class CurrentUserServiceDev : ICurrentUserService
     {

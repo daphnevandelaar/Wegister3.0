@@ -96,5 +96,17 @@ namespace Application.Common.Factories
                 Value = entity.Name
             };
         }
+
+        public CustomerMiniDto CreateMiniDto(Customer customer)
+        {
+            if(customer != null)
+                return new()
+                {
+                    Id = customer.Id,
+                    Name = customer.Name
+                };
+
+            return new();
+        }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WegisterUI.Areas.Identity;
 using WegisterUI.Data;
 using WegisterUI.Services;
+using WegisterUI.Services.Common;
 
 namespace WegisterUI
 {

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using Application.Common.Dtos;
 using Application.Common.Factories.Interfaces.Abstracts;
 using Application.Common.Viewmodels;
@@ -18,5 +20,6 @@ namespace Application.Common.Factories.Interfaces
         IFactory<DeleteWorkHourCommand, WorkHour>
     {
         public WorkHourLookupDto CreateLookUpDto(WorkHour workHour);
+        public delegate WorkHourLookupDto CreateLookUpDtoExp(WorkHour workHour);
     }
 }

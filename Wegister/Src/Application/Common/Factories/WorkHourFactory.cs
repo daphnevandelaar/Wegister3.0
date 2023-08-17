@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using Application.Common.Dtos;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Viewmodels;
@@ -11,6 +13,10 @@ namespace Application.Common.Factories
 {
     public class WorkHourFactory : FactoryBase, IWorkHourFactory
     {
+        private CustomerFactory _customerFactory;
+
+        public WorkHourFactory() => _customerFactory = new CustomerFactory();
+
         public static WorkHourVm CreateInternal(WorkHourLookupDto entity)
         {
             if (IsNull(entity))
@@ -52,11 +58,7 @@ namespace Application.Common.Factories
                 EndTime = workHour.EndTime,
                 RecreationInMinutes = workHour.RecreationInMinutes,
                 TotalWorkHoursInMinutes = workHour.TotalWorkHoursInMinutes,
-                Customer = new CustomerMiniDto
-                {
-                    Id = workHour.Customer?.Id ?? 0,
-                    Name = workHour.Customer?.Name ?? ""
-                },
+                Customer = _customerFactory.CreateMiniDto(workHour.Customer),
                 Description = workHour.Description
             };
         }
@@ -101,5 +103,17 @@ namespace Application.Common.Factories
                 Id = entity.Id
             };
         }
+
+        Expression<Func<WorkHour, WorkHourLookupDto>> CreateLookUpDtoExp =>
+         workHour => new WorkHourLookupDto()
+         {
+             Id = workHour.Id,
+             StartTime = workHour.StartTime,
+             EndTime = workHour.EndTime,
+             RecreationInMinutes = workHour.RecreationInMinutes,
+             TotalWorkHoursInMinutes = workHour.TotalWorkHoursInMinutes,
+             Customer = _customerFactory.CreateMiniDto(workHour.Customer),
+             Description = workHour.Description
+         };
     }
 }
