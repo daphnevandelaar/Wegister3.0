@@ -5,10 +5,9 @@
 @inject NavigationManager _uriHelper
 @inject CustomerService _customerService
 
-
 <h1>Klant toevoegen</h1>
 <div class="form-group container-overview">
-    <EditForm Model="@_customer" OnValidSubmit="@HandleValidSubmit">
+    <EditForm Model="@_customer" OnValidSubmit="@CreateCustomer">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="container-input">
@@ -35,7 +34,7 @@
 @code {
     private CustomerVm _customer = new();
 
-    private void HandleValidSubmit()
+    private void CreateCustomer()
     {
         _customerService.AddCustomer(_customer);
         _uriHelper.NavigateTo("klanten");

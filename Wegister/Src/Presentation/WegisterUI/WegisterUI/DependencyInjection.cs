@@ -18,6 +18,7 @@ namespace WegisterUI
             services.AddSingleton<WorkHourService>();
             services.AddSingleton<ItemService>();
             services.AddSingleton<CustomerService>();
+            services.AddSingleton<InvoiceService>();
 
             var connString = configuration.GetConnectionString("WegisterAuthDbConnectionString");
 

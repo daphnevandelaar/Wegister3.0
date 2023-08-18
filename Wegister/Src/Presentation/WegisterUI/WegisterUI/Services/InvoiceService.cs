@@ -1,6 +1,5 @@
 ﻿using Application.Common.Factories.Interfaces;
 using Application.Common.Viewmodels;
-using Application.Customers.Queries.GetCustomersList;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -10,30 +9,31 @@ namespace WegisterUI.Services
     public class InvoiceService
     {
         private readonly ILogger<InvoiceService> _logger;
-        private readonly ICustomerFactory _customerFactory;
+        private readonly IInvoiceFactory _invoiceFactory;
         private readonly IMediator _mediator;
 
-        public InvoiceService(ILogger<InvoiceService> logger, IInvoiceFactory customerFactory, IMediator mediator)
+        public InvoiceService(ILogger<InvoiceService> logger, IInvoiceFactory invoiceFactory, IMediator mediator)
         {
             _logger = logger;
-            _customerFactory = customerFactory;
+            _invoiceFactory = invoiceFactory;
             _mediator = mediator;
         }
 
-        public async Task<CustomerListVm> GetCustomers()
+        public async Task<CustomerListVm> GetInvoices()
         {
-            _logger.LogInformation("GetCustomers() is called");
+            _logger.LogInformation("GetInvoices() is called");
 
-            return await _mediator.Send(new GetCustomersListQuery());
+            return null;
+            //return await _mediator.Send(new GetCustomersListQuery());
         }
 
-        public async void AddCustomer(CustomerVm customer)
+        public async void AddInvoice(InvoiceVm invoice)
         {
-            _logger.LogInformation("AddCustomer() is called");
+            _logger.LogInformation("AddInvoice() is called");
 
-            var command = _customerFactory.Create(customer);
+            //var command = _invoiceFactory.Create(customer);
 
-            await _mediator.Send(command);
+            //await _mediator.Send(command);
         }
     }
 }

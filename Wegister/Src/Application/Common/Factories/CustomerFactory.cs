@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Application.Common.Dtos;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Viewmodels;
@@ -97,16 +99,21 @@ namespace Application.Common.Factories
             };
         }
 
-        public CustomerMiniDto CreateMiniDto(Customer customer)
-        {
-            if(customer != null)
-                return new()
-                {
+        public Expression<Func<Customer, CustomerMiniDto>> CreateMiniDtoExp =
+            customer => 
+                new() { 
                     Id = customer.Id,
                     Name = customer.Name
                 };
 
-            return new();
+        public CustomerMiniDto CreateMiniDtoT (Customer customer)
+        {
+            return new()
+            {
+                Id = customer.Id,
+                Name = customer.Name
+            };
         }
+        Expression<Func<Customer, CustomerMiniDto>> ICustomerFactory.CreateMiniDto => throw new NotImplementedException();
     }
 }

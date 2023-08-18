@@ -1,0 +1,43 @@
+﻿@page "/debitfactuur/toevoegen"
+
+@using Application.Common.Viewmodels
+@using WegisterUI.Services
+@inject NavigationManager _uriHelper
+@inject CustomerService _customerService
+
+<h3>Debit factuur toevoegen</h3>
+<div class="form-group container-overview">
+    <EditForm Model="@_invoice" OnValidSubmit="@CreateInvoice">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="container-input">
+            <label>Factuurdatum:</label>
+            <InputDate class="form-control" id="invoicedate" @bind-Value="_invoice.Date" />
+        </div>
+        <label>Totaal prijs incl. btw:</label>
+        <InputText class="form-control" id="invoiceprice" @bind-Value="_invoice.PriceIncludingTax"></InputText>
+        <label>Voeg factuur bestand toe:</label>
+        <br />
+        <InputFile OnChange="@LoadFiles"></InputFile>
+        <div class="container-action">
+            <button class="btn btn-primary" type="submit">Opslaan</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private void LoadFiles(InputFileChangeEventArgs e)
+    {
+        var contentType = "application/pdf";
+    }
+
+    private InvoiceVm _invoice = new() {
+        InvoiceType = InvoiceType.Debit
+    };
+
+    private void CreateInvoice()
+    {
+        var test = _invoice;
+        _uriHelper.NavigateTo("klanten");
+    }
+}

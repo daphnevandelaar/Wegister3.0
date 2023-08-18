@@ -1,0 +1,70 @@
+﻿@page "/creditfactuur/toevoegen"
+
+@using Application.Common.Viewmodels
+@using WegisterUI.Services
+@inject NavigationManager _uriHelper
+@inject CustomerService _customerService
+
+<h3>Credit factuur toevoegen</h3>
+<div class="form-group container-overview">
+    <EditForm Model="@_invoice" OnValidSubmit="@CreateInvoice">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="container-input">
+            <label>Factuurdatum:</label>
+            <InputDate class="form-control" id="invoicedate" @bind-Value="_invoice.Date" />
+        </div>
+        <label>Klantnaam:</label>
+        <SearchBar DropdownlistIn=@customerFilter Placeholder="Typ om klant bij naam te zoeken" OnItemSelected="CustomerSelected"></SearchBar>
+
+        <div class="container-action">
+            <button class="btn btn-primary" type="submit">Opslaan</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    List<FilterValue> customerFilter = new();
+    FilterValue selectedCustomer = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var customers = await _customerService.GetCustomers();
+        var customers2 = new List<CustomerVm> {
+            new CustomerVm{
+                Id = 1,
+                Name = "Tess",
+                Place = "Helmond"
+            },
+            new CustomerVm{
+                Id = 2,
+                Name = "McDonalds",
+                Place = "Eindhoven"
+            },
+            new CustomerVm{
+                Id = 3,
+                Name = "Burger King",
+                Place = "Lierop"
+            }
+        };
+
+        customers.Customers.ToList().ForEach(c =>
+        {
+            customerFilter.Add(new FilterValue { Id = c.Id, Value = c.Name + " " + c.Place });
+        });
+    }
+
+    private InvoiceVm _invoice = new() {
+        InvoiceType = InvoiceType.Credit
+    };
+
+    protected async Task CustomerSelected(FilterValue value){
+        _invoice.Customer.Id = value.Id;
+    }
+
+    private void CreateInvoice()
+    {
+        var test = _invoice;
+        _uriHelper.NavigateTo("klanten");
+    }
+}

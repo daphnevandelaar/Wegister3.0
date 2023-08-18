@@ -3,13 +3,40 @@
 @using Application.Common.Viewmodels
 @using WegisterUI.Services
 @inject NavigationManager _uriHelper
+@inject InvoiceService _invoiceService
 
-<h1>Factuur toevoegen</h1>
+<div class="title-with-buttons">
+    <h1>Factureren</h1>
+    <div class="align-buttons-center-div">
+        @if(_renderCreditComponent){
+            <button class="btn btn-primary" @onclick=RenderComponent>Debit</button>
+        }
+        @if(_renderDebitComponent){
+            <button class="btn btn-primary" @onclick=RenderComponent>Credit</button>
+        }
+    </div>
+</div>
 
+@if(_renderCreditComponent){
+    <InvoiceAddCredit></InvoiceAddCredit>
+}
+@if(_renderDebitComponent){
+    <InvoiceAddDebit></InvoiceAddDebit>
+}
 
 @code {
+    private InvoiceVm _invoice = new();
+    private bool _renderDebitComponent = false;
+    private bool _renderCreditComponent = true;
+
+    void RenderComponent() {
+        _renderCreditComponent = !_renderCreditComponent;
+        _renderDebitComponent = !_renderDebitComponent;
+    }
+
     private void HandleValidSubmit()
     {
+        _invoiceService.AddInvoice(_invoice);
         _uriHelper.NavigateTo("facturen");
     }
 }

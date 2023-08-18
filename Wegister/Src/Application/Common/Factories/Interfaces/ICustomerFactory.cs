@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using Application.Common.Dtos;
 using Application.Common.Factories.Interfaces.Abstracts;
 using Application.Common.Viewmodels;
@@ -15,6 +17,7 @@ namespace Application.Common.Factories.Interfaces
         IDtoFactory<Customer, SearchDto>
     {
         public CustomerLookupDto CreateLookUpDto(Customer customer);
-        public CustomerMiniDto CreateMiniDto(Customer customer);
+        public Expression<Func<Customer, CustomerMiniDto>> CreateMiniDto { get; }
+        public CustomerMiniDto CreateMiniDtoT(Customer customer);
     }
 }

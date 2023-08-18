@@ -58,7 +58,7 @@ namespace Application.Common.Factories
                 EndTime = workHour.EndTime,
                 RecreationInMinutes = workHour.RecreationInMinutes,
                 TotalWorkHoursInMinutes = workHour.TotalWorkHoursInMinutes,
-                Customer = _customerFactory.CreateMiniDto(workHour.Customer),
+                //Customer = _customerFactory.CreateMiniDto(workHour.Customer),
                 Description = workHour.Description
             };
         }
@@ -104,15 +104,15 @@ namespace Application.Common.Factories
             };
         }
 
-        Expression<Func<WorkHour, WorkHourLookupDto>> CreateLookUpDtoExp =>
-         workHour => new WorkHourLookupDto()
+        public Expression<Func<WorkHour, WorkHourLookupDto>> CreateLookUpDtoExp =>
+         (workHour) => new WorkHourLookupDto()
          {
              Id = workHour.Id,
              StartTime = workHour.StartTime,
              EndTime = workHour.EndTime,
              RecreationInMinutes = workHour.RecreationInMinutes,
              TotalWorkHoursInMinutes = workHour.TotalWorkHoursInMinutes,
-             Customer = _customerFactory.CreateMiniDto(workHour.Customer),
+             Customer = _customerFactory.CreateMiniDtoT(workHour.Customer),
              Description = workHour.Description
          };
     }

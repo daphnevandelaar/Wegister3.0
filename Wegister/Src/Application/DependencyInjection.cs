@@ -16,6 +16,7 @@ namespace Application
 
             services.AddTransient<IItemFactory, ItemFactory>();
             services.AddTransient<ICustomerFactory, CustomerFactory>();
+            services.AddTransient<IInvoiceFactory, InvoiceFactory>();
             services.AddTransient<IWorkHourFactory, WorkHourFactory>();
             services.AddTransient<IWorkHourBuilder, WorkHourBuilder>();
 

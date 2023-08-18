@@ -48,3 +48,17 @@ a, .btn-link {
     right: 0.75rem;
     top: 0.5rem;
 }
+
+.title-with-buttons{
+    display: flex;
+    justify-content: space-between;
+}
+
+.align-buttons-center-div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+a .dropdown-item:hover{
+    background-color: lightgray;
+}

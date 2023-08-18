@@ -20,6 +20,6 @@ namespace Application.Common.Factories.Interfaces
         IFactory<DeleteWorkHourCommand, WorkHour>
     {
         public WorkHourLookupDto CreateLookUpDto(WorkHour workHour);
-        public delegate WorkHourLookupDto CreateLookUpDtoExp(WorkHour workHour);
+        public Expression<Func<WorkHour, WorkHourLookupDto>> CreateLookUpDtoExp { get; }
     }
 }
