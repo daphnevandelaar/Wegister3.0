@@ -1,6 +1,4 @@
-﻿@using System.Threading
-
-<div class="dropdown">
+﻿<div class="dropdown">
     <input class="dropdown-button dropdown-toggle form-control" placeholder="@Placeholder" @onclick=Open @oninput=FilterOnValue value="@SelectedFilterValue"></input>
     <div class="dropdown-menu @(show ? "show" : "")" tabindex="-1">
         <div class="scrollable-menu">

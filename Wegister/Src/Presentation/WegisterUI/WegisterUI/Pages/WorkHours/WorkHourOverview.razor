@@ -11,7 +11,7 @@
         <h1>Urenoverzicht</h1>
 
         <p>Het onderstaande overzicht is een lijst met de geregistreerde uren</p>
-
+        <FilterDropdown FilterValues="filterValues" OnItemSelected="FiltersSelected"></FilterDropdown>
         <div class="container-overview">
             <div class="container-filter">
                 @if (_filters != null)
@@ -109,6 +109,18 @@
 @code {
     private WorkHourListVm _uren;
     private List<FilterValueListVm> _filters;
+    private List<FilterValue> filterValues = new()
+    {
+        new(){ Id = 1, Value = "Tst" },
+        new(){ Id = 2, Value = "Hallo" },
+        new(){ Id = 3, Value = "Doei" },
+        new(){ Id = 4, Value = "Houdoe" }
+    };
+
+    protected async Task FiltersSelected(List<FilterValue> values)
+    {
+        var tst = values;
+    }
 
     private string _dataTarget = "toggle";
 
@@ -127,7 +139,6 @@
 
     async void FilterOnWorkHours(string filterType, string value)
     {
-
         _filters = _filters
             .Select(f =>
             {

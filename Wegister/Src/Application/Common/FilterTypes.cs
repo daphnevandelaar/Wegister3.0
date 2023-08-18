@@ -7,6 +7,8 @@
         Week = 3,
         Day = 4,
         Hour = 5,
-        Customer = 6
+        Customer = 6,
+        InvoiceType = 7,
+        PaymentStatus = 8
     }
 }

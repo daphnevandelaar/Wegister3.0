@@ -1,0 +1,44 @@
+﻿<div class="dropdown">
+    <button class="dropdown-button dropdown-toggle form-control" @onclick="Open">Selecteer iets</button>
+    <div class="dropdown-menu @(show ? "show" : "")" tabindex="-1">
+        <div class="scrollable-menu">
+            <table>
+                <tr>
+                    @foreach (var item in FilterValues){
+                        <div>
+                            <input type="checkbox" @oninput="(e) => OnValueSelected(e, item)" />
+                            @item.Value
+                        </div>
+                    }
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    bool show;
+
+    [Parameter]
+    public List<FilterValue> FilterValues { get; set; }
+
+    [Parameter]
+    public List<FilterValue> SelectedFilterValues { get; set; } = new();
+    [Parameter]
+    public EventCallback<List<FilterValue>> OnItemSelected { get; set; }
+
+    void Open() => show = !show;
+
+    public void OnValueSelected(ChangeEventArgs e, FilterValue value)
+    {
+        bool isChecked = Convert.ToBoolean(e.Value);
+
+        if(isChecked){
+            SelectedFilterValues.Add(value);
+        }
+        else{
+            SelectedFilterValues.Remove(value);
+        }
+        OnItemSelected.InvokeAsync(SelectedFilterValues);
+    }
+}

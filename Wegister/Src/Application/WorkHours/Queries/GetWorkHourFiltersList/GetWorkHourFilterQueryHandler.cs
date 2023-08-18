@@ -31,7 +31,6 @@ namespace Application.WorkHours.Queries.GetWorkHourFiltersList
             
             var customerFilter = _customerValueRetriever.GetFilterValues(request);
             var yearFilter = _yearValueRetriever.GetFilterValues(request);
-
             var weekFilter = _weekValueRetriever.GetFilterValues(request);
 
             return new ()
