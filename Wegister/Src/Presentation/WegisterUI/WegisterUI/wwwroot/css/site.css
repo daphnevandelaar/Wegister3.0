@@ -62,3 +62,10 @@ a, .btn-link {
 a .dropdown-item:hover{
     background-color: lightgray;
 }
+.dropdown {
+    margin-right: 5px;
+}
+.dropdown-menu{
+    position: none!important;
+    padding: .5rem!important;
+}

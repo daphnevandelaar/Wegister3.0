@@ -34,6 +34,7 @@ namespace Persistence
         public DbSet<Item> Items { get; set; }
         public DbSet<WorkHour> WorkHours { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<FilterOption> FilterOptions { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new ())
         {
@@ -68,14 +69,16 @@ namespace Persistence
             base.OnModelCreating(modelBuilder);
 
             //This global query filter doesn't work with the ConfigurationModels
+            //TODO: make companyId notnullable
+            modelBuilder.Entity<FilterOption>().HasQueryFilter(c => EF.Property<string>(c, "CompanyId") == _currentUser.CompanyId);
             modelBuilder.Entity<WorkHour>().HasQueryFilter(c => EF.Property<string>(c, "CompanyId") == _currentUser.CompanyId && EF.Property<Guid>(c, "UserId") == new Guid(_currentUser.UserId));
             modelBuilder.Entity<Customer>().HasQueryFilter(c => EF.Property<string>(c, "CompanyId") == _currentUser.CompanyId);
             modelBuilder.Entity<Item>().HasQueryFilter(c => EF.Property<string>(c, "CompanyId") == _currentUser.CompanyId);
 
             //TODO: check if all configurations are injected (else throw exception)
             modelBuilder.ApplyConfiguration(new CustomerConfiguration(_currentUser));
-            //modelBuilder.ApplyConfiguration(new ItemConfiguration(_currentUser));
             modelBuilder.ApplyConfiguration(new WorkHourConfiguration(_currentUser));
+            modelBuilder.ApplyConfiguration(new FilterOptionConfiguration(_currentUser));
         }
     }
 }

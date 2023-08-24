@@ -1,8 +1,16 @@
-﻿namespace Application.Common.Viewmodels
+﻿using System.Collections.Generic;
+
+namespace Application.Common.Viewmodels
 {
     public class FilterValueVm
     {
-        public int Id { get; set; }
-        public string Value { get; set; }
+        public List<string> Values { get; set; }
+        public string PlaceholderValue { get; set; }
+        public List<string> SelectedValues { get; set; } = new List<string>();
+
+        public FilterValueVm()
+        {
+
+        }
     }
 }

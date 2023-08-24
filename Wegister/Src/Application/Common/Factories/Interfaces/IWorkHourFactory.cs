@@ -12,11 +12,12 @@ using WebUI.Dtos;
 namespace Application.Common.Factories.Interfaces
 {
     public interface IWorkHourFactory :
+        ICommonFactory,
         IFactory<CreateWorkHourCommand, WorkHour>,
         IFactory<WorkHour, WorkHourCreated>,
         ICommandFactory<WorkHourVm, CreateWorkHourCommand>,
         ICommandFactory<WorkHourDto, CreateWorkHourCommand>,
-        IFactory<List<WorkHourLookupDto>, WorkHourListVm>,
+        IQueryFactory<List<WorkHourLookupDto>, List<FilterValueVm>, WorkHourListVm>,
         IFactory<DeleteWorkHourCommand, WorkHour>
     {
         public WorkHourLookupDto CreateLookUpDto(WorkHour workHour);

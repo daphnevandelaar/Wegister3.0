@@ -12,6 +12,7 @@ namespace Application.Common.Interfaces
         DbSet<Item> Items { get; set; }
         DbSet<WorkHour> WorkHours { get; set; }
         DbSet<User> Users { get; set; }
+        DbSet<FilterOption> FilterOptions { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

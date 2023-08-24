@@ -34,21 +34,6 @@ namespace Application.Common.Factories
             };
         }
 
-        public WorkHourListVm Create(List<WorkHourLookupDto> entities)
-        {
-            if (IsNull(entities))
-                return null;
-
-            var workHoursVm = new List<WorkHourVm>();
-
-            entities.ForEach(w =>
-            {
-                workHoursVm.Add(CreateInternal(w));
-            });
-
-            return new WorkHourListVm(workHoursVm);
-        }
-
         public WorkHourLookupDto CreateLookUpDto(WorkHour workHour)
         {
             return new()
@@ -102,6 +87,21 @@ namespace Application.Common.Factories
             {
                 Id = entity.Id
             };
+        }
+
+        public WorkHourListVm Create(List<WorkHourLookupDto> entities, List<FilterValueVm> filter)
+        {
+            if (IsNull(entities))
+                return null;
+
+            var workHoursVm = new List<WorkHourVm>();
+
+            entities.ForEach(w =>
+            {
+                workHoursVm.Add(CreateInternal(w));
+            });
+
+            return new WorkHourListVm(workHoursVm, filter);
         }
 
         public Expression<Func<WorkHour, WorkHourLookupDto>> CreateLookUpDtoExp =>

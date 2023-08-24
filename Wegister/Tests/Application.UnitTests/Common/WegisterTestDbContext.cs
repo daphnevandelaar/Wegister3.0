@@ -12,6 +12,7 @@ namespace Application.UnitTests.Common
         public DbSet<Item> Items { get; set; }
         public DbSet<WorkHour> WorkHours { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<FilterOption> FilterOptions { get; set; }
 
         public void Dispose()
         {

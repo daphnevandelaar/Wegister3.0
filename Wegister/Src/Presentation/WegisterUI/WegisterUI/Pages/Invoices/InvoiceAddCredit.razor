@@ -7,7 +7,7 @@
 
 <h3>Credit factuur toevoegen</h3>
 <div class="form-group container-overview">
-    <EditForm Model="@_invoice" OnValidSubmit="@CreateInvoice">
+    @*<EditForm Model="@_invoice" OnValidSubmit="@CreateInvoice">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="container-input">
@@ -20,12 +20,12 @@
         <div class="container-action">
             <button class="btn btn-primary" type="submit">Opslaan</button>
         </div>
-    </EditForm>
+    </EditForm>*@
 </div>
 
 @code {
-    List<FilterValue> customerFilter = new();
-    FilterValue selectedCustomer = new();
+    List<FilterValueVm> customerFilter = new();
+    FilterValueVm selectedCustomer = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -50,7 +50,7 @@
 
         customers.Customers.ToList().ForEach(c =>
         {
-            customerFilter.Add(new FilterValue { Id = c.Id, Value = c.Name + " " + c.Place });
+            //customerFilter.Add(new FilterValueVm { Id = c.Id, Value = c.Name + " " + c.Place });
         });
     }
 
@@ -58,8 +58,8 @@
         InvoiceType = InvoiceType.Credit
     };
 
-    protected async Task CustomerSelected(FilterValue value){
-        _invoice.Customer.Id = value.Id;
+    protected async Task CustomerSelected(FilterValueVm value){
+        //_invoice.Customer.Id = value.Id;
     }
 
     private void CreateInvoice()

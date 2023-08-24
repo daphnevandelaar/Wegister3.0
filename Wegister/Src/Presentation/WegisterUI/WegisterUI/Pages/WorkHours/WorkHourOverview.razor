@@ -11,28 +11,13 @@
         <h1>Urenoverzicht</h1>
 
         <p>Het onderstaande overzicht is een lijst met de geregistreerde uren</p>
-        <FilterDropdown FilterValues="filterValues" OnItemSelected="FiltersSelected"></FilterDropdown>
         <div class="container-overview">
             <div class="container-filter">
                 @if (_filters != null)
                 {
                     @foreach (var filter in _filters)
                     {
-                        if (filter.FilterValues != null)
-                        {
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    @filter.Name
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" style="cursor: pointer;" @onclick='() => FilterOnWorkHours(filter.Type, "Alles")'>Alles</a>
-                                    @foreach (var item in filter.FilterValues)
-                                    {
-                                        <a class="dropdown-item" style="cursor: pointer;" @onclick="() => FilterOnWorkHours(filter.Type, item.Value)">@item.Value</a>
-                                    }
-                                </div>
-                            </div>
-                        }
+                        <FilterDropdown FilterOption=@filter FilterValues="@filter.Values" Placeholder=@filter.PlaceholderValue OnItemSelected="OnFilterSelected"></FilterDropdown>
                     }
                 }
             </div>
@@ -42,15 +27,15 @@
         </div>
 
         @{
-            var totaalUren = _uren?.TotalAmountOfWorkHoursInMinutes / 60;
-            var overgeblevenMinuten = _uren?.TotalAmountOfWorkHoursInMinutes % 60;
+            var totaalUren = _workHours?.TotalAmountOfWorkHoursInMinutes / 60;
+            var overgeblevenMinuten = _workHours?.TotalAmountOfWorkHoursInMinutes % 60;
         }
 
         <div class="container-details">
             Totaalgewerkt: @totaalUren:@overgeblevenMinuten
         </div>
 
-        @if (_uren == null)
+        @if (_workHours == null)
         {
             <p><em>Er zijn geen uren geregistreerd</em></p>
         }
@@ -69,7 +54,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var gewerktuur in _uren.WorkHours)
+                    @foreach (var gewerktuur in _workHours.WorkHours)
                     {
                         { _dataTarget += gewerktuur.Id; }
 
@@ -104,73 +89,3 @@
         <p><a href="identity/account/login">Klik hier</a> om in te loggen of neem contact op met beheerder.</p>
     </NotAuthorized>
 </AuthorizeView>
-
-
-@code {
-    private WorkHourListVm _uren;
-    private List<FilterValueListVm> _filters;
-    private List<FilterValue> filterValues = new()
-    {
-        new(){ Id = 1, Value = "Tst" },
-        new(){ Id = 2, Value = "Hallo" },
-        new(){ Id = 3, Value = "Doei" },
-        new(){ Id = 4, Value = "Houdoe" }
-    };
-
-    protected async Task FiltersSelected(List<FilterValue> values)
-    {
-        var tst = values;
-    }
-
-    private string _dataTarget = "toggle";
-
-    protected override async Task OnInitializedAsync()
-    {
-        _filters = await _workHourService.GetFilters(null, null);
-        _uren = await _workHourService.GetWorkHours();
-    }
-
-    void Navigate()
-    {
-        _uriHelper.NavigateTo("uren/toevoegen");
-    }
-
-    private List<FilterValueListDto> _selectedFilters = new();
-
-    async void FilterOnWorkHours(string filterType, string value)
-    {
-        _filters = _filters
-            .Select(f =>
-            {
-                f.Type = f.Type;
-                f.Name = f.Type == filterType ? value : f.Name;
-                f.FilterValues = f.FilterValues;
-                return f;
-            })
-            .ToList();
-
-        _selectedFilters ??= new();
-        _selectedFilters = _selectedFilters?.Where(f => f.Type != filterType).ToList();
-
-        _selectedFilters?.Add(
-            new FilterValueListDto
-            {
-                Type = filterType,
-                FilterValue = new FilterValueDto
-                {
-                    Value = value
-                }
-            }
-        );
-
-        _uren = await _workHourService.SearchHours(_selectedFilters);
-
-        _filters = await _workHourService.GetFilters(filterType, value);
-    }
-
-    async void Delete(int id)
-    {
-        _workHourService.DeleteWorkHour(id);
-        _uren = await _workHourService.GetWorkHours();
-    }
-}

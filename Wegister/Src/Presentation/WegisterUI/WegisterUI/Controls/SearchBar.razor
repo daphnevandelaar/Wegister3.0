@@ -1,4 +1,4 @@
-﻿<div class="dropdown">
+﻿@*<div class="dropdown">
     <input class="dropdown-button dropdown-toggle form-control" placeholder="@Placeholder" @onclick=Open @oninput=FilterOnValue value="@SelectedFilterValue"></input>
     <div class="dropdown-menu @(show ? "show" : "")" tabindex="-1">
         <div class="scrollable-menu">
@@ -10,29 +10,4 @@
         </div>
     </div>
 </div>
-
-@code {
-    bool show;
-    List<FilterValue> dropdownList = new();
-    string SelectedFilterValue = "";
-
-    [Parameter]
-    public string Placeholder { get; set; } = "No placeholder specified";
-    [Parameter]
-    public List<FilterValue> DropdownlistIn { get; set; }
-    [Parameter]
-    public EventCallback<FilterValue> OnItemSelected { get; set; }
-
-    protected override async Task OnInitializedAsync() => dropdownList = DropdownlistIn;
-
-    void Open() => show = true;
-    void Close() => show = false;
-
-    void FilterOnValue(ChangeEventArgs args) => dropdownList = DropdownlistIn.Where(v => v.Value.Contains(args.Value.ToString(), StringComparison.OrdinalIgnoreCase)).ToList();
-    public void OnValueSelected(FilterValue value)
-    {
-        SelectedFilterValue = value.Value;
-        OnItemSelected.InvokeAsync(value);
-        Close();
-    }
-}
+*@
