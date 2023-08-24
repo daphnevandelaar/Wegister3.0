@@ -13,7 +13,7 @@ namespace WegisterUI.Pages.WorkHours
 
         protected override async Task OnInitializedAsync()
         {
-            _workHours = await _workHourService.GetWorkHours();
+            _workHours = await _workHourService.GetWorkHours(null);
             _filters = _workHours.FilterValues.ToList();
         }
 
@@ -24,8 +24,8 @@ namespace WegisterUI.Pages.WorkHours
 
         protected async Task OnFilterSelected(FilterValueVm filterValue)
         {
-            var selectedFilters = _filters.Where(f => f.SelectedValues.Any());
-
+            _workHours = await _workHourService.GetWorkHours(_filters);
+            _filters = _workHours.FilterValues.ToList();
         }
     }
 }

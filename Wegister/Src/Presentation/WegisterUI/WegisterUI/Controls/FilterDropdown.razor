@@ -6,7 +6,12 @@
                 <tr>
                     @foreach (var item in FilterValues){
                         <div>
-                            <input type="checkbox" @oninput="(e) => OnValueSelected(e, item)" />
+                            @if(FilterOption.SelectedValues.Any(s => s == item)){
+                                <input type="checkbox" style="margin-right: 5px;" @oninput="(e) => OnValueSelected(e, item)" checked/>
+                            }
+                            else{
+                                <input type="checkbox" style="margin-right: 5px;" @oninput="(e) => OnValueSelected(e, item)" />
+                            }
                             @item
                         </div>
                     }

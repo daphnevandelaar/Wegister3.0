@@ -11,7 +11,7 @@ using WebUI.Dtos;
 
 namespace Application.Common.Factories
 {
-    public class WorkHourFactory : FactoryBase, IWorkHourFactory
+    public class WorkHourFactory : FilterFactory, IWorkHourFactory
     {
         private CustomerFactory _customerFactory;
 

@@ -1,20 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Application.Common.Factories;
+using Application.Common.Factories.Interfaces.Abstracts;
 using Application.Common.Viewmodels;
 using Common;
 using Domain.Entities;
 using WebUI.Dtos;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Application.Common.Helpers
 {
     public class FilterValueRetrieverHelper
     {
         private FilterValueDto FilterOption { get; set; }
+        private IFilterFactory _filterFactory;
 
         public FilterValueRetrieverHelper(FilterValueDto _filterOptions)
         {
             FilterOption = _filterOptions;
+            _filterFactory = new FilterFactory();
         }
 
         public FilterValueVm GetFilterValues(IEnumerable<object> entities)
@@ -41,11 +46,11 @@ namespace Application.Common.Helpers
 
             entities.ForEach(e => result.Add($"Week {WeekNumberHelper.GetWeeknumber(e)}/{e.Year}"));
 
-            return new FilterValueVm
-            {
-                PlaceholderValue = FilterOption.PlaceholderValue,
-                Values = result.Distinct().ToList()
-            };
+            return _filterFactory.CreateVm(FilterOption, result
+                .OrderBy(r => Convert.ToInt16(r.Substring(4, r.IndexOf("/") - 4)))
+                .ThenBy(r => Convert.ToInt16(r.Substring(r.IndexOf("/") + 1)))
+                .Distinct()
+                .ToList());
         }
         private FilterValueVm RetrieveYearValues(List<DateTime> entities)
         {
@@ -53,11 +58,7 @@ namespace Application.Common.Helpers
 
             entities.ForEach(e => result.Add(e.Year.ToString()));
 
-            return new FilterValueVm
-            {
-                PlaceholderValue = FilterOption.PlaceholderValue,
-                Values = result.Distinct().ToList()
-            };
+            return _filterFactory.CreateVm(FilterOption, result.OrderBy(r => r).Distinct().ToList());
         }
         private FilterValueVm RetrieveCustomerValues(List<string> entities)
         {
@@ -65,11 +66,7 @@ namespace Application.Common.Helpers
 
             entities.ForEach(e => result.Add(e));
 
-            return new FilterValueVm
-            {
-                PlaceholderValue = FilterOption.PlaceholderValue,
-                Values = result.Distinct().ToList()
-            };
+            return _filterFactory.CreateVm(FilterOption, result.OrderBy(r => r).Distinct().ToList());
         }
     }
 }

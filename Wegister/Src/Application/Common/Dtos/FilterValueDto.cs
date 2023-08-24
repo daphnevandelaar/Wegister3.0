@@ -10,5 +10,6 @@ namespace WebUI.Dtos
         public string PlaceholderValue { get; set; }
 
         public List<string> Values { get; set; }
+        public List<string> SelectedValues { get; set; }
     }
 }
