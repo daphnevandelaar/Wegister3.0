@@ -3,12 +3,12 @@ using System.Threading;
 using Xunit;
 using Persistence.UnitTests.Common;
 using Persistence.UnitTests.Common.Implementations;
-using Application.UnitTests.Common.DatabaseSeeders;
 using System.Linq;
 using Shouldly;
 using Application.Common.Models;
 using Domain.Entities;
 using System;
+using Persistence.UnitTests.Common.Seeders;
 
 namespace Persistence.UnitTests
 {

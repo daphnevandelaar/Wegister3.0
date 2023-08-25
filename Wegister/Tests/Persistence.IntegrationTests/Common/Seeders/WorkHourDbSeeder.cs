@@ -5,7 +5,7 @@ using Application.Common.Models;
 using Common;
 using Domain.Entities;
 
-namespace Application.UnitTests.Common.DatabaseSeeders
+namespace Persistence.UnitTests.Common.Seeders
 {
     public class WorkHourDbSeeder : ISeeder<WorkHour>
     {

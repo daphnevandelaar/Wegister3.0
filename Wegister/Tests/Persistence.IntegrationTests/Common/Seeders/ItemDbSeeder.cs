@@ -4,7 +4,7 @@ using Common;
 using Domain.Entities;
 using System.Collections.Generic;
 
-namespace Application.UnitTests.Common.DatabaseSeeders
+namespace Persistence.UnitTests.Common.Seeders
 {
     public class ItemDbSeeder : ISeeder<Item>
     {

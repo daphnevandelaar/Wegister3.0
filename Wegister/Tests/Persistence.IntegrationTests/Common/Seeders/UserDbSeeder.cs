@@ -4,7 +4,7 @@ using Application.Common.Interfaces;
 using Application.Common.Models;
 using Domain.Entities;
 
-namespace Application.UnitTests.Common.DatabaseSeeders
+namespace Persistence.UnitTests.Common.Seeders
 {
     public class UserDbSeeder : ISeeder<User>
     {

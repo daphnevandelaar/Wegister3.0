@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Application.Common.Dtos;
 using Application.Common.Factories;
 using Application.Common.Factories.Interfaces.Abstracts;
 using Application.Common.Viewmodels;
 using Common;
 using Domain.Entities;
-using WebUI.Dtos;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Application.Common.Helpers
 {

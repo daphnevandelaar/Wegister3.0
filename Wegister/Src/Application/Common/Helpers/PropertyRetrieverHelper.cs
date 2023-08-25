@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using WebUI.Dtos;
+using Application.Common.Dtos;
 
 namespace Application.Common.Helpers
 {

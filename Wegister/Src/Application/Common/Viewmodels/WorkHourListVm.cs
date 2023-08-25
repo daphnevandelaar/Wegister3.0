@@ -14,8 +14,10 @@ namespace Application.Common.Viewmodels
                 workHours.Sum(w => w.TotalWorkHoursInMinutes += TotalAmountOfWorkHoursInMinutes);
         }
 
-        public IList<WorkHourVm> WorkHours { get; }
+        public IEnumerable<WorkHourVm> WorkHours { get; set; }
         public IList<FilterValueVm> FilterValues { get; }
         public int TotalAmountOfWorkHoursInMinutes { get; }
+
+        public PaginationVm Pagination { get; set; }
     }
 }

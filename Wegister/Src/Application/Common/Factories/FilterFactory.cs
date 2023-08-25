@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Application.Common.Dtos;
 using Application.Common.Factories.Interfaces.Abstracts;
 using Application.Common.Viewmodels;
 using Domain.Entities;
-using WebUI.Dtos;
 
 namespace Application.Common.Factories
 {

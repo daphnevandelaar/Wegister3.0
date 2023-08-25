@@ -4,7 +4,6 @@ using Application.Common.Viewmodels;
 using LinqKit;
 using System.Collections.Generic;
 using System.Linq;
-using WebUI.Dtos;
 
 namespace Application
 {

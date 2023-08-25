@@ -33,4 +33,10 @@
         <button class="form-control pagination-btn" @onclick=@(_=>OnClickPage(-2))><i class="fas fa-angle-right fa-1x"></i></button>
         <button class="form-control pagination-btn" @onclick=@(_=>OnClickPage(-22))><i class="fas fa-angle-double-right fa-1x"></i></button>
     }
+
+    <select name="pagesizedropdown" id="cars" @onchange=OnSelectedPageSize>
+        <option value="10">10</option>
+        <option value="30">30</option>
+        <option value="50">50</option>
+    </select>
 </div>

@@ -1,6 +1,5 @@
 ﻿@page "/uren"
 
-@using WebUI.Dtos
 @using Application.Common.Viewmodels
 @using WegisterUI.Services
 @inject WorkHourService _workHourService
@@ -82,7 +81,7 @@
                     }
                 </tbody>
             </table>
-            <TablePagination></TablePagination>
+            <TablePagination OnPageSizeSelected="OnPageSizeSelected" CurrentPage="OtherPageSelected"></TablePagination>
         }
     </Authorized>
     <NotAuthorized>

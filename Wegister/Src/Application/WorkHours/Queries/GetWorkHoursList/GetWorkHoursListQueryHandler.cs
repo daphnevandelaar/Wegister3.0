@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Dtos;
 using Application.Common.Factories.Interfaces;
 using Application.Common.Interfaces;
 using Application.Common.Viewmodels;
-using Application.WorkHours.Queries.GetWorkHoursList;
 using Common;
 using Domain.Entities;
 using LinqKit;
 using MediatR;
-using WebUI.Dtos;
 
-namespace Application.WorkHours.Queries.GetHoursList
+namespace Application.WorkHours.Queries.GetWorkHoursList
 {
     public class GetWorkHoursListQueryHandler : QueryHandlerBase, IRequestHandler<GetWorkHoursListQuery, WorkHourListVm>
     {
@@ -35,7 +33,11 @@ namespace Application.WorkHours.Queries.GetHoursList
             if (request.Filters is not null)
                 workhours = Filter(workhours, request.Filters);
 
-            var result = workhours.Select(_factory.CreateLookUpDtoExp).ToList();
+            workhours = Pagination(workhours, request.Pagination);
+
+            var result = workhours
+                .Select(_factory.CreateLookUpDtoExp)
+                .ToList();
 
             List<FilterValueDto> filters;
             if (request.Filters is not null)
@@ -46,7 +48,33 @@ namespace Application.WorkHours.Queries.GetHoursList
                     .Select(_factory.CreateFilterDto)
                     .ToList();
 
-            return _factory.Create(result, GetFilterOptions(filters, result));
+            var workhoursVm = _factory.Create(result, GetFilterOptions(filters, result));
+
+            workhoursVm.Pagination = new()
+            {
+                Page = request.Pagination.Page,
+                PageSize = request.Pagination.PageSize,
+                Take = request.Pagination.Take,
+                Skip = request.Pagination.Skip,
+                Total = dbContext.WorkHours.Count()
+            };
+
+            return workhoursVm;
+        }
+
+        //TODO: Extract to base
+        private IQueryable<WorkHour> Pagination(IQueryable<WorkHour> workHoursQuery, PaginationDto pagination)
+        {
+            if(pagination.Take == 0)
+                workHoursQuery = workHoursQuery.Skip(pagination.Skip);
+            if(pagination.Skip == 0)
+                workHoursQuery = workHoursQuery.Take(pagination.Take);
+            else
+                workHoursQuery = workHoursQuery
+                    .Skip(pagination.Skip)
+                    .Take(pagination.Take);
+
+            return workHoursQuery;
         }
 
         //TODO: Make this generic
@@ -89,7 +117,7 @@ namespace Application.WorkHours.Queries.GetHoursList
                 }
             });
 
-            if(weekPredicate.IsStarted)
+            if (weekPredicate.IsStarted)
                 predicate = predicate.And(weekPredicate);
             if (customerPredicate.IsStarted)
                 predicate = predicate.And(customerPredicate);

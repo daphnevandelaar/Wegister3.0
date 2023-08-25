@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Application.UnitTests.Common.DatabaseSeeders
+namespace Persistence.UnitTests.Common.Seeders
 {
     public interface ISeeder<T> where T : class
     {

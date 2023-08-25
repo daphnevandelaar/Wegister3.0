@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebUI.Dtos
+namespace Application.Common.Dtos
 {
     public class FilterValueDto
     {

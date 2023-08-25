@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Application.Common.Dtos;
 using Application.Common.Viewmodels;
 
 namespace Application.Common.Factories.Interfaces.Abstracts
 {
-    public abstract class FactoryBase : ICommonFactory
+    public abstract class FactoryBase : IPaginationFactory
     {
 
         protected static bool IsNull<T>(T entity)
@@ -18,18 +17,16 @@ namespace Application.Common.Factories.Interfaces.Abstracts
             return entities is null || entities.Count == 0;
         }
 
-        public SearchVm CreateCommon(SearchDto entity)
+        public PaginationDto GetPaginationDto(PaginationVm pagination)
         {
             return new()
             {
-                Id = entity.Id,
-                Value = entity.Value
+                Page = pagination.Page,
+                PageSize = pagination.PageSize,
+                Take = pagination.Take,
+                Skip = pagination.Skip,
+                Total = pagination.Total
             };
-        }
-
-        public List<SearchVm> CreateCommon(List<SearchDto> entity)
-        {
-            return entity.Select(CreateCommon).ToList();
         }
     }
 }

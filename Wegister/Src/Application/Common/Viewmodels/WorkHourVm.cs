@@ -10,5 +10,6 @@
         public int RecreationInMinutes { get; set; }
         public string Description { get; set; }
         public int TotalWorkHoursInMinutes { get; set; }
+        public PaginationVm Pagination { get; set; } = new PaginationVm();
     }
 }

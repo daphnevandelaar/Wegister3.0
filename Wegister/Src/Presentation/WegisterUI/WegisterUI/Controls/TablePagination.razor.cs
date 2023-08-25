@@ -1,13 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Application.Common.Viewmodels;
+using Microsoft.AspNetCore.Components;
 
 namespace WegisterUI.Controls
 {
     public partial class TablePagination
     {
+        [Parameter]
+        public EventCallback<PaginationVm> OnPageSizeSelected { get; set; }
+        [Parameter]
+        public EventCallback<int> CurrentPage { get; set; }
         public PaginationVm Pagination { get; set; }
         private int _amountOfPages { get; set; }
-        private string _pagenumber;
 
         protected override async Task OnInitializedAsync()
         {
@@ -18,6 +23,11 @@ namespace WegisterUI.Controls
                 Total = 100
             };
             _amountOfPages = Pagination.Total / Pagination.PageSize;
+        }
+        protected void OnSelectedPageSize(ChangeEventArgs e)
+        {
+            Pagination.PageSize = Convert.ToInt16(e);
+            OnPageSizeSelected.InvokeAsync(Pagination);
         }
         protected void OnClickPage(int pageNumber)
         {
@@ -45,7 +55,7 @@ namespace WegisterUI.Controls
                 Pagination.Page = pageNumber;
             }
 
-            _pagenumber = pageNumber.ToString();
+            CurrentPage.InvokeAsync(Pagination.Page);
         }
     }
 }
