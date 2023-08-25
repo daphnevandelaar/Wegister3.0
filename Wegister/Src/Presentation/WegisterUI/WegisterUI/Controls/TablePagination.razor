@@ -1,0 +1,36 @@
+﻿<div class="pagination-div">
+    @if(Pagination.Page == 1){
+        <button class="form-control pagination-btn disabled" @onclick=@(_=>OnClickPage(-11))><i class="fas fa-angle-double-left fa-1x"></i></button>
+        <button class="form-control pagination-btn disabled" @onclick=@(_=>OnClickPage(-1))><i class="fas fa-angle-left fa-1x"></i></button>
+    }
+    else{
+        <button class="form-control pagination-btn" @onclick=@(_=>OnClickPage(-11))><i class="fas fa-angle-double-left fa-1x"></i></button>
+        <button class="form-control pagination-btn" @onclick=@(_=>OnClickPage(-1))><i class="fas fa-angle-left fa-1x"></i></button>
+    }
+
+    @for (int i = 0 + Pagination.Page; i < (_amountOfPages) && i - Pagination.Page < 3; i++)
+    {
+        var buttonValue = i;
+        if(i == Pagination.Page){
+            <button class="btn btn-primary" style="margin-right: 5px;" @onclick=@(_=>OnClickPage(buttonValue))>@(i)</button>
+        }
+        else{
+            <button class="form-control pagination-btn" @onclick=@(_=>OnClickPage(buttonValue))>@(i)</button>
+        }
+    }
+
+    <button class="form-control pagination-btn disabled">...</button>
+
+    @if (Pagination.Page == _amountOfPages)
+    {
+        <button class="btn btn-primary" @onclick=@(_=>OnClickPage(_amountOfPages))>@_amountOfPages</button>
+        <button class="form-control pagination-btn disabled" @onclick=@(_=>OnClickPage(-2))><i class="fas fa-angle-right fa-1x"></i></button>
+        <button class="form-control pagination-btn disabled" @onclick=@(_=>OnClickPage(-22))><i class="fas fa-angle-double-right fa-1x"></i></button>
+    }
+    else
+    {
+        <button class="form-control pagination-btn" @onclick=@(_=>OnClickPage(_amountOfPages))>@_amountOfPages</button>
+        <button class="form-control pagination-btn" @onclick=@(_=>OnClickPage(-2))><i class="fas fa-angle-right fa-1x"></i></button>
+        <button class="form-control pagination-btn" @onclick=@(_=>OnClickPage(-22))><i class="fas fa-angle-double-right fa-1x"></i></button>
+    }
+</div>

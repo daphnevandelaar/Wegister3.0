@@ -69,3 +69,18 @@ a .dropdown-item:hover{
     position: none!important;
     padding: .5rem!important;
 }
+.pagination-div{
+    display: flex;
+}
+.pagination-btn{
+    width: auto !important;
+    margin-right: 5px;
+}
+.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
