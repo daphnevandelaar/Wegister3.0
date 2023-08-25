@@ -8,11 +8,13 @@ namespace Common
     {
         public static int GetWeeknumber(DateTime date)
         {
+            var dateWithoutTime = new DateTime(date.Year, date.Month, date.Day);
+
             var currentCulture = CultureInfo.CurrentCulture;
             var weekNo = currentCulture.Calendar.GetWeekOfYear(
-                date,
+                dateWithoutTime,
                 currentCulture.DateTimeFormat.CalendarWeekRule,
-                currentCulture.DateTimeFormat.FirstDayOfWeek);
+                DayOfWeek.Monday);
 
             return weekNo;
         }

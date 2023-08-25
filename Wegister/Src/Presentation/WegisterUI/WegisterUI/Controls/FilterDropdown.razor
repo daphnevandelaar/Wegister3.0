@@ -1,7 +1,7 @@
 ﻿<div class="dropdown">
     <button class="dropdown-button dropdown-toggle form-control" @onclick="Open">Selecteer @Placeholder</button>
     <div class="dropdown-menu @(show ? "show" : "")" tabindex="-1">
-        <div class="scrollable-menu">
+        <div class="scrollable-dropdown-filter">
             <table>
                 <tr>
                     @foreach (var item in FilterValues){

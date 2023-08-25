@@ -7,7 +7,6 @@ using Application.Common.Viewmodels;
 using Common;
 using Domain.Entities;
 using WebUI.Dtos;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Application.Common.Helpers
 {

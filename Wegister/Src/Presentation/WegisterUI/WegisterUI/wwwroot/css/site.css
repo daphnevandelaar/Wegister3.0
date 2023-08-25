@@ -69,3 +69,7 @@ a .dropdown-item:hover{
     position: none!important;
     padding: .5rem!important;
 }
+.scrollable-dropdown-filter {
+    max-height: 300px;
+    overflow: auto;
+}
